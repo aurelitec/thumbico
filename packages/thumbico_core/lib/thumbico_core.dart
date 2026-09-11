@@ -3,3 +3,5 @@
 
 /// Reads the thumbnail or icon of any shell item through the Windows shell.
 library;
+
+export 'src/thumbico_size.dart' show ThumbicoSize;
