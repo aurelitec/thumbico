@@ -4,4 +4,8 @@
 import 'package:material_ui/material_ui.dart';
 
 /// The application theme, shared by every window.
-ThemeData appTheme() => ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber));
+ThemeData appTheme() {
+  return ThemeData(
+    colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
+  );
+}

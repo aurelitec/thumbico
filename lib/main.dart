@@ -6,11 +6,18 @@
 // ignore_for_file: implementation_imports
 
 import 'package:flutter/src/widgets/_window.dart';
+
 import 'package:material_ui/material_ui.dart';
 
 import 'windows/main_window.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runWidget(WindowManager(initialWindows: [MainWindow.windowEntry()]));
+  runWidget(
+    WindowManager(
+      initialWindows: [
+        MainWindow.windowEntry(),
+      ],
+    ),
+  );
 }

@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/_window.dart';
 
 import 'package:material_ui/material_ui.dart';
+
 import 'package:thumbico_core/thumbico_core.dart';
 
 import '../common/strings.dart' as strings;
@@ -36,6 +37,7 @@ class const MainWindow({super.key}) extends StatefulWidget {
     return WindowEntry(
       controller: _controller,
       builder: (context) => MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: strings.appName,
         theme: appTheme(),
         home: const MainWindow(),

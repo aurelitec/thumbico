@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE file in the project root for more information.
 
 import 'package:material_ui/material_ui.dart';
+
 import 'package:thumbico_core/thumbico_core.dart';
 
 import '../common/strings.dart' as strings;
