@@ -47,16 +47,6 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Icon
-//
-
-// Icon with lowest ID value placed first to ensure application icon
-// remains consistent on all systems.
-IDI_APP_ICON            ICON                    "resources\\app_icon.ico"
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
 // Version
 //
 
@@ -89,13 +79,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.aurelitec" "\0"
-            VALUE "FileDescription", "thumbico" "\0"
+            VALUE "CompanyName", "Aurelitec" "\0"
+            VALUE "FileDescription", "View the large thumbnail or icon of any file, document, or program on your PC." "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "thumbico" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 com.aurelitec. All rights reserved." "\0"
+            VALUE "InternalName", "Thumbico" "\0"
+            VALUE "LegalCopyright", "Copyright (c) 2011-2026 Aurelitec. All rights reserved." "\0"
             VALUE "OriginalFilename", "thumbico.exe" "\0"
-            VALUE "ProductName", "thumbico" "\0"
+            VALUE "ProductName", "Thumbico" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
