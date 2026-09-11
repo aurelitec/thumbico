@@ -1,6 +1,8 @@
 // Copyright (c) 2011-2026 Aurelitec <https://www.aurelitec.com>
 // Licensed under the MIT License. See LICENSE file in the project root for more information.
 
+import 'dart:isolate';
+
 import 'package:path/path.dart' as p;
 
 import 'shell/shell_bitmap.dart';
@@ -47,6 +49,20 @@ ThumbicoImage readThumbico(
         return _read(shellPath, size, ThumbicoSource.iconOnly, options);
       }
   }
+}
+
+/// Runs [readThumbico] in a short-lived isolate and returns its result.
+///
+/// The isolate enters its own COM apartment, so this is safe to call from a
+/// UI isolate. Argument errors are reported before any isolate is spawned.
+Future<ThumbicoImage> readThumbicoAsync(
+  String path,
+  ThumbicoSize size, {
+  ThumbicoSource source = ThumbicoSource.auto,
+  Set<ThumbicoOption> options = const {},
+}) async {
+  validateArguments(path, size);
+  return Isolate.run(() => readThumbico(path, size, source: source, options: options));
 }
 
 /// One shell call for an explicit source; the source says whether it is an icon.

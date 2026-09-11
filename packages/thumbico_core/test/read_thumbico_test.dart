@@ -213,6 +213,43 @@ void main() {
     });
   });
 
+  group('readThumbicoAsync', () {
+    test('returns the same bytes as the synchronous call', () async {
+      final sync = readThumbico(fixtures.png, size256);
+      final async = await readThumbicoAsync(fixtures.png, size256);
+      expect(async.width, sync.width);
+      expect(async.height, sync.height);
+      expect(async.isIcon, sync.isIcon);
+      expect(async.requestedSize, sync.requestedSize);
+      expect(async.pixels, sync.pixels);
+    });
+
+    test('rethrows a shell failure from the isolate', () {
+      expect(
+        readThumbicoAsync(fixtures.text, size256, source: ThumbicoSource.thumbnailOnly),
+        throwsA(
+          isA<ThumbicoException>()
+              .having((e) => e.failure, 'failure', ThumbicoFailure.noThumbnail)
+              .having((e) => e.hresultHex, 'hresultHex', '0x8004B200'),
+        ),
+      );
+    });
+
+    test('rejects bad arguments without spawning an isolate', () {
+      expect(readThumbicoAsync('', size256), throwsArgumentError);
+      expect(readThumbicoAsync(notepad, const ThumbicoSize(0, 1)), throwsArgumentError);
+    });
+
+    test('can run several reads at once', () async {
+      final images = await Future.wait([
+        readThumbicoAsync(notepad, size256),
+        readThumbicoAsync(fixtures.png, size256),
+        readThumbicoAsync(r'C:\Windows', size256),
+      ]);
+      expect(images.map((i) => i.width), [256, 256, 256]);
+    });
+  });
+
   group('readThumbico size validation', () {
     test('rejects a zero or negative dimension', () {
       expect(() => readThumbico(notepad, const ThumbicoSize(0, 16)), throwsArgumentError);
