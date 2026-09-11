@@ -13,6 +13,7 @@ import 'package:flutter/src/widgets/_window.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../common/strings.dart' as strings;
+import '../common/theme.dart';
 
 /// The main window of the application.
 class const MainWindow({super.key}) extends StatelessWidget {
@@ -25,8 +26,16 @@ class const MainWindow({super.key}) extends StatelessWidget {
 
   /// Returns a [WindowEntry] for the main window. Call before `runWidget`.
   static WindowEntry windowEntry() {
-    // Assigned before the delegate's callback can run
-    return WindowEntry(controller: _controller, builder: (context) => const MainWindow());
+    // Each window gets its own MaterialApp, which is what gives text fields
+    // their localizations and tooltips their overlay.
+    return WindowEntry(
+      controller: _controller,
+      builder: (context) => MaterialApp(
+        title: strings.appName,
+        theme: appTheme(),
+        home: const MainWindow(),
+      ),
+    );
   }
 
   @override
