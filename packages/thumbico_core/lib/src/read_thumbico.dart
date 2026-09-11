@@ -4,6 +4,7 @@
 import 'package:path/path.dart' as p;
 
 import 'shell/shell_bitmap.dart';
+import 'thumbico_exception.dart';
 import 'thumbico_image.dart';
 import 'thumbico_option.dart';
 import 'thumbico_size.dart';
@@ -13,6 +14,10 @@ import 'thumbico_source.dart';
 const _maximumDimension = 0x7FFFFFFF;
 
 /// Reads the thumbnail or icon of the shell item at [path], at most [size].
+///
+/// With [ThumbicoSource.auto] the shell is asked for a thumbnail first; if
+/// that fails for any reason other than a missing item, its icon is returned
+/// instead and [ThumbicoImage.isIcon] is true.
 ///
 /// Blocks the calling thread for as long as the shell takes, which can be
 /// seconds for a video; GUI callers use [readThumbicoAsync]. Throws
@@ -32,7 +37,15 @@ ThumbicoImage readThumbico(
     case ThumbicoSource.iconOnly:
       return _read(shellPath, size, source, options);
     case ThumbicoSource.auto:
-      throw UnimplementedError('auto mode arrives in Task 5');
+      try {
+        return _read(shellPath, size, ThumbicoSource.thumbnailOnly, options);
+      } on ThumbicoException catch (e) {
+        // A missing item fails the same way again, so only that case is not retried.
+        if (e.failure == ThumbicoFailure.itemNotFound) {
+          rethrow;
+        }
+        return _read(shellPath, size, ThumbicoSource.iconOnly, options);
+      }
   }
 }
 

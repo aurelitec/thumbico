@@ -178,6 +178,41 @@ void main() {
     });
   });
 
+  group('readThumbico with auto', () {
+    test('returns the thumbnail when the item has one', () {
+      final image = readThumbico(fixtures.png, size256);
+      expect(image.isIcon, isFalse);
+      expect(image.width, 256);
+      expect(image.height, 192);
+    });
+
+    test('falls back to the icon when the item has no thumbnail', () {
+      final image = readThumbico(fixtures.text, size256);
+      expect(image.isIcon, isTrue);
+      expect(image.width, 256);
+      expect(image.height, 256);
+    });
+
+    test('falls back to the icon for an executable and a drive', () {
+      expect(readThumbico(notepad, size256).isIcon, isTrue);
+      expect(readThumbico(r'C:\', size256).isIcon, isTrue);
+    });
+
+    test('does not fall back for a missing item', () {
+      final missing = p.join(fixtures.directory.path, 'missing.txt');
+      expect(
+        () => readThumbico(missing, size256),
+        throwsA(
+          isA<ThumbicoException>().having(
+            (e) => e.failure,
+            'failure',
+            ThumbicoFailure.itemNotFound,
+          ),
+        ),
+      );
+    });
+  });
+
   group('readThumbico size validation', () {
     test('rejects a zero or negative dimension', () {
       expect(() => readThumbico(notepad, const ThumbicoSize(0, 16)), throwsArgumentError);
