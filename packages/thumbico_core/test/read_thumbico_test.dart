@@ -250,6 +250,49 @@ void main() {
     });
   });
 
+  group('readThumbico options', () {
+    test('scaleUp stretches a thumbnail beyond its source size', () {
+      final image = readThumbico(
+        fixtures.png,
+        const ThumbicoSize.square(1024),
+        source: ThumbicoSource.thumbnailOnly,
+        options: const {ThumbicoOption.scaleUp},
+      );
+      expect(image.width, 1024);
+      expect(image.height, 768);
+    });
+
+    test('cropToSquare returns a square thumbnail', () {
+      final image = readThumbico(
+        fixtures.png,
+        size256,
+        source: ThumbicoSource.thumbnailOnly,
+        options: const {ThumbicoOption.cropToSquare},
+      );
+      expect(image.width, image.height);
+    });
+
+    test('allowLargerSize still returns an image', () {
+      final image = readThumbico(
+        fixtures.png,
+        size256,
+        options: const {ThumbicoOption.allowLargerSize},
+      );
+      expect(image.width, greaterThanOrEqualTo(256));
+    });
+
+    test('iconBackground on an icon keeps the requested square', () {
+      final image = readThumbico(
+        notepad,
+        size256,
+        source: ThumbicoSource.iconOnly,
+        options: const {ThumbicoOption.iconBackground},
+      );
+      expect(image.width, 256);
+      expect(image.height, 256);
+    });
+  });
+
   group('readThumbico size validation', () {
     test('rejects a zero or negative dimension', () {
       expect(() => readThumbico(notepad, const ThumbicoSize(0, 16)), throwsArgumentError);
