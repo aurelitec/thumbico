@@ -1,6 +1,10 @@
-# The following line activates a set of recommended lints for Flutter apps,
+# The first include activates a set of recommended lints for Flutter apps,
 # packages, and plugins designed to encourage good coding practices.
-include: package:flutter_lints/flutter.yaml
+# The second holds the project's own rules and formatter settings, shared
+# with the packages under packages/.
+include:
+  - package:flutter_lints/flutter.yaml
+  - analysis_rules.yaml
 
 analyzer:
   exclude:
@@ -11,44 +15,6 @@ analyzer:
     - windows/**
     - macos/**
     - linux/**
-
-linter:
-  rules:
-    # Encourages brevity by using ; rather than {} in class-like declarations
-    - empty_container_bodies
-
-    # Encourages clarity by moving field initialization from a primary constructor to the field declaration
-    - initialize_in_field_declaration
-
-    # Encourages brevity by removing const from enum constructors
-    - unnecessary_const_in_enum_constructor
-
-    # Encourages brevity by removing unneeded primary constructor bodies
-    - unnecessary_primary_constructor_body
-
-    # Encourages brevity by replacing the type name with new in constructor declarations
-    - unnecessary_type_name_in_constructor
-
-    # Encourages brevity by using declaring parameters where possible
-    - use_declaring_parameters
-
-    - avoid_final_parameters
-    - omit_local_variable_types
-    - omit_obvious_local_variable_types
-    - parameter_assignments
-    - prefer_const_constructors
-    - prefer_const_declarations
-    - prefer_const_literals_to_create_immutables
-    - prefer_final_fields
-    - prefer_final_in_for_each
-    - prefer_final_locals
-    - prefer_single_quotes
-    - unnecessary_const
-    - unnecessary_nullable_for_final_variable_declarations
-
-formatter:
-  page_width: 100
-  trailing_commas: preserve
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

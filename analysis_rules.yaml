@@ -1,0 +1,41 @@
+# Lint rules and formatter settings shared by the app and the packages under packages/.
+# Each package's analysis_options.yaml includes this file after its base lint set:
+# flutter_lints for the app, lints for a pure Dart package.
+
+linter:
+  rules:
+    # Encourages brevity by using ; rather than {} in class-like declarations
+    - empty_container_bodies
+
+    # Encourages clarity by moving field initialization from a primary constructor to the field declaration
+    - initialize_in_field_declaration
+
+    # Encourages brevity by removing const from enum constructors
+    - unnecessary_const_in_enum_constructor
+
+    # Encourages brevity by removing unneeded primary constructor bodies
+    - unnecessary_primary_constructor_body
+
+    # Encourages brevity by replacing the type name with new in constructor declarations
+    - unnecessary_type_name_in_constructor
+
+    # Encourages brevity by using declaring parameters where possible
+    - use_declaring_parameters
+
+    - avoid_final_parameters
+    - omit_local_variable_types
+    - omit_obvious_local_variable_types
+    - parameter_assignments
+    - prefer_const_constructors
+    - prefer_const_declarations
+    - prefer_const_literals_to_create_immutables
+    - prefer_final_fields
+    - prefer_final_in_for_each
+    - prefer_final_locals
+    - prefer_single_quotes
+    - unnecessary_const
+    - unnecessary_nullable_for_final_variable_declarations
+
+formatter:
+  page_width: 100
+  trailing_commas: preserve

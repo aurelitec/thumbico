@@ -1,0 +1,21 @@
+name: thumbico_core
+description: Reads the thumbnail or icon of any shell item through the Windows shell. The engine behind Thumbico.
+version: 0.1.0
+repository: https://github.com/aurelitec/thumbico
+publish_to: none
+
+environment:
+  sdk: ^3.13.0
+
+platforms:
+  windows:
+
+dependencies:
+  ffi: ^2.2.0
+  path: ^1.9.0
+  win32: ^6.4.0
+
+dev_dependencies:
+  image: ^4.9.2
+  lints: ^6.1.0
+  test: ^1.25.0

@@ -1,0 +1,5 @@
+# The recommended lints for a pure Dart package, plus the rules and formatter
+# settings shared with the app.
+include:
+  - package:lints/recommended.yaml
+  - ../../analysis_rules.yaml
