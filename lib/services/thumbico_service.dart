@@ -8,6 +8,8 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart' show visibleForTesting;
+
 import 'package:thumbico_core/thumbico_core.dart';
 
 /// A thumbnail or icon ready to draw: what the shell said about it, and the Flutter image.
@@ -28,6 +30,7 @@ Future<LoadedThumbico> loadThumbico(String path, ThumbicoSize size) async {
 ///
 /// Flutter's raw pixel formats expect premultiplied alpha while the shell
 /// hands out straight alpha, so the pixels are premultiplied into a copy first.
+@visibleForTesting
 Future<ui.Image> toUiImage(ThumbicoImage image) {
   final bytes = Uint8List.fromList(image.pixels);
   for (var i = 0; i < bytes.length; i += 4) {
