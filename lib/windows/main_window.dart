@@ -16,7 +16,7 @@ import 'package:thumbico_core/thumbico_core.dart';
 
 import '../common/strings.dart' as strings;
 import '../common/theme.dart';
-import '../imaging/ui_image.dart';
+import '../services/shell_service.dart';
 import '../widgets/status_bar.dart';
 import '../widgets/thumbico_canvas.dart';
 import '../widgets/toolbar.dart';
@@ -53,9 +53,7 @@ class _MainWindowState extends State<MainWindow> {
   final _path = TextEditingController();
   final _size = TextEditingController(text: '256');
 
-  ui.Image? _image;
-  ThumbicoImage? _result;
-  ThumbicoSize? _requested;
+  ShellImage? _shellImage;
   var _message = strings.enterPath;
 
   /// Asks the shell for the item in the path field at the size in the size field.
@@ -67,17 +65,14 @@ class _MainWindowState extends State<MainWindow> {
     }
 
     try {
-      final result = await readThumbicoAsync(_path.text, size);
-      final image = await toUiImage(result);
+      final shellImage = await readShellImage(_path.text, size);
       if (!mounted) {
-        image.dispose();
+        shellImage.image.dispose();
         return;
       }
-      _image?.dispose();
+      _shellImage?.image.dispose();
       setState(() {
-        _image = image;
-        _result = result;
-        _requested = size;
+        _shellImage = shellImage;
         _message = '';
       });
     } on ThumbicoException catch (e) {
@@ -97,7 +92,7 @@ class _MainWindowState extends State<MainWindow> {
   void dispose() {
     _path.dispose();
     _size.dispose();
-    _image?.dispose();
+    _shellImage?.image.dispose();
     super.dispose();
   }
 
@@ -107,8 +102,8 @@ class _MainWindowState extends State<MainWindow> {
       child: Column(
         children: [
           Toolbar(path: _path, size: _size, onRefresh: _read),
-          Expanded(child: ThumbicoCanvas(image: _image)),
-          StatusBar(message: _message, requested: _requested, image: _result),
+          Expanded(child: ThumbicoCanvas(image: _shellImage?.image)),
+          StatusBar(message: _message, info: _shellImage?.info),
         ],
       ),
     );

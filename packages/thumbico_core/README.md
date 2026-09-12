@@ -15,7 +15,7 @@ final image = await readThumbicoAsync(r'C:\Windows\explorer.exe', const Thumbico
 // From a command-line tool, where blocking is fine:
 final same = readThumbico(r'C:\Windows\explorer.exe', const ThumbicoSize.square(256));
 
-print('${image.width}x${image.height}, icon: ${image.isIcon}');
+print(image.info); // 256 x 256, requested 256 x 256, icon
 ```
 
 `ThumbicoSource` chooses between the thumbnail, the icon, or the best available (the default). `ThumbicoOption` values map one-to-one to the shell's `SIIGBF` flags. `ThumbicoSize.tryParse` reads `256`, `256x160`, or `256 x 160` the same way for every frontend.
@@ -24,7 +24,9 @@ Shell failures throw `ThumbicoException`, with `failure` (`itemNotFound`, `noThu
 
 ## Pixels
 
-`ThumbicoImage.pixels` is straight (non-premultiplied) alpha, BGRA byte order, four bytes per pixel, rows top-down, no padding.
+`ThumbicoImage` is two things: `info`, what the shell said about the item (`size`, `requestedSize`, `isIcon`), and `pixels`, the buffer. Keep `info` and let the image go once the pixels have been used; the facts stay small.
+
+`pixels` is straight (non-premultiplied) alpha, BGRA byte order, four bytes per pixel, rows top-down, no padding, so the length is `info.size.width * info.size.height * 4`.
 
 - `package:image`: `img.Image.fromBytes(width: w, height: h, bytes: pixels.buffer, numChannels: 4, order: img.ChannelOrder.bgra)`.
 - Flutter: premultiply the alpha into a copy first, then `ui.decodeImageFromPixels(copy, w, h, ui.PixelFormat.bgra8888, callback)`. Flutter's raw formats are premultiplied.

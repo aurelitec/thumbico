@@ -59,7 +59,7 @@ img.Image layoutImage(int width, int height) {
 
 /// The pixel at [x], [y] as red, green, blue, alpha.
 (int, int, int, int) pixelAt(ThumbicoImage image, int x, int y) {
-  final i = (y * image.width + x) * 4;
+  final i = (y * image.info.size.width + x) * 4;
   final pixels = image.pixels;
   return (pixels[i + 2], pixels[i + 1], pixels[i], pixels[i + 3]);
 }

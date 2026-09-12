@@ -8,21 +8,18 @@ import 'package:thumbico_core/thumbico_core.dart';
 import '../common/strings.dart' as strings;
 
 /// The window's status bar: a message, then what was asked for and what came back.
-class const StatusBar({
-  super.key,
-  final String message = '',
-  final ThumbicoSize? requested,
-  final ThumbicoImage? image,
-}) extends StatelessWidget {
+class const StatusBar({super.key, final String message = '', final ThumbicoInfo? info})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final requested = this.requested;
-    final image = this.image;
+    final info = this.info;
     final panes = <String>[
-      if (requested != null) '${strings.askedFor} ${requested.format()}',
-      if (image != null) '${strings.returned} ${image.width} x ${image.height}',
-      if (image != null) image.isIcon ? strings.kindIcon : strings.kindThumbnail,
+      if (info != null) ...[
+        '${strings.askedFor} ${info.requestedSize.format()}',
+        '${strings.returned} ${info.size.format()}',
+        info.isIcon ? strings.kindIcon : strings.kindThumbnail,
+      ],
     ];
 
     return Material(

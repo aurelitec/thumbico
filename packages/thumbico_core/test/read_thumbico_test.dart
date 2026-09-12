@@ -27,11 +27,7 @@ void main() {
   group('readThumbico with iconOnly', () {
     test('returns the requested square for an executable', () {
       final image = readThumbico(notepad, size256, source: ThumbicoSource.iconOnly);
-      expect(image.width, 256);
-      expect(image.height, 256);
-      expect(image.rowStride, 256 * 4);
-      expect(image.isIcon, isTrue);
-      expect(image.requestedSize, size256);
+      expect(image.info, const ThumbicoInfo(size: size256, requestedSize: size256, isIcon: true));
       expect(image.pixels.length, 256 * 256 * 4);
     });
 
@@ -57,8 +53,7 @@ void main() {
         const ThumbicoSize.square(32),
         source: ThumbicoSource.iconOnly,
       );
-      expect(image.width, 32);
-      expect(image.height, 32);
+      expect(image.info.size, const ThumbicoSize.square(32));
 
       // Lists, not records: expect applies nested matchers inside a list only.
       final (r1, g1, b1, a1) = pixelAt(image, 14, 8);
@@ -77,21 +72,23 @@ void main() {
     });
 
     test('works for a folder and a drive', () {
-      expect(readThumbico(r'C:\Windows', size256, source: ThumbicoSource.iconOnly).width, 256);
-      expect(readThumbico(r'C:\', size256, source: ThumbicoSource.iconOnly).width, 256);
+      expect(
+        readThumbico(r'C:\Windows', size256, source: ThumbicoSource.iconOnly).info.size,
+        size256,
+      );
+      expect(readThumbico(r'C:\', size256, source: ThumbicoSource.iconOnly).info.size, size256);
     });
   });
 
   group('readThumbico with thumbnailOnly', () {
     test('keeps the aspect ratio and returns the image right side up', () {
       final image = readThumbico(fixtures.png, size256, source: ThumbicoSource.thumbnailOnly);
-      expect(image.width, 256);
-      expect(image.height, 192);
-      expect(image.isIcon, isFalse);
+      expect(image.info.size, const ThumbicoSize(256, 192));
+      expect(image.info.isIcon, isFalse);
       expect(image.pixels.length, 256 * 192 * 4);
 
-      final w = image.width;
-      final h = image.height;
+      final w = image.info.size.width;
+      final h = image.info.size.height;
 
       final (r1, g1, b1, a1) = pixelAt(image, w * 45 ~/ 100, h ~/ 4);
       expect([r1, g1, b1, a1], [near(220), near(0), near(0), 255], reason: 'top half is red');
@@ -113,8 +110,7 @@ void main() {
         const ThumbicoSize.square(1024),
         source: ThumbicoSource.thumbnailOnly,
       );
-      expect(image.width, 400);
-      expect(image.height, 300);
+      expect(image.info.size, const ThumbicoSize(400, 300));
     });
 
     test('throws noThumbnail for an item without a thumbnail handler', () {
@@ -160,8 +156,7 @@ void main() {
       // The parsing name of This PC.
       const thisPc = '::{20D04FE0-3AEA-1069-A2D8-08002B30309D}';
       final image = readThumbico(thisPc, size256, source: ThumbicoSource.iconOnly);
-      expect(image.width, 256);
-      expect(image.height, 256);
+      expect(image.info.size, size256);
     });
 
     test('accepts forward slashes', () {
@@ -170,7 +165,7 @@ void main() {
         size256,
         source: ThumbicoSource.iconOnly,
       );
-      expect(image.width, 256);
+      expect(image.info.size, size256);
     });
 
     test('rejects an empty path', () {
@@ -181,21 +176,19 @@ void main() {
   group('readThumbico with auto', () {
     test('returns the thumbnail when the item has one', () {
       final image = readThumbico(fixtures.png, size256);
-      expect(image.isIcon, isFalse);
-      expect(image.width, 256);
-      expect(image.height, 192);
+      expect(image.info.isIcon, isFalse);
+      expect(image.info.size, const ThumbicoSize(256, 192));
     });
 
     test('falls back to the icon when the item has no thumbnail', () {
       final image = readThumbico(fixtures.text, size256);
-      expect(image.isIcon, isTrue);
-      expect(image.width, 256);
-      expect(image.height, 256);
+      expect(image.info.isIcon, isTrue);
+      expect(image.info.size, size256);
     });
 
     test('falls back to the icon for an executable and a drive', () {
-      expect(readThumbico(notepad, size256).isIcon, isTrue);
-      expect(readThumbico(r'C:\', size256).isIcon, isTrue);
+      expect(readThumbico(notepad, size256).info.isIcon, isTrue);
+      expect(readThumbico(r'C:\', size256).info.isIcon, isTrue);
     });
 
     test('does not fall back for a missing item', () {
@@ -217,10 +210,7 @@ void main() {
     test('returns the same bytes as the synchronous call', () async {
       final sync = readThumbico(fixtures.png, size256);
       final async = await readThumbicoAsync(fixtures.png, size256);
-      expect(async.width, sync.width);
-      expect(async.height, sync.height);
-      expect(async.isIcon, sync.isIcon);
-      expect(async.requestedSize, sync.requestedSize);
+      expect(async.info, sync.info);
       expect(async.pixels, sync.pixels);
     });
 
@@ -246,7 +236,7 @@ void main() {
         readThumbicoAsync(fixtures.png, size256),
         readThumbicoAsync(r'C:\Windows', size256),
       ]);
-      expect(images.map((i) => i.width), [256, 256, 256]);
+      expect(images.map((i) => i.info.size.width), [256, 256, 256]);
     });
   });
 
@@ -258,8 +248,7 @@ void main() {
         source: ThumbicoSource.thumbnailOnly,
         options: const {ThumbicoOption.scaleUp},
       );
-      expect(image.width, 1024);
-      expect(image.height, 768);
+      expect(image.info.size, const ThumbicoSize(1024, 768));
     });
 
     test('cropToSquare returns a square thumbnail', () {
@@ -269,7 +258,7 @@ void main() {
         source: ThumbicoSource.thumbnailOnly,
         options: const {ThumbicoOption.cropToSquare},
       );
-      expect(image.width, image.height);
+      expect(image.info.size.isSquare, isTrue);
     });
 
     test('allowLargerSize still returns an image', () {
@@ -278,7 +267,7 @@ void main() {
         size256,
         options: const {ThumbicoOption.allowLargerSize},
       );
-      expect(image.width, greaterThanOrEqualTo(256));
+      expect(image.info.size.width, greaterThanOrEqualTo(256));
     });
 
     test('iconBackground on an icon keeps the requested square', () {
@@ -288,8 +277,7 @@ void main() {
         source: ThumbicoSource.iconOnly,
         options: const {ThumbicoOption.iconBackground},
       );
-      expect(image.width, 256);
-      expect(image.height, 256);
+      expect(image.info.size, size256);
     });
   });
 

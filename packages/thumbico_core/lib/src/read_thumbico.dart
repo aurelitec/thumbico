@@ -8,6 +8,7 @@ import 'package:path/path.dart' as p;
 import 'shell/shell_bitmap.dart';
 import 'thumbico_exception.dart';
 import 'thumbico_image.dart';
+import 'thumbico_info.dart';
 import 'thumbico_option.dart';
 import 'thumbico_size.dart';
 import 'thumbico_source.dart';
@@ -19,7 +20,7 @@ const _maximumDimension = 0x7FFFFFFF;
 ///
 /// With [ThumbicoSource.auto] the shell is asked for a thumbnail first; if
 /// that fails for any reason other than a missing item, its icon is returned
-/// instead and [ThumbicoImage.isIcon] is true.
+/// instead and [ThumbicoInfo.isIcon] is true.
 ///
 /// Blocks the calling thread for as long as the shell takes, which can be
 /// seconds for a video; GUI callers use [readThumbicoAsync]. Throws
@@ -74,10 +75,11 @@ ThumbicoImage _read(
 ) {
   final bitmap = readShellBitmap(shellPath, size.width, size.height, source, options);
   return ThumbicoImage(
-    width: bitmap.width,
-    height: bitmap.height,
-    requestedSize: size,
-    isIcon: source == ThumbicoSource.iconOnly,
+    info: ThumbicoInfo(
+      size: ThumbicoSize(bitmap.width, bitmap.height),
+      requestedSize: size,
+      isIcon: source == ThumbicoSource.iconOnly,
+    ),
     pixels: bitmap.pixels,
   );
 }
