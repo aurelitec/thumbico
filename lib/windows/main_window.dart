@@ -16,7 +16,7 @@ import 'package:thumbico_core/thumbico_core.dart';
 
 import '../common/strings.dart' as strings;
 import '../common/theme.dart';
-import '../services/shell_service.dart';
+import '../services/thumbico_service.dart';
 import '../widgets/status_bar.dart';
 import '../widgets/thumbico_canvas.dart';
 import '../widgets/toolbar.dart';
@@ -53,7 +53,7 @@ class _MainWindowState extends State<MainWindow> {
   final _path = TextEditingController();
   final _size = TextEditingController(text: '256');
 
-  ShellImage? _shellImage;
+  LoadedThumbico? _thumbico;
   var _message = strings.enterPath;
 
   /// Asks the shell for the item in the path field at the size in the size field.
@@ -65,14 +65,14 @@ class _MainWindowState extends State<MainWindow> {
     }
 
     try {
-      final shellImage = await readShellImage(_path.text, size);
+      final thumbico = await loadThumbico(_path.text, size);
       if (!mounted) {
-        shellImage.image.dispose();
+        thumbico.image.dispose();
         return;
       }
-      _shellImage?.image.dispose();
+      _thumbico?.image.dispose();
       setState(() {
-        _shellImage = shellImage;
+        _thumbico = thumbico;
         _message = '';
       });
     } on ThumbicoException catch (e) {
@@ -92,7 +92,7 @@ class _MainWindowState extends State<MainWindow> {
   void dispose() {
     _path.dispose();
     _size.dispose();
-    _shellImage?.image.dispose();
+    _thumbico?.image.dispose();
     super.dispose();
   }
 
@@ -102,8 +102,8 @@ class _MainWindowState extends State<MainWindow> {
       child: Column(
         children: [
           Toolbar(path: _path, size: _size, onRefresh: _read),
-          Expanded(child: ThumbicoCanvas(image: _shellImage?.image)),
-          StatusBar(message: _message, info: _shellImage?.info),
+          Expanded(child: ThumbicoCanvas(image: _thumbico?.image)),
+          StatusBar(message: _message, info: _thumbico?.info),
         ],
       ),
     );

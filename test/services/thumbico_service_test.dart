@@ -6,7 +6,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:thumbico/services/shell_service.dart';
+import 'package:thumbico/services/thumbico_service.dart';
 import 'package:thumbico_core/thumbico_core.dart';
 
 void main() {
@@ -32,24 +32,24 @@ void main() {
     expect(pixels, [10, 20, 30, 255, 200, 100, 50, 128], reason: 'the source is not modified');
   });
 
-  test('readShellImage returns the shell facts and the decoded image at that size', () async {
+  test('loadThumbico returns the shell facts and the decoded image at that size', () async {
     final directory = Directory.systemTemp.createTempSync('thumbico_app_');
     addTearDown(() => directory.deleteSync(recursive: true));
     final path = '${directory.path}${Platform.pathSeparator}sample.txt';
     File(path).writeAsStringSync('hello from the tests\n');
 
-    final shellImage = await readShellImage(path, const ThumbicoSize.square(32));
-    addTearDown(shellImage.image.dispose);
+    final thumbico = await loadThumbico(path, const ThumbicoSize.square(32));
+    addTearDown(thumbico.image.dispose);
 
-    expect(shellImage.info.isIcon, isTrue);
-    expect(shellImage.info.requestedSize, const ThumbicoSize.square(32));
-    expect(shellImage.image.width, shellImage.info.size.width);
-    expect(shellImage.image.height, shellImage.info.size.height);
+    expect(thumbico.info.isIcon, isTrue);
+    expect(thumbico.info.requestedSize, const ThumbicoSize.square(32));
+    expect(thumbico.image.width, thumbico.info.size.width);
+    expect(thumbico.image.height, thumbico.info.size.height);
   });
 
-  test('readShellImage passes the shell failure through', () async {
+  test('loadThumbico passes the shell failure through', () async {
     expect(
-      () => readShellImage(r'C:\does\not\exist.txt', const ThumbicoSize.square(32)),
+      () => loadThumbico(r'C:\does\not\exist.txt', const ThumbicoSize.square(32)),
       throwsA(isA<ThumbicoException>()),
     );
   });

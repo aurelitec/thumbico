@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2026 Aurelitec <https://www.aurelitec.com>
 // Licensed under the MIT License. See LICENSE file in the project root for more information.
 
-/// The application's access to the Windows shell, through thumbico_core.
+/// Loads thumbnails and icons for display, through thumbico_core.
 library;
 
 import 'dart:async';
@@ -10,16 +10,16 @@ import 'dart:ui' as ui;
 
 import 'package:thumbico_core/thumbico_core.dart';
 
-/// What the shell said about an item, together with the Flutter image drawn from it.
+/// A thumbnail or icon ready to draw: what the shell said about it, and the Flutter image.
 ///
 /// The caller owns [image] and must dispose it.
-typedef ShellImage = ({ThumbicoInfo info, ui.Image image});
+typedef LoadedThumbico = ({ThumbicoInfo info, ui.Image image});
 
-/// Asks the shell for the thumbnail or icon of the item at [path], at most [size].
+/// Reads the thumbnail or icon of the item at [path], at most [size], and decodes it.
 ///
 /// Runs off the UI isolate and throws what [readThumbicoAsync] throws. The
 /// shell's pixel buffer is dropped once the Flutter image has been made.
-Future<ShellImage> readShellImage(String path, ThumbicoSize size) async {
+Future<LoadedThumbico> loadThumbico(String path, ThumbicoSize size) async {
   final result = await readThumbicoAsync(path, size);
   return (info: result.info, image: await toUiImage(result));
 }
