@@ -36,6 +36,8 @@ dependencies:
   thumbico_core:
     path: packages/thumbico_core
 
+  filepicker_windows: ^3.0.1
+
   simple_app_settings:
     path: packages/simple_app_settings
 

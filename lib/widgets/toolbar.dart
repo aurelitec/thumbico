@@ -5,11 +5,13 @@ import 'package:material_ui/material_ui.dart';
 
 import '../common/strings.dart' as strings;
 
-/// The window's toolbar: the path, the size, and the button that asks the shell again.
+/// The window's toolbar: the open buttons, the path, the size, and the button that asks again.
 class const Toolbar({
   super.key,
   required final TextEditingController path,
   required final TextEditingController size,
+  required final VoidCallback onOpenFile,
+  required final VoidCallback onOpenFolder,
   required final VoidCallback onRefresh,
 }) extends StatelessWidget {
   @override
@@ -27,6 +29,17 @@ class const Toolbar({
         padding: const EdgeInsets.all(8),
         child: Row(
           children: [
+            IconButton(
+              icon: const Icon(Icons.file_open),
+              tooltip: strings.openFileTooltip,
+              onPressed: onOpenFile,
+            ),
+            IconButton(
+              icon: const Icon(Icons.folder_open),
+              tooltip: strings.openFolderTooltip,
+              onPressed: onOpenFolder,
+            ),
+            const SizedBox(width: 4),
             Expanded(
               child: TextField(
                 controller: path,

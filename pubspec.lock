@@ -81,6 +81,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.2"
+  filepicker_windows:
+    dependency: "direct main"
+    description:
+      name: filepicker_windows
+      sha256: "29f834e7c52e3c34f6cc75c0a888ea6a27a0e7feed774ecde98ab88e78f38da1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.2"
   flutter:
     dependency: "direct main"
     description: flutter
