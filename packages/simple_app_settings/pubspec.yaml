@@ -1,0 +1,19 @@
+name: simple_app_settings
+description: Keeps an app's settings in one flat JSON file, beside the executable for a portable copy and under Local AppData otherwise.
+version: 0.1.0
+repository: https://github.com/aurelitec/thumbico
+publish_to: none
+
+environment:
+  sdk: ^3.13.0
+
+platforms:
+  windows:
+
+dependencies:
+  meta: ^1.16.0
+  path: ^1.9.0
+
+dev_dependencies:
+  lints: ^6.1.0
+  test: ^1.25.0

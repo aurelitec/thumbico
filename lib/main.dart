@@ -8,10 +8,18 @@
 import 'package:flutter/src/widgets/_window.dart';
 
 import 'package:material_ui/material_ui.dart';
+import 'package:simple_app_settings/simple_app_settings.dart';
 
+import 'common/strings.dart' as strings;
 import 'windows/main_window.dart';
 
 void main() {
+  // Settings read the file the first time one is touched, so the store must exist before any window.
+  SettingsStore.shared = SettingsStore.forApp(
+    company: strings.companyName,
+    product: strings.appName,
+    onSaveError: (error, stackTrace) => debugPrint('Could not save the settings: $error'),
+  );
   WidgetsFlutterBinding.ensureInitialized();
   runWidget(
     WindowManager(

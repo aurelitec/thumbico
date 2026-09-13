@@ -14,6 +14,7 @@ import 'package:material_ui/material_ui.dart';
 
 import 'package:thumbico_core/thumbico_core.dart';
 
+import '../common/settings.dart' as settings;
 import '../common/strings.dart' as strings;
 import '../common/theme.dart';
 import '../services/thumbico_service.dart';
@@ -51,7 +52,7 @@ class const MainWindow({super.key}) extends StatefulWidget {
 
 class _MainWindowState extends State<MainWindow> {
   final _path = TextEditingController();
-  final _size = TextEditingController(text: '256');
+  final _size = TextEditingController(text: settings.sizeText.value);
 
   LoadedThumbico? _thumbico;
   var _message = strings.enterPath;
@@ -63,6 +64,7 @@ class _MainWindowState extends State<MainWindow> {
       setState(() => _message = strings.invalidSize);
       return;
     }
+    settings.sizeText.value = _size.text;
 
     try {
       final thumbico = await loadThumbico(_path.text, size);
