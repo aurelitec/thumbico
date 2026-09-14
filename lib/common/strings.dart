@@ -51,6 +51,14 @@ const Map<ThumbicoOption, String> optionLabels = {
 };
 
 // ---------------------------------------------------------------------------
+// Overflow menu
+// ---------------------------------------------------------------------------
+
+const moreTooltip = 'More';
+const helpLabel = 'Help';
+const exitLabel = 'Exit';
+
+// ---------------------------------------------------------------------------
 // Status bar
 // ---------------------------------------------------------------------------
 
@@ -68,3 +76,4 @@ const invalidSize = 'The size must be a number, or two numbers like 256 x 160.';
 const itemNotFound = 'Not found';
 const noThumbnail = 'No thumbnail';
 const shellError = 'The shell could not render this item';
+const couldNotOpenBrowser = 'Could not open the browser.';

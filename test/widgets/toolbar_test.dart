@@ -3,6 +3,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:thumbico/widgets/overflow_menu.dart';
 import 'package:thumbico/widgets/toolbar.dart';
 import 'package:thumbico_core/thumbico_core.dart';
 
@@ -36,6 +37,7 @@ void main() {
           options: const {},
           onSourceChanged: (_) {},
           onOptionToggled: (_, _) {},
+          overflowCallbacks: OverflowCallbacks(onHelp: () {}, onExit: () {}),
         ),
       ),
     );
@@ -70,6 +72,7 @@ void main() {
           options: const {},
           onSourceChanged: (_) {},
           onOptionToggled: (_, _) {},
+          overflowCallbacks: OverflowCallbacks(onHelp: () {}, onExit: () {}),
         ),
       ),
     );
@@ -96,6 +99,7 @@ void main() {
           options: const {},
           onSourceChanged: (_) {},
           onOptionToggled: (_, _) {},
+          overflowCallbacks: OverflowCallbacks(onHelp: () {}, onExit: () {}),
         ),
       ),
     );
@@ -120,6 +124,7 @@ void main() {
           options: const {},
           onSourceChanged: (_) {},
           onOptionToggled: (_, _) {},
+          overflowCallbacks: OverflowCallbacks(onHelp: () {}, onExit: () {}),
         ),
       ),
     );
@@ -127,6 +132,29 @@ void main() {
     final refreshButton = tester.getCenter(find.byTooltip('Ask the shell again'));
     final optionsButton = tester.getCenter(find.byTooltip('Options'));
     expect(refreshButton.dx, lessThan(optionsButton.dx));
+  });
+
+  testWidgets('the More button comes last, after the Options button', (tester) async {
+    await tester.pumpWidget(
+      host(
+        Toolbar(
+          path: path,
+          size: size,
+          onOpenFile: () {},
+          onOpenFolder: () {},
+          onRefresh: () {},
+          source: ThumbicoSource.auto,
+          options: const {},
+          onSourceChanged: (_) {},
+          onOptionToggled: (_, _) {},
+          overflowCallbacks: OverflowCallbacks(onHelp: () {}, onExit: () {}),
+        ),
+      ),
+    );
+
+    final optionsButton = tester.getCenter(find.byTooltip('Options'));
+    final moreButton = tester.getCenter(find.byTooltip('More'));
+    expect(optionsButton.dx, lessThan(moreButton.dx));
   });
 
   testWidgets('the size field offers the standard sizes', (tester) async {
@@ -142,6 +170,7 @@ void main() {
           options: const {},
           onSourceChanged: (_) {},
           onOptionToggled: (_, _) {},
+          overflowCallbacks: OverflowCallbacks(onHelp: () {}, onExit: () {}),
         ),
       ),
     );
@@ -165,6 +194,7 @@ void main() {
           options: const {},
           onSourceChanged: (_) {},
           onOptionToggled: (_, _) {},
+          overflowCallbacks: OverflowCallbacks(onHelp: () {}, onExit: () {}),
         ),
       ),
     );

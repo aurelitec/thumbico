@@ -38,6 +38,9 @@ dependencies:
 
   filepicker_windows: ^3.0.1
 
+  ffi: ^2.2.0
+  win32: ^6.4.0
+
   simple_app_settings:
     path: packages/simple_app_settings
 

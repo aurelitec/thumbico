@@ -7,9 +7,11 @@ import 'package:thumbico_core/thumbico_core.dart';
 
 import '../common/strings.dart' as strings;
 import 'options_flyout.dart';
+import 'overflow_menu.dart';
 import 'size_field.dart';
 
-/// The window's toolbar: the open buttons, the path, the size, refresh, and the options flyout.
+/// The window's toolbar: the open buttons, the path, the size, refresh, the options flyout, and
+/// the overflow menu.
 class const Toolbar({
   super.key,
   required final TextEditingController path,
@@ -21,6 +23,9 @@ class const Toolbar({
   required final Set<ThumbicoOption> options,
   required final ValueChanged<ThumbicoSource> onSourceChanged,
   required final void Function(ThumbicoOption option, bool isOn) onOptionToggled,
+
+  /// What each item of the overflow menu does.
+  required final OverflowCallbacks overflowCallbacks,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -70,6 +75,7 @@ class const Toolbar({
               onSourceChanged: onSourceChanged,
               onOptionToggled: onOptionToggled,
             ),
+            OverflowMenu(callbacks: overflowCallbacks),
           ],
         ),
       ),

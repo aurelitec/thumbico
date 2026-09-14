@@ -19,8 +19,11 @@ import 'package:thumbico_core/thumbico_core.dart';
 import '../common/settings.dart' as settings;
 import '../common/strings.dart' as strings;
 import '../common/theme.dart';
+import '../common/urls.dart' as urls;
 import '../services/open_dialogs.dart';
+import '../services/open_url.dart';
 import '../services/thumbico_service.dart';
+import '../widgets/overflow_menu.dart';
 import '../widgets/status_bar.dart';
 import '../widgets/thumbico_canvas.dart';
 import '../widgets/toolbar.dart';
@@ -59,6 +62,9 @@ class _MainWindowState extends State<MainWindow> {
 
   LoadedThumbico? _thumbico;
   var _message = strings.enterPath;
+
+  /// What the overflow menu's items do, built once from the handlers below.
+  late final _overflowCallbacks = OverflowCallbacks(onHelp: _help, onExit: _exit);
 
   /// The native window, so a dialog can be owned by it and stay in front.
   static Pointer<Void> get _handle => switch (MainWindow._controller) {
@@ -130,6 +136,16 @@ class _MainWindowState extends State<MainWindow> {
     _read();
   }
 
+  /// Opens the help page in the browser, or says in the status bar that it could not.
+  void _help() {
+    if (!openUrl(urls.help)) {
+      setState(() => _message = strings.couldNotOpenBrowser);
+    }
+  }
+
+  /// Closes the window, which is what exits the application, so Exit and the close button share one path.
+  void _exit() => MainWindow._controller.destroy();
+
   String _describe(ThumbicoException e) => switch (e.failure) {
     ThumbicoFailure.itemNotFound => '${strings.itemNotFound}: ${e.path}',
     ThumbicoFailure.noThumbnail => '${strings.noThumbnail}: ${e.path}',
@@ -159,6 +175,7 @@ class _MainWindowState extends State<MainWindow> {
             options: settings.options.value,
             onSourceChanged: _setSource,
             onOptionToggled: _toggleOption,
+            overflowCallbacks: _overflowCallbacks,
           ),
           Expanded(child: ThumbicoCanvas(image: _thumbico?.image)),
           StatusBar(message: _message, info: _thumbico?.info),
