@@ -1,6 +1,7 @@
 // Copyright (c) 2011-2026 Aurelitec <https://www.aurelitec.com>
 // Licensed under the MIT License. See LICENSE file in the project root for more information.
 
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:thumbico/widgets/size_field.dart';
@@ -29,6 +30,22 @@ void main() {
 
     expect(submits, 1);
     expect(controller.text, '512');
+  });
+
+  testWidgets('the arrow keys move the caret inside the field', (tester) async {
+    await tester.pumpWidget(field());
+    await tester.tap(find.byType(TextField));
+    await tester.pump();
+    controller.selection = const TextSelection.collapsed(offset: 3);
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowLeft);
+    await tester.pump();
+    expect(controller.selection, const TextSelection.collapsed(offset: 2));
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pump();
+    expect(controller.selection, const TextSelection.collapsed(offset: 3));
+    expect(tester.widget<TextField>(find.byType(TextField)).focusNode?.hasFocus ?? true, isTrue);
   });
 
   testWidgets('the chevron opens a list of the standard sizes in the one format', (tester) async {
