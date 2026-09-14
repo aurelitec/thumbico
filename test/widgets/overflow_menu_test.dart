@@ -52,7 +52,7 @@ void main() {
     await open(tester);
 
     await tester.tap(find.text('Exit'));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     expect(exits, 1);
   });

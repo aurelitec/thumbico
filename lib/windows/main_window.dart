@@ -137,8 +137,9 @@ class _MainWindowState extends State<MainWindow> {
   }
 
   /// Opens the help page in the browser, or says in the status bar that it could not.
-  void _help() {
-    if (!openUrl(urls.help)) {
+  Future<void> _help() async {
+    final opened = await openUrl(urls.help);
+    if (!opened && mounted) {
       setState(() => _message = strings.couldNotOpenBrowser);
     }
   }
