@@ -11,8 +11,8 @@ import '../common/strings.dart' as strings;
 
 /// The size field: a typed size, Enter to read, and a list of the standard sizes.
 ///
-/// A picked standard size is written to the field in the one format and submitted
-/// at once, so a pick behaves like typing the size and pressing Enter.
+/// Built on the framework's combo box. A picked or highlighted standard size is
+/// written to the field in the one format and submitted at once.
 class const SizeField({
   super.key,
 
@@ -21,80 +21,62 @@ class const SizeField({
 
   /// Called when the user presses Enter in the field or picks a standard size.
   required final VoidCallback onSubmitted,
-}) extends StatelessWidget {
+}) extends StatefulWidget {
   /// Every icon size the Windows shell itself uses, then doubled twice for thumbnails.
   static const presets = [16, 24, 32, 48, 64, 96, 128, 256, 512, 1024, 2048];
 
   /// Wide enough for the longest entry and the chevron.
   static const _width = 150.0;
 
-  /// The arrow keys as a text field normally has them.
-  ///
-  /// The anchor binds the plain arrows to focus traversal for its menu, which
-  /// would take them from the field; this map sits closer to the field and wins.
-  static const _editingShortcuts = <ShortcutActivator, Intent>{
-    SingleActivator(LogicalKeyboardKey.arrowLeft): ExtendSelectionByCharacterIntent(
-      forward: false,
-      collapseSelection: true,
-    ),
-    SingleActivator(LogicalKeyboardKey.arrowRight): ExtendSelectionByCharacterIntent(
-      forward: true,
-      collapseSelection: true,
-    ),
-    SingleActivator(LogicalKeyboardKey.arrowUp): ExtendSelectionVerticallyToAdjacentLineIntent(
-      forward: false,
-      collapseSelection: true,
-    ),
-    SingleActivator(LogicalKeyboardKey.arrowDown): ExtendSelectionVerticallyToAdjacentLineIntent(
-      forward: true,
-      collapseSelection: true,
-    ),
-  };
+  @override
+  State<SizeField> createState() => _SizeFieldState();
+}
 
-  /// Puts a standard size in the field in the one format, then submits it.
-  void _pick(int side) {
-    controller.text = ThumbicoSize.square(side).format();
-    onSubmitted();
+class _SizeFieldState extends State<SizeField> {
+  /// Tells the Enter handler whether the combo's own submit will fire.
+  final _menu = MenuController();
+
+  /// Submits on Enter while the list is closed, the one case the combo ignores.
+  ///
+  /// With the list open, the combo reports the typed or highlighted size itself
+  /// through its selection callback. The key is left unhandled so that path runs.
+  KeyEventResult _onKey(FocusNode node, KeyEvent event) {
+    final isEnter = event.logicalKey == .enter || event.logicalKey == .numpadEnter;
+    if (event is KeyDownEvent && isEnter && !_menu.isOpen) {
+      widget.onSubmitted();
+    }
+    return .ignored;
   }
 
   @override
   Widget build(BuildContext context) {
-    return MenuAnchor(
-      menuChildren: [
-        // The standard sizes, in the format the field settles to
-        for (final side in presets)
-          MenuItemButton(
-            onPressed: () => _pick(side),
-            child: Text(ThumbicoSize.square(side).format()),
-          ),
-      ],
-
-      // The field, with the chevron that opens the list
-      builder: (context, menu, child) => SizedBox(
-        width: _width,
-        child: Shortcuts(
-          shortcuts: _editingShortcuts,
-          child: TextField(
-            controller: controller,
-            decoration: InputDecoration(
-              isDense: true,
-              border: const OutlineInputBorder(),
-              contentPadding: const .symmetric(horizontal: 8, vertical: 8),
-              hintText: strings.sizeHint,
-              // The decoration reserves a 48-pixel box for its suffix by default,
-              // which would make this field taller than the path field
-              suffixIconConstraints: const BoxConstraints.tightFor(width: 32, height: 32),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.arrow_drop_down),
-                tooltip: strings.standardSizesTooltip,
-                padding: .zero,
-                constraints: const BoxConstraints.tightFor(width: 32, height: 32),
-                onPressed: menu.isOpen ? menu.close : menu.open,
-              ),
-            ),
-            onSubmitted: (_) => onSubmitted(),
-          ),
+    return Focus(
+      onKeyEvent: _onKey,
+      child: DropdownMenu<int>(
+        controller: widget.controller,
+        menuController: _menu,
+        width: SizeField._width,
+        requestFocusOnTap: true,
+        enableFilter: false,
+        enableSearch: false,
+        hintText: strings.sizeHint,
+        // The path field's dense look, and a suffix box that does not grow the field
+        inputDecorationTheme: const InputDecorationThemeData(
+          isDense: true,
+          border: OutlineInputBorder(),
+          contentPadding: .symmetric(horizontal: 8, vertical: 8),
+          suffixIconConstraints: BoxConstraints.tightFor(width: 32, height: 32),
         ),
+
+        // The standard sizes, in the format the field settles to
+        dropdownMenuEntries: [
+          for (final side in SizeField.presets)
+            DropdownMenuEntry(value: side, label: ThumbicoSize.square(side).format()),
+        ],
+
+        // Null is the combo's word for typed text submitted with the list open;
+        // either way the text is already in the controller
+        onSelected: (_) => widget.onSubmitted(),
       ),
     );
   }

@@ -146,10 +146,10 @@ void main() {
       ),
     );
 
-    await tester.tap(find.byTooltip('Standard sizes'));
+    await tester.tap(find.byIcon(Icons.arrow_drop_down).hitTestable());
     await tester.pumpAndSettle();
 
-    expect(find.text('256 x 256'), findsOneWidget);
+    expect(find.text('2048 x 2048').hitTestable(), findsOneWidget);
   });
 
   testWidgets('the size field is as tall as the path field', (tester) async {

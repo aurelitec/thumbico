@@ -27,7 +27,6 @@ const openFileTooltip = 'Open file';
 const openFolderTooltip = 'Open folder';
 const pathHint = 'File, folder, or drive path';
 const sizeHint = 'Size';
-const standardSizesTooltip = 'Standard sizes';
 const refreshTooltip = 'Ask the shell again';
 const optionsTooltip = 'Options';
 
