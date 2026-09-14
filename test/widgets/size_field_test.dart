@@ -29,7 +29,7 @@ void main() {
   }
 
   Future<void> openList(WidgetTester tester) async {
-    await tester.tap(find.byIcon(Icons.arrow_drop_down).hitTestable());
+    await tester.tap(find.byIcon(Icons.expand_more).hitTestable());
     await tester.pumpAndSettle();
   }
 
@@ -102,6 +102,23 @@ void main() {
     expect(find.byType(MenuItemButton).hitTestable(), findsNWidgets(SizeField.presets.length));
     expect(find.text('16 x 16').hitTestable(), findsOneWidget);
     expect(find.text('2048 x 2048').hitTestable(), findsOneWidget);
+  });
+
+  testWidgets('the chevron stays a downward chevron while the list is open', (tester) async {
+    await tester.pumpWidget(field());
+    await openList(tester);
+
+    expect(find.byIcon(Icons.expand_more).hitTestable(), findsOneWidget);
+    expect(find.byIcon(Icons.arrow_drop_up).hitTestable(), findsNothing);
+  });
+
+  testWidgets('the list rows are compact', (tester) async {
+    await tester.pumpWidget(field());
+    await openList(tester);
+
+    // Material's 48 less the 8 that compact density takes off
+    final row = tester.getSize(find.byType(MenuItemButton).hitTestable().first);
+    expect(row.height, 40);
   });
 
   testWidgets('picking a standard size writes it to the field and submits', (tester) async {

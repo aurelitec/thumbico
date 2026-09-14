@@ -60,6 +60,9 @@ class _SizeFieldState extends State<SizeField> {
         enableFilter: false,
         enableSearch: false,
         hintText: strings.sizeHint,
+        // A Windows combo box has a chevron that does not flip while open
+        trailingIcon: const Icon(Icons.expand_more),
+        selectedTrailingIcon: const Icon(Icons.expand_more),
         // The path field's dense look, and a suffix box that does not grow the field
         inputDecorationTheme: const InputDecorationThemeData(
           isDense: true,
@@ -71,7 +74,12 @@ class _SizeFieldState extends State<SizeField> {
         // The standard sizes, in the format the field settles to
         dropdownMenuEntries: [
           for (final side in SizeField.presets)
-            DropdownMenuEntry(value: side, label: ThumbicoSize.square(side).format()),
+            DropdownMenuEntry(
+              value: side,
+              label: ThumbicoSize.square(side).format(),
+              // Tighter rows, the same density the options flyout uses
+              style: MenuItemButton.styleFrom(visualDensity: .compact),
+            ),
         ],
 
         // Null is the combo's word for typed text submitted with the list open;

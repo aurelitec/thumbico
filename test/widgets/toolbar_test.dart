@@ -146,7 +146,7 @@ void main() {
       ),
     );
 
-    await tester.tap(find.byIcon(Icons.arrow_drop_down).hitTestable());
+    await tester.tap(find.byIcon(Icons.expand_more).hitTestable());
     await tester.pumpAndSettle();
 
     expect(find.text('2048 x 2048').hitTestable(), findsOneWidget);
