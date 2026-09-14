@@ -4,6 +4,8 @@
 /// Contains user-facing strings used throughout the application.
 library;
 
+import 'package:thumbico_core/thumbico_core.dart';
+
 // ---------------------------------------------------------------------------
 // App
 // ---------------------------------------------------------------------------
@@ -32,17 +34,21 @@ const optionsTooltip = 'Options';
 // Options flyout
 // ---------------------------------------------------------------------------
 
-const sourceAuto = 'Best';
-const sourceThumbnailOnly = 'Thumbnail';
-const sourceIconOnly = 'Icon';
+const Map<ThumbicoSource, String> sourceLabels = {
+  .auto: 'Best',
+  .thumbnailOnly: 'Thumbnail',
+  .iconOnly: 'Icon',
+};
 
-const optionAllowLargerSize = 'Allow larger than asked';
-const optionInMemoryOnly = 'Only if already in memory';
-const optionInCacheOnly = 'Only if already cached';
-const optionCropToSquare = 'Crop to square';
-const optionWideAspect = 'Wide aspect (0.7)';
-const optionIconBackground = 'App colour behind icons';
-const optionScaleUp = 'Scale small images up';
+const Map<ThumbicoOption, String> optionLabels = {
+  .allowLargerSize: 'Allow larger than asked',
+  .inMemoryOnly: 'Only if already in memory',
+  .inCacheOnly: 'Only if already cached',
+  .cropToSquare: 'Crop to square',
+  .wideAspect: 'Wide aspect (0.7)',
+  .iconBackground: 'App colour behind icons',
+  .scaleUp: 'Scale small images up',
+};
 
 // ---------------------------------------------------------------------------
 // Status bar

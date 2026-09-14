@@ -37,7 +37,7 @@ class const OptionsFlyout({
                 showSelectedIcon: false,
                 segments: [
                   for (final value in ThumbicoSource.values)
-                    ButtonSegment(value: value, label: Text(_sourceLabel(value))),
+                    ButtonSegment(value: value, label: Text(strings.sourceLabels[value]!)),
                 ],
                 selected: {source},
                 onSelectionChanged: (selected) => onSourceChanged(selected.single),
@@ -47,7 +47,7 @@ class const OptionsFlyout({
                 SwitchListTile(
                   dense: true,
                   visualDensity: VisualDensity.compact,
-                  title: Text(_optionLabel(option)),
+                  title: Text(strings.optionLabels[option]!),
                   value: options.contains(option),
                   onChanged: (isOn) => onOptionToggled(option, isOn),
                 ),
@@ -66,20 +66,4 @@ class const OptionsFlyout({
       ),
     );
   }
-
-  static String _sourceLabel(ThumbicoSource source) => switch (source) {
-    ThumbicoSource.auto => strings.sourceAuto,
-    ThumbicoSource.thumbnailOnly => strings.sourceThumbnailOnly,
-    ThumbicoSource.iconOnly => strings.sourceIconOnly,
-  };
-
-  static String _optionLabel(ThumbicoOption option) => switch (option) {
-    ThumbicoOption.allowLargerSize => strings.optionAllowLargerSize,
-    ThumbicoOption.inMemoryOnly => strings.optionInMemoryOnly,
-    ThumbicoOption.inCacheOnly => strings.optionInCacheOnly,
-    ThumbicoOption.cropToSquare => strings.optionCropToSquare,
-    ThumbicoOption.wideAspect => strings.optionWideAspect,
-    ThumbicoOption.iconBackground => strings.optionIconBackground,
-    ThumbicoOption.scaleUp => strings.optionScaleUp,
-  };
 }
