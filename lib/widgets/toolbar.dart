@@ -7,6 +7,7 @@ import 'package:thumbico_core/thumbico_core.dart';
 
 import '../common/strings.dart' as strings;
 import 'options_flyout.dart';
+import 'size_field.dart';
 
 /// The window's toolbar: the open buttons, the path, the size, refresh, and the options flyout.
 class const Toolbar({
@@ -55,14 +56,7 @@ class const Toolbar({
               ),
             ),
             const SizedBox(width: 8),
-            SizedBox(
-              width: 120,
-              child: TextField(
-                controller: size,
-                decoration: fieldDecoration.copyWith(hintText: strings.sizeHint),
-                onSubmitted: (_) => onRefresh(),
-              ),
-            ),
+            SizeField(controller: size, onSubmitted: onRefresh),
             const SizedBox(width: 4),
             IconButton(
               icon: const Icon(Icons.refresh),

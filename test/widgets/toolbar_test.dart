@@ -128,4 +128,49 @@ void main() {
     final optionsButton = tester.getCenter(find.byTooltip('Options'));
     expect(refreshButton.dx, lessThan(optionsButton.dx));
   });
+
+  testWidgets('the size field offers the standard sizes', (tester) async {
+    await tester.pumpWidget(
+      host(
+        Toolbar(
+          path: path,
+          size: size,
+          onOpenFile: () {},
+          onOpenFolder: () {},
+          onRefresh: () {},
+          source: ThumbicoSource.auto,
+          options: const {},
+          onSourceChanged: (_) {},
+          onOptionToggled: (_, _) {},
+        ),
+      ),
+    );
+
+    await tester.tap(find.byTooltip('Standard sizes'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('256 x 256'), findsOneWidget);
+  });
+
+  testWidgets('the size field is as tall as the path field', (tester) async {
+    await tester.pumpWidget(
+      host(
+        Toolbar(
+          path: path,
+          size: size,
+          onOpenFile: () {},
+          onOpenFolder: () {},
+          onRefresh: () {},
+          source: ThumbicoSource.auto,
+          options: const {},
+          onSourceChanged: (_) {},
+          onOptionToggled: (_, _) {},
+        ),
+      ),
+    );
+
+    final pathField = tester.getSize(find.byType(TextField).first);
+    final sizeField = tester.getSize(find.byType(TextField).last);
+    expect(sizeField.height, pathField.height);
+  });
 }

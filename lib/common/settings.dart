@@ -11,7 +11,7 @@ import 'package:simple_app_settings/simple_app_settings.dart';
 import 'package:thumbico_core/thumbico_core.dart';
 
 /// The text of the size field, as the user typed it.
-final sizeText = AppSetting<String>(key: 'sizeText', defaultValue: '256', saveOnSet: true);
+final sizeText = AppSetting<String>(key: 'sizeText', defaultValue: '256 x 256', saveOnSet: true);
 
 final source = EnumAppSetting<ThumbicoSource>(
   key: 'source',

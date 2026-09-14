@@ -86,6 +86,8 @@ class _MainWindowState extends State<MainWindow> {
       setState(() => _message = strings.invalidSize);
       return;
     }
+    // The field settles to the one format however the size was typed
+    _size.text = size.format();
     settings.sizeText.value = _size.text;
 
     try {
