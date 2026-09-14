@@ -28,12 +28,6 @@ final options = ConvertedAppSetting<Set<ThumbicoOption>, List<Object?>>(
   saveOnSet: true,
 );
 
-final optionsPaneOpen = AppSetting<bool>(
-  key: 'optionsPaneOpen',
-  defaultValue: false,
-  saveOnSet: true,
-);
-
 /// The solid canvas colour as ARGB, or null for the checkerboard.
 final backgroundArgb = AppSetting<int?>(key: 'backgroundArgb', defaultValue: null, saveOnSet: true);
 

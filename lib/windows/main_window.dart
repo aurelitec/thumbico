@@ -89,7 +89,12 @@ class _MainWindowState extends State<MainWindow> {
     settings.sizeText.value = _size.text;
 
     try {
-      final thumbico = await loadThumbico(_path.text, size);
+      final thumbico = await loadThumbico(
+        _path.text,
+        size,
+        source: settings.source.value,
+        options: settings.options.value,
+      );
       if (!mounted) {
         thumbico.image.dispose();
         return;
@@ -104,6 +109,23 @@ class _MainWindowState extends State<MainWindow> {
     } on ArgumentError {
       setState(() => _message = strings.enterPath);
     }
+  }
+
+  // A read mode is read again the moment it changes, so its effect is visible at once.
+  void _setSource(ThumbicoSource source) {
+    setState(() => settings.source.value = source);
+    _read();
+  }
+
+  void _toggleOption(ThumbicoOption option, bool isOn) {
+    final options = {...settings.options.value};
+    if (isOn) {
+      options.add(option);
+    } else {
+      options.remove(option);
+    }
+    setState(() => settings.options.value = options);
+    _read();
   }
 
   String _describe(ThumbicoException e) => switch (e.failure) {
@@ -131,6 +153,10 @@ class _MainWindowState extends State<MainWindow> {
             onOpenFile: _openFile,
             onOpenFolder: _openFolder,
             onRefresh: _read,
+            source: settings.source.value,
+            options: settings.options.value,
+            onSourceChanged: _setSource,
+            onOptionToggled: _toggleOption,
           ),
           Expanded(child: ThumbicoCanvas(image: _thumbico?.image)),
           StatusBar(message: _message, info: _thumbico?.info),

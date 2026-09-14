@@ -3,9 +3,12 @@
 
 import 'package:material_ui/material_ui.dart';
 
-import '../common/strings.dart' as strings;
+import 'package:thumbico_core/thumbico_core.dart';
 
-/// The window's toolbar: the open buttons, the path, the size, and the button that asks again.
+import '../common/strings.dart' as strings;
+import 'options_flyout.dart';
+
+/// The window's toolbar: the open buttons, the path, the size, refresh, and the options flyout.
 class const Toolbar({
   super.key,
   required final TextEditingController path,
@@ -13,6 +16,10 @@ class const Toolbar({
   required final VoidCallback onOpenFile,
   required final VoidCallback onOpenFolder,
   required final VoidCallback onRefresh,
+  required final ThumbicoSource source,
+  required final Set<ThumbicoOption> options,
+  required final ValueChanged<ThumbicoSource> onSourceChanged,
+  required final void Function(ThumbicoOption option, bool isOn) onOptionToggled,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -61,6 +68,13 @@ class const Toolbar({
               icon: const Icon(Icons.refresh),
               tooltip: strings.refreshTooltip,
               onPressed: onRefresh,
+            ),
+            const SizedBox(width: 4),
+            OptionsFlyout(
+              source: source,
+              options: options,
+              onSourceChanged: onSourceChanged,
+              onOptionToggled: onOptionToggled,
             ),
           ],
         ),

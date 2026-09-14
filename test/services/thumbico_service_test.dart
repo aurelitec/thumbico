@@ -47,6 +47,26 @@ void main() {
     expect(thumbico.image.height, thumbico.info.size.height);
   });
 
+  test('loadThumbico passes the source and the options to the core', () async {
+    final directory = Directory.systemTemp.createTempSync('thumbico_app_');
+    addTearDown(() => directory.deleteSync(recursive: true));
+    final path = '${directory.path}${Platform.pathSeparator}sample.txt';
+    File(path).writeAsStringSync('hello from the tests\n');
+
+    // A text file has no thumbnail, so asking for one alone must fail as the core says.
+    expect(
+      () => loadThumbico(
+        path,
+        const ThumbicoSize.square(32),
+        source: ThumbicoSource.thumbnailOnly,
+        options: const {ThumbicoOption.scaleUp},
+      ),
+      throwsA(
+        isA<ThumbicoException>().having((e) => e.failure, 'failure', ThumbicoFailure.noThumbnail),
+      ),
+    );
+  });
+
   test('loadThumbico passes the shell failure through', () async {
     expect(
       () => loadThumbico(r'C:\does\not\exist.txt', const ThumbicoSize.square(32)),

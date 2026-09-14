@@ -26,6 +26,23 @@ const openFolderTooltip = 'Open folder';
 const pathHint = 'File, folder, or drive path';
 const sizeHint = 'Size';
 const refreshTooltip = 'Ask the shell again';
+const optionsTooltip = 'Options';
+
+// ---------------------------------------------------------------------------
+// Options flyout
+// ---------------------------------------------------------------------------
+
+const sourceAuto = 'Best';
+const sourceThumbnailOnly = 'Thumbnail';
+const sourceIconOnly = 'Icon';
+
+const optionAllowLargerSize = 'Allow larger than asked';
+const optionInMemoryOnly = 'Only if already in memory';
+const optionInCacheOnly = 'Only if already cached';
+const optionCropToSquare = 'Crop to square';
+const optionWideAspect = 'Wide aspect (0.7)';
+const optionIconBackground = 'App colour behind icons';
+const optionScaleUp = 'Scale small images up';
 
 // ---------------------------------------------------------------------------
 // Status bar

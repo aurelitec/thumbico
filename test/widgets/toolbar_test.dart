@@ -4,6 +4,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:thumbico/widgets/toolbar.dart';
+import 'package:thumbico_core/thumbico_core.dart';
 
 import '../widget_host.dart';
 
@@ -31,6 +32,10 @@ void main() {
           onOpenFile: () {},
           onOpenFolder: () {},
           onRefresh: () => reads++,
+          source: ThumbicoSource.auto,
+          options: const {},
+          onSourceChanged: (_) {},
+          onOptionToggled: (_, _) {},
         ),
       ),
     );
@@ -61,6 +66,10 @@ void main() {
           onOpenFile: () => files++,
           onOpenFolder: () => folders++,
           onRefresh: () {},
+          source: ThumbicoSource.auto,
+          options: const {},
+          onSourceChanged: (_) {},
+          onOptionToggled: (_, _) {},
         ),
       ),
     );
@@ -83,6 +92,10 @@ void main() {
           onOpenFile: () {},
           onOpenFolder: () {},
           onRefresh: () {},
+          source: ThumbicoSource.auto,
+          options: const {},
+          onSourceChanged: (_) {},
+          onOptionToggled: (_, _) {},
         ),
       ),
     );
@@ -92,5 +105,27 @@ void main() {
     final pathField = tester.getCenter(find.byType(TextField).first);
     expect(fileButton.dx, lessThan(folderButton.dx));
     expect(folderButton.dx, lessThan(pathField.dx));
+  });
+
+  testWidgets('the Options button comes after the refresh button', (tester) async {
+    await tester.pumpWidget(
+      host(
+        Toolbar(
+          path: path,
+          size: size,
+          onOpenFile: () {},
+          onOpenFolder: () {},
+          onRefresh: () {},
+          source: ThumbicoSource.auto,
+          options: const {},
+          onSourceChanged: (_) {},
+          onOptionToggled: (_, _) {},
+        ),
+      ),
+    );
+
+    final refreshButton = tester.getCenter(find.byTooltip('Ask the shell again'));
+    final optionsButton = tester.getCenter(find.byTooltip('Options'));
+    expect(refreshButton.dx, lessThan(optionsButton.dx));
   });
 }

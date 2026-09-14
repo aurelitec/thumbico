@@ -19,10 +19,16 @@ typedef LoadedThumbico = ({ThumbicoInfo info, ui.Image image});
 
 /// Reads the thumbnail or icon of the item at [path], at most [size], and decodes it.
 ///
-/// Runs off the UI isolate and throws what [readThumbicoAsync] throws. The
-/// shell's pixel buffer is dropped once the Flutter image has been made.
-Future<LoadedThumbico> loadThumbico(String path, ThumbicoSize size) async {
-  final result = await readThumbicoAsync(path, size);
+/// [source] and [options] go to the core unchanged. Runs off the UI isolate and
+/// throws what [readThumbicoAsync] throws. The shell's pixel buffer is dropped
+/// once the Flutter image has been made.
+Future<LoadedThumbico> loadThumbico(
+  String path,
+  ThumbicoSize size, {
+  ThumbicoSource source = ThumbicoSource.auto,
+  Set<ThumbicoOption> options = const {},
+}) async {
+  final result = await readThumbicoAsync(path, size, source: source, options: options);
   return (info: result.info, image: await toUiImage(result));
 }
 
