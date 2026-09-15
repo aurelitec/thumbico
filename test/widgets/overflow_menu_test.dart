@@ -115,6 +115,15 @@ void main() {
     expect(exits, 1);
   });
 
+  testWidgets('the items that have a shortcut show it', (tester) async {
+    await tester.pumpWidget(menu());
+    await open(tester);
+
+    expect(find.text('Ctrl+S'), findsOneWidget);
+    expect(find.text('Ctrl+Shift+C'), findsOneWidget);
+    expect(find.text('F1'), findsOneWidget);
+  });
+
   testWidgets('every item carries an icon', (tester) async {
     await tester.pumpWidget(menu());
     await open(tester);

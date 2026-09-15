@@ -13,12 +13,15 @@ void main() {
   disableWindowingForTests();
 
   late TextEditingController path;
+  late FocusNode pathFocus;
   late TextEditingController size;
 
   setUp(() {
     path = TextEditingController(text: r'C:\Windows');
+    pathFocus = FocusNode();
     size = TextEditingController(text: '256');
     addTearDown(path.dispose);
+    addTearDown(pathFocus.dispose);
     addTearDown(size.dispose);
   });
 
@@ -29,6 +32,7 @@ void main() {
       host(
         Toolbar(
           path: path,
+          pathFocus: pathFocus,
           size: size,
           onOpenFile: () {},
           onOpenFolder: () {},
@@ -64,6 +68,7 @@ void main() {
       host(
         Toolbar(
           path: path,
+          pathFocus: pathFocus,
           size: size,
           onOpenFile: () => files++,
           onOpenFolder: () => folders++,
@@ -77,20 +82,21 @@ void main() {
       ),
     );
 
-    await tester.tap(find.byTooltip('Open file'));
+    await tester.tap(find.byTooltip('Open file (Ctrl+O)'));
     expect(files, 1);
     expect(folders, 0);
 
-    await tester.tap(find.byTooltip('Open folder'));
+    await tester.tap(find.byTooltip('Open folder (Ctrl+Shift+O)'));
     expect(files, 1);
     expect(folders, 1);
   });
 
-  testWidgets('the open buttons come before the path field', (tester) async {
+  testWidgets('the path field has focus at start', (tester) async {
     await tester.pumpWidget(
       host(
         Toolbar(
           path: path,
+          pathFocus: pathFocus,
           size: size,
           onOpenFile: () {},
           onOpenFolder: () {},
@@ -104,8 +110,30 @@ void main() {
       ),
     );
 
-    final fileButton = tester.getCenter(find.byTooltip('Open file'));
-    final folderButton = tester.getCenter(find.byTooltip('Open folder'));
+    expect(pathFocus.hasFocus, isTrue);
+  });
+
+  testWidgets('the open buttons come before the path field', (tester) async {
+    await tester.pumpWidget(
+      host(
+        Toolbar(
+          path: path,
+          pathFocus: pathFocus,
+          size: size,
+          onOpenFile: () {},
+          onOpenFolder: () {},
+          onRefresh: () {},
+          source: ThumbicoSource.auto,
+          options: const {},
+          onSourceChanged: (_) {},
+          onOptionToggled: (_, _) {},
+          overflowCallbacks: OverflowCallbacks(onHelp: () {}, onExit: () {}),
+        ),
+      ),
+    );
+
+    final fileButton = tester.getCenter(find.byTooltip('Open file (Ctrl+O)'));
+    final folderButton = tester.getCenter(find.byTooltip('Open folder (Ctrl+Shift+O)'));
     final pathField = tester.getCenter(find.byType(TextField).first);
     expect(fileButton.dx, lessThan(folderButton.dx));
     expect(folderButton.dx, lessThan(pathField.dx));
@@ -116,6 +144,7 @@ void main() {
       host(
         Toolbar(
           path: path,
+          pathFocus: pathFocus,
           size: size,
           onOpenFile: () {},
           onOpenFolder: () {},
@@ -129,7 +158,7 @@ void main() {
       ),
     );
 
-    final refreshButton = tester.getCenter(find.byTooltip('Ask the shell again'));
+    final refreshButton = tester.getCenter(find.byTooltip('Ask the shell again (F5)'));
     final optionsButton = tester.getCenter(find.byTooltip('Options'));
     expect(refreshButton.dx, lessThan(optionsButton.dx));
   });
@@ -139,6 +168,7 @@ void main() {
       host(
         Toolbar(
           path: path,
+          pathFocus: pathFocus,
           size: size,
           onOpenFile: () {},
           onOpenFolder: () {},
@@ -162,6 +192,7 @@ void main() {
       host(
         Toolbar(
           path: path,
+          pathFocus: pathFocus,
           size: size,
           onOpenFile: () {},
           onOpenFolder: () {},
@@ -186,6 +217,7 @@ void main() {
       host(
         Toolbar(
           path: path,
+          pathFocus: pathFocus,
           size: size,
           onOpenFile: () {},
           onOpenFolder: () {},

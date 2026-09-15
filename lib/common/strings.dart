@@ -23,11 +23,11 @@ const mainWindowTitle = 'Thumbico';
 // Toolbar
 // ---------------------------------------------------------------------------
 
-const openFileTooltip = 'Open file';
-const openFolderTooltip = 'Open folder';
+const openFileTooltip = 'Open file (Ctrl+O)';
+const openFolderTooltip = 'Open folder (Ctrl+Shift+O)';
 const pathHint = 'File, folder, or drive path';
 const sizeHint = 'Size';
-const refreshTooltip = 'Ask the shell again';
+const refreshTooltip = 'Ask the shell again (F5)';
 const optionsTooltip = 'Options';
 
 // ---------------------------------------------------------------------------

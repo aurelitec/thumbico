@@ -17,6 +17,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:thumbico_core/thumbico_core.dart';
 
 import '../common/settings.dart' as settings;
+import '../common/shortcuts.dart' as shortcuts;
 import '../common/strings.dart' as strings;
 import '../common/theme.dart';
 import '../common/urls.dart' as urls;
@@ -26,6 +27,7 @@ import '../services/open_url.dart';
 import '../services/save_image.dart';
 import '../services/thumbico_service.dart';
 import '../widgets/overflow_menu.dart';
+import '../widgets/shortcut_scope.dart';
 import '../widgets/status_bar.dart';
 import '../widgets/thumbico_canvas.dart';
 import '../widgets/toolbar.dart';
@@ -63,6 +65,7 @@ class _MainWindowState extends State<MainWindow> {
   static const _whiteArgb = 0xFFFFFFFF;
 
   final _path = TextEditingController();
+  final _pathFocus = FocusNode();
   final _size = TextEditingController(text: settings.sizeText.value);
 
   LoadedThumbico? _thumbico;
@@ -81,6 +84,23 @@ class _MainWindowState extends State<MainWindow> {
     final WindowControllerWin32 controller => controller.windowHandle,
     _ => nullptr,
   };
+
+  /// What each shortcut does; the same handlers the buttons and menu items call.
+  Map<ShortcutActivator, VoidCallback> get _shortcutBindings => {
+    shortcuts.openFile: _openFile,
+    shortcuts.openFolder: _openFolder,
+    shortcuts.refresh: _read,
+    shortcuts.focusPath: _focusPath,
+    shortcuts.saveAs: _saveAs,
+    shortcuts.copy: _copy,
+    shortcuts.help: _help,
+  };
+
+  /// Puts the caret in the path field with the whole path selected, ready to be replaced.
+  void _focusPath() {
+    _pathFocus.requestFocus();
+    _path.selection = TextSelection(baseOffset: 0, extentOffset: _path.text.length);
+  }
 
   void _openFile() => _open(pickFile(_handle));
 
@@ -205,6 +225,7 @@ class _MainWindowState extends State<MainWindow> {
   @override
   void dispose() {
     _path.dispose();
+    _pathFocus.dispose();
     _size.dispose();
     _thumbico?.image.dispose();
     super.dispose();
@@ -212,24 +233,28 @@ class _MainWindowState extends State<MainWindow> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Column(
-        children: [
-          Toolbar(
-            path: _path,
-            size: _size,
-            onOpenFile: _openFile,
-            onOpenFolder: _openFolder,
-            onRefresh: _read,
-            source: settings.source.value,
-            options: settings.options.value,
-            onSourceChanged: _setSource,
-            onOptionToggled: _toggleOption,
-            overflowCallbacks: _overflowCallbacks,
-          ),
-          Expanded(child: ThumbicoCanvas(image: _thumbico?.image)),
-          StatusBar(message: _message, info: _thumbico?.info),
-        ],
+    return ShortcutScope(
+      bindings: _shortcutBindings,
+      child: Material(
+        child: Column(
+          children: [
+            Toolbar(
+              path: _path,
+              pathFocus: _pathFocus,
+              size: _size,
+              onOpenFile: _openFile,
+              onOpenFolder: _openFolder,
+              onRefresh: _read,
+              source: settings.source.value,
+              options: settings.options.value,
+              onSourceChanged: _setSource,
+              onOptionToggled: _toggleOption,
+              overflowCallbacks: _overflowCallbacks,
+            ),
+            Expanded(child: ThumbicoCanvas(image: _thumbico?.image)),
+            StatusBar(message: _message, info: _thumbico?.info),
+          ],
+        ),
       ),
     );
   }

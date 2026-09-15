@@ -15,6 +15,9 @@ import 'size_field.dart';
 class const Toolbar({
   super.key,
   required final TextEditingController path,
+
+  /// The path field's focus, which the window uses to put the caret there on its shortcut.
+  required final FocusNode pathFocus,
   required final TextEditingController size,
   required final VoidCallback onOpenFile,
   required final VoidCallback onOpenFolder,
@@ -56,6 +59,9 @@ class const Toolbar({
             Expanded(
               child: TextField(
                 controller: path,
+                focusNode: pathFocus,
+                // Focus starts here, so typing and the shortcuts work before any click
+                autofocus: true,
                 decoration: fieldDecoration.copyWith(hintText: strings.pathHint),
                 onSubmitted: (_) => onRefresh(),
               ),

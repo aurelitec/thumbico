@@ -3,6 +3,7 @@
 
 import 'package:material_ui/material_ui.dart';
 
+import '../common/shortcuts.dart' as shortcuts;
 import '../common/strings.dart' as strings;
 
 /// What the window does for each item of the overflow menu.
@@ -25,7 +26,8 @@ class const OverflowCallbacks({
 
 /// The More button and the menu it opens: the commands used occasionally.
 ///
-/// A flat list of items with icons. Picking an item closes the menu.
+/// A flat list of items with icons. Picking an item closes the menu. An item shows its
+/// shortcut, but the key itself is bound by the window, which is where focus lives.
 class const OverflowMenu({
   super.key,
 
@@ -39,6 +41,7 @@ class const OverflowMenu({
         // Save the image to a file
         MenuItemButton(
           leadingIcon: const Icon(Icons.save_as),
+          shortcut: shortcuts.saveAs,
           onPressed: callbacks.onSaveAs,
           child: const Text(strings.saveAsLabel),
         ),
@@ -46,6 +49,7 @@ class const OverflowMenu({
         // Copy the image to the clipboard
         MenuItemButton(
           leadingIcon: const Icon(Icons.content_copy),
+          shortcut: shortcuts.copy,
           onPressed: callbacks.onCopy,
           child: const Text(strings.copyLabel),
         ),
@@ -53,6 +57,7 @@ class const OverflowMenu({
         // Help on the website
         MenuItemButton(
           leadingIcon: const Icon(Icons.help_outline),
+          shortcut: shortcuts.help,
           onPressed: callbacks.onHelp,
           child: const Text(strings.helpLabel),
         ),
