@@ -10,10 +10,14 @@ import '../widget_host.dart';
 void main() {
   disableWindowingForTests();
 
-  Widget menu({VoidCallback? onHelp, VoidCallback? onExit}) {
+  Widget menu({VoidCallback? onCopy, VoidCallback? onHelp, VoidCallback? onExit}) {
     return host(
       OverflowMenu(
-        callbacks: OverflowCallbacks(onHelp: onHelp ?? () {}, onExit: onExit ?? () {}),
+        callbacks: OverflowCallbacks(
+          onCopy: onCopy,
+          onHelp: onHelp ?? () {},
+          onExit: onExit ?? () {},
+        ),
       ),
     );
   }
@@ -23,15 +27,40 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('the More button opens the menu with Help above Exit', (tester) async {
+  testWidgets('the More button opens the menu with Copy, Help, and Exit in that order', (
+    tester,
+  ) async {
     await tester.pumpWidget(menu());
     expect(find.text('Help'), findsNothing);
 
     await open(tester);
 
+    final copy = tester.getCenter(find.text('Copy'));
     final help = tester.getCenter(find.text('Help'));
     final exit = tester.getCenter(find.text('Exit'));
+    expect(copy.dy, lessThan(help.dy));
     expect(help.dy, lessThan(exit.dy));
+  });
+
+  testWidgets('picking Copy reports it', (tester) async {
+    var copies = 0;
+    await tester.pumpWidget(menu(onCopy: () => copies++));
+    await open(tester);
+
+    await tester.tap(find.text('Copy'));
+    await tester.pumpAndSettle();
+
+    expect(copies, 1);
+  });
+
+  testWidgets('Copy is disabled when there is nothing to copy', (tester) async {
+    await tester.pumpWidget(menu());
+    await open(tester);
+
+    final item = tester.widget<MenuItemButton>(
+      find.ancestor(of: find.text('Copy'), matching: find.byType(MenuItemButton)),
+    );
+    expect(item.enabled, isFalse);
   });
 
   testWidgets('picking Help reports it and closes the menu', (tester) async {
@@ -61,7 +90,7 @@ void main() {
     await tester.pumpWidget(menu());
     await open(tester);
 
-    expect(find.byType(MenuItemButton), findsNWidgets(2));
-    expect(find.byType(Icon), findsNWidgets(3));
+    expect(find.byType(MenuItemButton), findsNWidgets(3));
+    expect(find.byType(Icon), findsNWidgets(4));
   });
 }

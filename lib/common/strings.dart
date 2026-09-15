@@ -55,6 +55,7 @@ const Map<ThumbicoOption, String> optionLabels = {
 // ---------------------------------------------------------------------------
 
 const moreTooltip = 'More';
+const copyLabel = 'Copy';
 const helpLabel = 'Help';
 const exitLabel = 'Exit';
 
@@ -77,3 +78,5 @@ const itemNotFound = 'Not found';
 const noThumbnail = 'No thumbnail';
 const shellError = 'The shell could not render this item';
 const couldNotOpenBrowser = 'Could not open the browser.';
+const copied = 'Copied to the clipboard.';
+const couldNotCopy = 'Could not copy to the clipboard.';

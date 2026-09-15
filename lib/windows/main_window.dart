@@ -20,6 +20,7 @@ import '../common/settings.dart' as settings;
 import '../common/strings.dart' as strings;
 import '../common/theme.dart';
 import '../common/urls.dart' as urls;
+import '../services/copy_image.dart';
 import '../services/open_dialogs.dart';
 import '../services/open_url.dart';
 import '../services/thumbico_service.dart';
@@ -57,14 +58,21 @@ class const MainWindow({super.key}) extends StatefulWidget {
 }
 
 class _MainWindowState extends State<MainWindow> {
+  /// What transparent pixels are copied onto while the canvas shows its checkerboard.
+  static const _whiteArgb = 0xFFFFFFFF;
+
   final _path = TextEditingController();
   final _size = TextEditingController(text: settings.sizeText.value);
 
   LoadedThumbico? _thumbico;
   var _message = strings.enterPath;
 
-  /// What the overflow menu's items do, built once from the handlers below.
-  late final _overflowCallbacks = OverflowCallbacks(onHelp: _help, onExit: _exit);
+  /// What the overflow menu's items do; Copy is only offered while there is an image.
+  OverflowCallbacks get _overflowCallbacks => OverflowCallbacks(
+    onCopy: _thumbico == null ? null : _copy,
+    onHelp: _help,
+    onExit: _exit,
+  );
 
   /// The native window, so a dialog can be owned by it and stay in front.
   static Pointer<Void> get _handle => switch (MainWindow._controller) {
@@ -134,6 +142,19 @@ class _MainWindowState extends State<MainWindow> {
     }
     setState(() => settings.options.value = options);
     _read();
+  }
+
+  /// Copies the image, flattened onto the canvas background, and says so in the status bar.
+  Future<void> _copy() async {
+    final image = _thumbico?.image;
+    if (image == null) {
+      return;
+    }
+    final background = Color(settings.backgroundArgb.value ?? _whiteArgb);
+    final copied = await copyImage(image, background);
+    if (mounted) {
+      setState(() => _message = copied ? strings.copied : strings.couldNotCopy);
+    }
   }
 
   /// Opens the help page in the browser, or says in the status bar that it could not.

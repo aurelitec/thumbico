@@ -10,6 +10,9 @@ import '../common/strings.dart' as strings;
 /// One bundle travels from the window through the toolbar to the menu, so a new item adds a
 /// field here rather than a parameter on every widget in between.
 class const OverflowCallbacks({
+  /// Called when the user picks Copy; null while there is nothing to copy, which disables the item.
+  final VoidCallback? onCopy,
+
   /// Called when the user picks Help.
   required final VoidCallback onHelp,
 
@@ -30,6 +33,13 @@ class const OverflowMenu({
   Widget build(BuildContext context) {
     return MenuAnchor(
       menuChildren: [
+        // Copy the image to the clipboard
+        MenuItemButton(
+          leadingIcon: const Icon(Icons.content_copy),
+          onPressed: callbacks.onCopy,
+          child: const Text(strings.copyLabel),
+        ),
+
         // Help on the website
         MenuItemButton(
           leadingIcon: const Icon(Icons.help_outline),

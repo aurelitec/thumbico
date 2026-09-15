@@ -40,6 +40,9 @@ dependencies:
 
   ffi: ^2.2.0
   win32: ^6.4.0
+  win32_clipboard: ^2.0.3
+
+  image: ^4.10.1
 
   simple_app_settings:
     path: packages/simple_app_settings
