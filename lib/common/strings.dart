@@ -55,9 +55,23 @@ const Map<ThumbicoOption, String> optionLabels = {
 // ---------------------------------------------------------------------------
 
 const moreTooltip = 'More';
+const saveAsLabel = 'Save As...';
 const copyLabel = 'Copy';
 const helpLabel = 'Help';
 const exitLabel = 'Exit';
+
+// ---------------------------------------------------------------------------
+// Save As dialog
+// ---------------------------------------------------------------------------
+
+/// The file types offered, in the order shown; the first is the default.
+const Map<String, String> saveFilters = {
+  'PNG image (*.png)': '*.png',
+  'Icon (*.ico)': '*.ico',
+  'JPEG image (*.jpg)': '*.jpg;*.jpeg',
+  'Bitmap (*.bmp)': '*.bmp',
+  'GIF image (*.gif)': '*.gif',
+};
 
 // ---------------------------------------------------------------------------
 // Status bar
@@ -78,5 +92,10 @@ const itemNotFound = 'Not found';
 const noThumbnail = 'No thumbnail';
 const shellError = 'The shell could not render this item';
 const couldNotOpenBrowser = 'Could not open the browser.';
+const savedTo = 'Saved to';
+const couldNotSave = 'Could not save the image:';
+const unknownSaveFormat = 'End the file name with .png, .ico, .jpg, .bmp, or .gif.';
+const tooLargeForIco =
+    'An icon file holds at most 256 x 256 pixels. Save as PNG, or ask for a smaller size.';
 const copied = 'Copied to the clipboard.';
 const couldNotCopy = 'Could not copy to the clipboard.';

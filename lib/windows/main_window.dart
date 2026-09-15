@@ -21,8 +21,9 @@ import '../common/strings.dart' as strings;
 import '../common/theme.dart';
 import '../common/urls.dart' as urls;
 import '../services/copy_image.dart';
-import '../services/open_dialogs.dart';
+import '../services/file_dialogs.dart';
 import '../services/open_url.dart';
+import '../services/save_image.dart';
 import '../services/thumbico_service.dart';
 import '../widgets/overflow_menu.dart';
 import '../widgets/status_bar.dart';
@@ -67,8 +68,9 @@ class _MainWindowState extends State<MainWindow> {
   LoadedThumbico? _thumbico;
   var _message = strings.enterPath;
 
-  /// What the overflow menu's items do; Copy is only offered while there is an image.
+  /// What the overflow menu's items do; Save As and Copy are only offered while there is an image.
   OverflowCallbacks get _overflowCallbacks => OverflowCallbacks(
+    onSaveAs: _thumbico == null ? null : _saveAs,
     onCopy: _thumbico == null ? null : _copy,
     onHelp: _help,
     onExit: _exit,
@@ -144,14 +146,40 @@ class _MainWindowState extends State<MainWindow> {
     _read();
   }
 
+  /// The colour transparent pixels are flattened onto when a copy or a save cannot keep them.
+  Color get _background => Color(settings.backgroundArgb.value ?? _whiteArgb);
+
+  /// Asks where to save the image, writes it there, and says how it went in the status bar.
+  Future<void> _saveAs() async {
+    final thumbico = _thumbico;
+    if (thumbico == null) {
+      return;
+    }
+    final path = await pickSavePath(_handle, suggestedFileName(_path.text, thumbico.info.size));
+    if (path == null || !mounted) {
+      return;
+    }
+    final result = await saveImage(thumbico.image, path, _background);
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _message = switch (result) {
+        Saved() => '${strings.savedTo} $path',
+        UnknownFormat() => strings.unknownSaveFormat,
+        TooLargeForIco() => strings.tooLargeForIco,
+        WriteFailed(:final reason) => '${strings.couldNotSave} $reason',
+      };
+    });
+  }
+
   /// Copies the image, flattened onto the canvas background, and says so in the status bar.
   Future<void> _copy() async {
     final image = _thumbico?.image;
     if (image == null) {
       return;
     }
-    final background = Color(settings.backgroundArgb.value ?? _whiteArgb);
-    final copied = await copyImage(image, background);
+    final copied = await copyImage(image, _background);
     if (mounted) {
       setState(() => _message = copied ? strings.copied : strings.couldNotCopy);
     }
