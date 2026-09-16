@@ -99,6 +99,10 @@ class _MainWindowState extends State<MainWindow> {
     shortcuts.saveAs: _saveAs,
     shortcuts.copy: _copy,
     shortcuts.help: _help,
+    shortcuts.bigger: _bigger,
+    shortcuts.biggerNumpad: _bigger,
+    shortcuts.smaller: _smaller,
+    shortcuts.smallerNumpad: _smaller,
     shortcuts.showcase: _toggleShowcase,
     // Escape is taken only while there is a mode to leave
     if (_showcase) shortcuts.exitShowcase: _exitShowcase,
@@ -168,6 +172,26 @@ class _MainWindowState extends State<MainWindow> {
       setState(() => _message = strings.enterPath);
     }
   }
+
+  void _bigger() => _step((size) => size.doubled());
+
+  void _smaller() => _step((size) => size.halved());
+
+  void _wheelStep(bool bigger) => bigger ? _bigger() : _smaller();
+
+  /// Replaces the size in the field with [next] of it and reads.
+  ///
+  /// Text that is not a size is left alone, so the read reports it as it would for Enter.
+  void _step(ThumbicoSize Function(ThumbicoSize size) next) {
+    final size = ThumbicoSize.tryParse(_size.text);
+    if (size != null) {
+      _size.text = next(size).format();
+    }
+    _read();
+  }
+
+  // The display scale only changes how the image is drawn, so nothing is read again.
+  void _setScaleToDisplay(bool value) => setState(() => settings.scaleToDisplay.value = value);
 
   // A read mode is read again the moment it changes, so its effect is visible at once.
   void _setSource(ThumbicoSource source) {
@@ -253,7 +277,11 @@ class _MainWindowState extends State<MainWindow> {
 
   @override
   Widget build(BuildContext context) {
-    final canvas = ThumbicoCanvas(image: _thumbico?.image);
+    final canvas = ThumbicoCanvas(
+      image: _thumbico?.image,
+      scaleToDisplay: settings.scaleToDisplay.value,
+      onWheelStep: _wheelStep,
+    );
 
     return ShortcutScope(
       bindings: _shortcutBindings,
@@ -266,6 +294,10 @@ class _MainWindowState extends State<MainWindow> {
                 path: _path,
                 pathFocus: _pathFocus,
                 size: _size,
+                onBigger: _bigger,
+                onSmaller: _smaller,
+                scaleToDisplay: settings.scaleToDisplay.value,
+                onScaleToDisplayChanged: _setScaleToDisplay,
                 onOpenFile: _openFile,
                 onOpenFolder: _openFolder,
                 onRefresh: _read,

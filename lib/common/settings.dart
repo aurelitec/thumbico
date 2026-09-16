@@ -13,6 +13,13 @@ import 'package:thumbico_core/thumbico_core.dart';
 /// The text of the size field, as the user typed it.
 final sizeText = AppSetting<String>(key: 'sizeText', defaultValue: '256 x 256', saveOnSet: true);
 
+/// Whether the image is drawn at the display's scale rather than one image pixel per screen pixel.
+final scaleToDisplay = AppSetting<bool>(
+  key: 'scaleToDisplay',
+  defaultValue: false,
+  saveOnSet: true,
+);
+
 final source = EnumAppSetting<ThumbicoSource>(
   key: 'source',
   defaultValue: ThumbicoSource.auto,

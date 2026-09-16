@@ -26,6 +26,16 @@ void main() {
       [LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.shiftLeft, LogicalKeyboardKey.keyC],
     ),
     'help': (shortcuts.help, [LogicalKeyboardKey.f1]),
+    'bigger': (shortcuts.bigger, [LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.equal]),
+    'biggerNumpad': (
+      shortcuts.biggerNumpad,
+      [LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.numpadAdd],
+    ),
+    'smaller': (shortcuts.smaller, [LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.minus]),
+    'smallerNumpad': (
+      shortcuts.smallerNumpad,
+      [LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.numpadSubtract],
+    ),
     'showcase': (shortcuts.showcase, [LogicalKeyboardKey.f11]),
     'exitShowcase': (shortcuts.exitShowcase, [LogicalKeyboardKey.escape]),
   };

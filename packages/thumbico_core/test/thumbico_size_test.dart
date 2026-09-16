@@ -74,5 +74,17 @@ void main() {
     test('toString matches format', () {
       expect(const ThumbicoSize(300, 200).toString(), '300 x 200');
     });
+
+    test('doubled doubles both dimensions', () {
+      expect(const ThumbicoSize(256, 160).doubled(), const ThumbicoSize(512, 320));
+    });
+
+    test('halved halves both dimensions, rounding down', () {
+      expect(const ThumbicoSize(512, 321).halved(), const ThumbicoSize(256, 160));
+    });
+
+    test('halved never goes below one pixel', () {
+      expect(const ThumbicoSize(1, 3).halved(), const ThumbicoSize(1, 1));
+    });
   });
 }

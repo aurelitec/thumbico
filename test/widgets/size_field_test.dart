@@ -18,8 +18,24 @@ void main() {
     addTearDown(controller.dispose);
   });
 
-  Widget field({VoidCallback? onSubmitted}) =>
-      host(SizeField(controller: controller, onSubmitted: onSubmitted ?? () {}));
+  Widget field({
+    VoidCallback? onSubmitted,
+    VoidCallback? onBigger,
+    VoidCallback? onSmaller,
+    bool scaleToDisplay = false,
+    ValueChanged<bool>? onScaleToDisplayChanged,
+  }) {
+    return host(
+      SizeField(
+        controller: controller,
+        onSubmitted: onSubmitted ?? () {},
+        onBigger: onBigger ?? () {},
+        onSmaller: onSmaller ?? () {},
+        scaleToDisplay: scaleToDisplay,
+        onScaleToDisplayChanged: onScaleToDisplayChanged ?? (_) {},
+      ),
+    );
+  }
 
   /// What one Enter press does on Windows: a key event, then the field's submit action.
   Future<void> pressEnter(WidgetTester tester) async {
@@ -28,10 +44,12 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  Future<void> openList(WidgetTester tester) async {
-    await tester.tap(find.byIcon(Icons.expand_more).hitTestable());
+  Future<void> openFlyout(WidgetTester tester) async {
+    await tester.tap(find.byTooltip('Sizes'));
     await tester.pumpAndSettle();
   }
+
+  final presets = find.byType(MenuItemButton);
 
   testWidgets('Enter after typing submits what was typed, once', (tester) async {
     var submits = 0;
@@ -44,23 +62,16 @@ void main() {
     expect(controller.text, '512');
   });
 
-  testWidgets('Enter with the list closed still submits, once', (tester) async {
-    var submits = 0;
-    await tester.pumpWidget(field(onSubmitted: () => submits++));
+  testWidgets('nothing opens on a click in the field or on typing', (tester) async {
+    await tester.pumpWidget(field());
 
-    await tester.enterText(find.byType(TextField), '512');
-    await tester.sendKeyEvent(LogicalKeyboardKey.escape);
+    await tester.tap(find.byType(TextField));
     await tester.pumpAndSettle();
-    expect(
-      find.byType(MenuItemButton).hitTestable(),
-      findsNothing,
-      reason: 'Escape closed the list',
-    );
+    expect(presets, findsNothing);
 
-    await pressEnter(tester);
-
-    expect(submits, 1);
-    expect(controller.text, '512');
+    await tester.enterText(find.byType(TextField), '5');
+    await tester.pumpAndSettle();
+    expect(presets, findsNothing);
   });
 
   testWidgets('Left and Right move the caret inside the field', (tester) async {
@@ -78,63 +89,102 @@ void main() {
     expect(controller.selection, const TextSelection.collapsed(offset: 3));
   });
 
-  testWidgets('Down walks the open list and puts the highlighted size in the field', (
+  testWidgets('the chevron opens the flyout with the standard sizes in the one format', (
     tester,
   ) async {
     await tester.pumpWidget(field());
-    await openList(tester);
+    expect(find.text('16 x 16'), findsNothing);
 
-    await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
-    await tester.pumpAndSettle();
-    expect(controller.text, '16 x 16');
+    await openFlyout(tester);
 
-    await tester.sendKeyEvent(LogicalKeyboardKey.arrowDown);
-    await tester.pumpAndSettle();
-    expect(controller.text, '24 x 24');
+    expect(presets, findsNWidgets(SizeField.presets.length));
+    expect(find.text('16 x 16'), findsOneWidget);
+    expect(find.text('2048 x 2048'), findsOneWidget);
   });
 
-  testWidgets('the chevron opens a list of the standard sizes in the one format', (tester) async {
+  testWidgets('the preset rows are compact', (tester) async {
     await tester.pumpWidget(field());
-    expect(find.text('16 x 16').hitTestable(), findsNothing);
-
-    await openList(tester);
-
-    expect(find.byType(MenuItemButton).hitTestable(), findsNWidgets(SizeField.presets.length));
-    expect(find.text('16 x 16').hitTestable(), findsOneWidget);
-    expect(find.text('2048 x 2048').hitTestable(), findsOneWidget);
-  });
-
-  testWidgets('the chevron stays a downward chevron while the list is open', (tester) async {
-    await tester.pumpWidget(field());
-    await openList(tester);
-
-    expect(find.byIcon(Icons.expand_more).hitTestable(), findsOneWidget);
-    expect(find.byIcon(Icons.arrow_drop_up).hitTestable(), findsNothing);
-  });
-
-  testWidgets('the list rows are compact', (tester) async {
-    await tester.pumpWidget(field());
-    await openList(tester);
+    await openFlyout(tester);
 
     // Material's 48 less the 8 that compact density takes off
-    final row = tester.getSize(find.byType(MenuItemButton).hitTestable().first);
-    expect(row.height, 40);
+    expect(tester.getSize(presets.first).height, 40);
   });
 
-  testWidgets('picking a standard size writes it to the field and submits', (tester) async {
+  testWidgets('picking a standard size writes it to the field, submits, and closes', (
+    tester,
+  ) async {
     var submits = 0;
     await tester.pumpWidget(field(onSubmitted: () => submits++));
 
-    await openList(tester);
-    await tester.tap(find.text('512 x 512').hitTestable());
+    await openFlyout(tester);
+    await tester.tap(find.text('512 x 512'));
     await tester.pumpAndSettle();
 
     expect(controller.text, '512 x 512');
     expect(submits, 1);
-    expect(
-      find.byType(MenuItemButton).hitTestable(),
-      findsNothing,
-      reason: 'the list closes on a pick',
+    expect(presets, findsNothing, reason: 'the flyout closes on a pick');
+  });
+
+  testWidgets('Bigger and Smaller report a step and keep the flyout open', (tester) async {
+    var bigger = 0;
+    var smaller = 0;
+    await tester.pumpWidget(field(onBigger: () => bigger++, onSmaller: () => smaller++));
+    await openFlyout(tester);
+
+    await tester.tap(find.byTooltip('Bigger (Ctrl++)'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Smaller (Ctrl+-)'));
+    await tester.pumpAndSettle();
+
+    expect(bigger, 1);
+    expect(smaller, 1);
+    expect(presets, findsNWidgets(SizeField.presets.length), reason: 'a step keeps it open');
+  });
+
+  testWidgets('the display-scale toggle shows the current state and reports the other', (
+    tester,
+  ) async {
+    bool? chosen;
+    await tester.pumpWidget(field(onScaleToDisplayChanged: (value) => chosen = value));
+    await openFlyout(tester);
+
+    final toggle = find.byTooltip('Display scale instead of real pixels');
+    IconButton button() =>
+        tester.widget<IconButton>(find.ancestor(of: toggle, matching: find.byType(IconButton)));
+    expect(button().isSelected, isFalse);
+
+    await tester.tap(toggle);
+    await tester.pumpAndSettle();
+
+    expect(chosen, isTrue);
+    expect(presets, findsNWidgets(SizeField.presets.length), reason: 'a toggle keeps it open');
+  });
+
+  testWidgets('the display-scale toggle is filled while the display scale is on', (
+    tester,
+  ) async {
+    await tester.pumpWidget(field(scaleToDisplay: true));
+    await openFlyout(tester);
+
+    final toggle = find.byTooltip('Display scale instead of real pixels');
+    final button = tester.widget<IconButton>(
+      find.ancestor(of: toggle, matching: find.byType(IconButton)),
     );
+    expect(button.isSelected, isTrue);
+  });
+
+  testWidgets('Tab from the field reaches the chevron and Enter opens the flyout', (
+    tester,
+  ) async {
+    await tester.pumpWidget(field());
+    await tester.tap(find.byType(TextField));
+    await tester.pumpAndSettle();
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+    await tester.pumpAndSettle();
+    await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+    await tester.pumpAndSettle();
+
+    expect(find.text('16 x 16'), findsOneWidget);
   });
 }

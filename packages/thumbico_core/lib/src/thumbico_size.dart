@@ -1,6 +1,8 @@
 // Copyright (c) 2011-2026 Aurelitec <https://www.aurelitec.com>
 // Licensed under the MIT License. See LICENSE file in the project root for more information.
 
+import 'dart:math' show max;
+
 /// A size in pixels, and the text form every frontend parses the same way.
 ///
 /// As a request there is no upper limit here. A maximum is a product decision each frontend
@@ -49,6 +51,12 @@ final class const ThumbicoSize(final int width, final int height) {
 
   /// Writes the size in the form [tryParse] reads back, such as `256 x 160`.
   String format() => '$width x $height';
+
+  /// Twice the size in each dimension, keeping its shape.
+  ThumbicoSize doubled() => ThumbicoSize(width * 2, height * 2);
+
+  /// Half the size in each dimension, rounded down and never below one pixel.
+  ThumbicoSize halved() => ThumbicoSize(max(1, width ~/ 2), max(1, height ~/ 2));
 
   @override
   bool operator ==(Object other) =>

@@ -19,6 +19,14 @@ class const Toolbar({
   /// The path field's focus, which the window uses to put the caret there on its shortcut.
   required final FocusNode pathFocus,
   required final TextEditingController size,
+
+  /// Called when the user asks for the next size up or down.
+  required final VoidCallback onBigger,
+  required final VoidCallback onSmaller,
+
+  /// Whether the image is drawn at the display's scale, and the call that changes it.
+  required final bool scaleToDisplay,
+  required final ValueChanged<bool> onScaleToDisplayChanged,
   required final VoidCallback onOpenFile,
   required final VoidCallback onOpenFolder,
   required final VoidCallback onRefresh,
@@ -65,7 +73,14 @@ class const Toolbar({
               ),
             ),
             const SizedBox(width: 8),
-            SizeField(controller: size, onSubmitted: onRefresh),
+            SizeField(
+              controller: size,
+              onSubmitted: onRefresh,
+              onBigger: onBigger,
+              onSmaller: onSmaller,
+              scaleToDisplay: scaleToDisplay,
+              onScaleToDisplayChanged: onScaleToDisplayChanged,
+            ),
             const SizedBox(width: 4),
             IconButton(
               icon: const Icon(Icons.refresh),

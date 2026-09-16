@@ -22,6 +22,14 @@ const saveAs = SingleActivator(LogicalKeyboardKey.keyS, control: true);
 const copy = SingleActivator(LogicalKeyboardKey.keyC, control: true, shift: true);
 const help = SingleActivator(LogicalKeyboardKey.f1);
 
+/// Doubles the size. The main keyboard's plus is the equals key unshifted, as browsers bind it.
+const bigger = SingleActivator(LogicalKeyboardKey.equal, control: true);
+const biggerNumpad = SingleActivator(LogicalKeyboardKey.numpadAdd, control: true);
+
+/// Halves the size.
+const smaller = SingleActivator(LogicalKeyboardKey.minus, control: true);
+const smallerNumpad = SingleActivator(LogicalKeyboardKey.numpadSubtract, control: true);
+
 /// Enters and leaves Showcase mode; the key every full-screen view on Windows uses.
 const showcase = SingleActivator(LogicalKeyboardKey.f11);
 

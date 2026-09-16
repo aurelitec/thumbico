@@ -31,6 +31,15 @@ const refreshTooltip = 'Ask the shell again (F5)';
 const optionsTooltip = 'Options';
 
 // ---------------------------------------------------------------------------
+// Size flyout
+// ---------------------------------------------------------------------------
+
+const sizesTooltip = 'Sizes';
+const biggerTooltip = 'Bigger (Ctrl++)';
+const smallerTooltip = 'Smaller (Ctrl+-)';
+const displayScaleTooltip = 'Display scale instead of real pixels';
+
+// ---------------------------------------------------------------------------
 // Options flyout
 // ---------------------------------------------------------------------------
 
