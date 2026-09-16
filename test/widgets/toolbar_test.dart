@@ -41,7 +41,7 @@ void main() {
           options: const {},
           onSourceChanged: (_) {},
           onOptionToggled: (_, _) {},
-          overflowCallbacks: OverflowCallbacks(onHelp: () {}, onExit: () {}),
+          overflowCallbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
         ),
       ),
     );
@@ -77,7 +77,7 @@ void main() {
           options: const {},
           onSourceChanged: (_) {},
           onOptionToggled: (_, _) {},
-          overflowCallbacks: OverflowCallbacks(onHelp: () {}, onExit: () {}),
+          overflowCallbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
         ),
       ),
     );
@@ -105,7 +105,7 @@ void main() {
           options: const {},
           onSourceChanged: (_) {},
           onOptionToggled: (_, _) {},
-          overflowCallbacks: OverflowCallbacks(onHelp: () {}, onExit: () {}),
+          overflowCallbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
         ),
       ),
     );
@@ -127,7 +127,7 @@ void main() {
           options: const {},
           onSourceChanged: (_) {},
           onOptionToggled: (_, _) {},
-          overflowCallbacks: OverflowCallbacks(onHelp: () {}, onExit: () {}),
+          overflowCallbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
         ),
       ),
     );
@@ -153,7 +153,7 @@ void main() {
           options: const {},
           onSourceChanged: (_) {},
           onOptionToggled: (_, _) {},
-          overflowCallbacks: OverflowCallbacks(onHelp: () {}, onExit: () {}),
+          overflowCallbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
         ),
       ),
     );
@@ -177,7 +177,7 @@ void main() {
           options: const {},
           onSourceChanged: (_) {},
           onOptionToggled: (_, _) {},
-          overflowCallbacks: OverflowCallbacks(onHelp: () {}, onExit: () {}),
+          overflowCallbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
         ),
       ),
     );
@@ -201,7 +201,7 @@ void main() {
           options: const {},
           onSourceChanged: (_) {},
           onOptionToggled: (_, _) {},
-          overflowCallbacks: OverflowCallbacks(onHelp: () {}, onExit: () {}),
+          overflowCallbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
         ),
       ),
     );
@@ -226,7 +226,7 @@ void main() {
           options: const {},
           onSourceChanged: (_) {},
           onOptionToggled: (_, _) {},
-          overflowCallbacks: OverflowCallbacks(onHelp: () {}, onExit: () {}),
+          overflowCallbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
         ),
       ),
     );

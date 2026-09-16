@@ -28,6 +28,7 @@ import '../services/save_image.dart';
 import '../services/thumbico_service.dart';
 import '../widgets/overflow_menu.dart';
 import '../widgets/shortcut_scope.dart';
+import '../widgets/showcase_view.dart';
 import '../widgets/status_bar.dart';
 import '../widgets/thumbico_canvas.dart';
 import '../widgets/toolbar.dart';
@@ -71,10 +72,14 @@ class _MainWindowState extends State<MainWindow> {
   LoadedThumbico? _thumbico;
   var _message = strings.enterPath;
 
+  /// Whether the bars are hidden and the image shown alone. Never remembered between runs.
+  var _showcase = false;
+
   /// What the overflow menu's items do; Save As and Copy are only offered while there is an image.
   OverflowCallbacks get _overflowCallbacks => OverflowCallbacks(
     onSaveAs: _thumbico == null ? null : _saveAs,
     onCopy: _thumbico == null ? null : _copy,
+    onShowcase: _toggleShowcase,
     onHelp: _help,
     onExit: _exit,
   );
@@ -94,12 +99,27 @@ class _MainWindowState extends State<MainWindow> {
     shortcuts.saveAs: _saveAs,
     shortcuts.copy: _copy,
     shortcuts.help: _help,
+    shortcuts.showcase: _toggleShowcase,
+    // Escape is taken only while there is a mode to leave
+    if (_showcase) shortcuts.leaveShowcase: _leaveShowcase,
   };
 
   /// Puts the caret in the path field with the whole path selected, ready to be replaced.
+  ///
+  /// Leaves Showcase mode first, since the field is hidden there; the field's autofocus then
+  /// takes the caret when the toolbar is back.
   void _focusPath() {
+    _leaveShowcase();
     _pathFocus.requestFocus();
     _path.selection = TextSelection(baseOffset: 0, extentOffset: _path.text.length);
+  }
+
+  void _toggleShowcase() => setState(() => _showcase = !_showcase);
+
+  void _leaveShowcase() {
+    if (_showcase) {
+      setState(() => _showcase = false);
+    }
   }
 
   void _openFile() => _open(pickFile(_handle));
@@ -233,26 +253,36 @@ class _MainWindowState extends State<MainWindow> {
 
   @override
   Widget build(BuildContext context) {
+    final canvas = ThumbicoCanvas(image: _thumbico?.image);
+
     return ShortcutScope(
       bindings: _shortcutBindings,
       child: Material(
         child: Column(
           children: [
-            Toolbar(
-              path: _path,
-              pathFocus: _pathFocus,
-              size: _size,
-              onOpenFile: _openFile,
-              onOpenFolder: _openFolder,
-              onRefresh: _read,
-              source: settings.source.value,
-              options: settings.options.value,
-              onSourceChanged: _setSource,
-              onOptionToggled: _toggleOption,
-              overflowCallbacks: _overflowCallbacks,
+            // The toolbar, hidden in Showcase mode
+            if (!_showcase)
+              Toolbar(
+                path: _path,
+                pathFocus: _pathFocus,
+                size: _size,
+                onOpenFile: _openFile,
+                onOpenFolder: _openFolder,
+                onRefresh: _read,
+                source: settings.source.value,
+                options: settings.options.value,
+                onSourceChanged: _setSource,
+                onOptionToggled: _toggleOption,
+                overflowCallbacks: _overflowCallbacks,
+              ),
+
+            // The image, alone with a way back while the bars are hidden
+            Expanded(
+              child: _showcase ? ShowcaseView(onLeave: _leaveShowcase, child: canvas) : canvas,
             ),
-            Expanded(child: ThumbicoCanvas(image: _thumbico?.image)),
-            StatusBar(message: _message, info: _thumbico?.info),
+
+            // The status bar, hidden in Showcase mode
+            if (!_showcase) StatusBar(message: _message, info: _thumbico?.info),
           ],
         ),
       ),

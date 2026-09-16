@@ -17,6 +17,9 @@ class const OverflowCallbacks({
   /// Called when the user picks Copy; null while there is nothing to copy, which disables the item.
   final VoidCallback? onCopy,
 
+  /// Called when the user picks Showcase mode.
+  required final VoidCallback onShowcase,
+
   /// Called when the user picks Help.
   required final VoidCallback onHelp,
 
@@ -52,6 +55,14 @@ class const OverflowMenu({
           shortcut: shortcuts.copy,
           onPressed: callbacks.onCopy,
           child: const Text(strings.copyLabel),
+        ),
+
+        // Hide the bars and show the image alone
+        MenuItemButton(
+          leadingIcon: const Icon(Icons.fullscreen),
+          shortcut: shortcuts.showcase,
+          onPressed: callbacks.onShowcase,
+          child: const Text(strings.showcaseLabel),
         ),
 
         // Help on the website

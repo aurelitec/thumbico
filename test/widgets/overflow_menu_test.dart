@@ -13,6 +13,7 @@ void main() {
   Widget menu({
     VoidCallback? onSaveAs,
     VoidCallback? onCopy,
+    VoidCallback? onShowcase,
     VoidCallback? onHelp,
     VoidCallback? onExit,
   }) {
@@ -21,6 +22,7 @@ void main() {
         callbacks: OverflowCallbacks(
           onSaveAs: onSaveAs,
           onCopy: onCopy,
+          onShowcase: onShowcase ?? () {},
           onHelp: onHelp ?? () {},
           onExit: onExit ?? () {},
         ),
@@ -33,22 +35,25 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('the More button opens the menu with Save As, Copy, Help, and Exit in that order', (
-    tester,
-  ) async {
-    await tester.pumpWidget(menu());
-    expect(find.text('Help'), findsNothing);
+  testWidgets(
+    'the More button opens the menu with Save As, Copy, Showcase mode, Help, and Exit in that order',
+    (tester) async {
+      await tester.pumpWidget(menu());
+      expect(find.text('Help'), findsNothing);
 
-    await open(tester);
+      await open(tester);
 
-    final saveAs = tester.getCenter(find.text('Save As...'));
-    final copy = tester.getCenter(find.text('Copy'));
-    final help = tester.getCenter(find.text('Help'));
-    final exit = tester.getCenter(find.text('Exit'));
-    expect(saveAs.dy, lessThan(copy.dy));
-    expect(copy.dy, lessThan(help.dy));
-    expect(help.dy, lessThan(exit.dy));
-  });
+      final saveAs = tester.getCenter(find.text('Save As...'));
+      final copy = tester.getCenter(find.text('Copy'));
+      final showcase = tester.getCenter(find.text('Showcase mode'));
+      final help = tester.getCenter(find.text('Help'));
+      final exit = tester.getCenter(find.text('Exit'));
+      expect(saveAs.dy, lessThan(copy.dy));
+      expect(copy.dy, lessThan(showcase.dy));
+      expect(showcase.dy, lessThan(help.dy));
+      expect(help.dy, lessThan(exit.dy));
+    },
+  );
 
   testWidgets('picking Save As reports it', (tester) async {
     var saves = 0;
@@ -92,6 +97,17 @@ void main() {
     expect(item.enabled, isFalse);
   });
 
+  testWidgets('picking Showcase mode reports it', (tester) async {
+    var showcases = 0;
+    await tester.pumpWidget(menu(onShowcase: () => showcases++));
+    await open(tester);
+
+    await tester.tap(find.text('Showcase mode'));
+    await tester.pumpAndSettle();
+
+    expect(showcases, 1);
+  });
+
   testWidgets('picking Help reports it and closes the menu', (tester) async {
     var helps = 0;
     await tester.pumpWidget(menu(onHelp: () => helps++));
@@ -121,6 +137,7 @@ void main() {
 
     expect(find.text('Ctrl+S'), findsOneWidget);
     expect(find.text('Ctrl+Shift+C'), findsOneWidget);
+    expect(find.text('F11'), findsOneWidget);
     expect(find.text('F1'), findsOneWidget);
   });
 
@@ -128,7 +145,7 @@ void main() {
     await tester.pumpWidget(menu());
     await open(tester);
 
-    expect(find.byType(MenuItemButton), findsNWidgets(4));
-    expect(find.byType(Icon), findsNWidgets(5));
+    expect(find.byType(MenuItemButton), findsNWidgets(5));
+    expect(find.byType(Icon), findsNWidgets(6));
   });
 }

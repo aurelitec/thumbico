@@ -57,6 +57,8 @@ const Map<ThumbicoOption, String> optionLabels = {
 const moreTooltip = 'More';
 const saveAsLabel = 'Save As...';
 const copyLabel = 'Copy';
+const showcaseLabel = 'Showcase mode';
+const leaveShowcaseTooltip = 'Show the toolbar and status bar (F11, Esc)';
 const helpLabel = 'Help';
 const exitLabel = 'Exit';
 
