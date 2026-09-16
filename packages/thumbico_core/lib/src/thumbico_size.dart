@@ -52,11 +52,9 @@ final class const ThumbicoSize(final int width, final int height) {
   /// Writes the size in the form [tryParse] reads back, such as `256 x 160`.
   String format() => '$width x $height';
 
-  /// Twice the size in each dimension, keeping its shape.
-  ThumbicoSize doubled() => ThumbicoSize(width * 2, height * 2);
-
-  /// Half the size in each dimension, rounded down and never below one pixel.
-  ThumbicoSize halved() => ThumbicoSize(max(1, width ~/ 2), max(1, height ~/ 2));
+  /// The size scaled by [factor] in each dimension, rounded to whole pixels, never below one.
+  ThumbicoSize scaled(double factor) =>
+      ThumbicoSize(max(1, (width * factor).round()), max(1, (height * factor).round()));
 
   @override
   bool operator ==(Object other) =>

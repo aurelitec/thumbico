@@ -146,11 +146,18 @@ class _MainWindowState extends State<MainWindow> {
   /// toggles ends with one read of the final state and the image agrees with the field.
   late final _reads = SampledRunner(_readNow);
 
+  // TEMP: remove after checking
+  static String _stamp() => DateTime.now().toIso8601String().substring(11, 23);
+
   /// Asks for a read of the item in the path field at the size in the size field.
-  void _read() => _reads.request();
+  void _read() {
+    debugPrint('${_stamp()} TEMP read requested for ${_size.text}'); // TEMP: remove after checking
+    _reads.request();
+  }
 
   /// The read itself; called only through [_reads].
   Future<void> _readNow() async {
+    debugPrint('${_stamp()} TEMP read STARTED for ${_size.text}'); // TEMP: remove after checking
     final size = ThumbicoSize.tryParse(_size.text);
     if (size == null) {
       setState(() => _message = strings.invalidSize);
@@ -171,6 +178,9 @@ class _MainWindowState extends State<MainWindow> {
         thumbico.image.dispose();
         return;
       }
+      debugPrint(
+        '${_stamp()} TEMP read finished: ${thumbico.info.size.format()}',
+      ); // TEMP: remove after checking
       _thumbico?.image.dispose();
       setState(() {
         _thumbico = thumbico;
@@ -183,11 +193,12 @@ class _MainWindowState extends State<MainWindow> {
     }
   }
 
-  void _bigger() => _step((size) => size.doubled());
+  /// How much Bigger and Smaller change the size: a nudge, about four steps per doubling.
+  static const _stepFactor = 1.25;
 
-  void _smaller() => _step((size) => size.halved());
+  void _bigger() => _step((size) => size.scaled(_stepFactor));
 
-  void _wheelStep(bool bigger) => bigger ? _bigger() : _smaller();
+  void _smaller() => _step((size) => size.scaled(1 / _stepFactor));
 
   /// Replaces the size in the field with [next] of it and reads.
   ///
@@ -291,7 +302,6 @@ class _MainWindowState extends State<MainWindow> {
     final canvas = ThumbicoCanvas(
       image: _thumbico?.image,
       scaleToDisplay: settings.scaleToDisplay.value,
-      onWheelStep: _wheelStep,
     );
 
     return ShortcutScope(

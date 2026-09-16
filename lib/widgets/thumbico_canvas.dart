@@ -3,9 +3,6 @@
 
 import 'dart:ui' as ui;
 
-import 'package:flutter/gestures.dart';
-import 'package:flutter/services.dart';
-
 import 'package:material_ui/material_ui.dart';
 
 /// Shows a shell image at its real pixel size, centred, scrolling when it does not fit.
@@ -15,23 +12,7 @@ class const ThumbicoCanvas({
 
   /// Whether to draw the image at the display's scale instead of one image pixel per screen pixel.
   final bool scaleToDisplay = false,
-
-  /// Called with true for a wheel notch up and false for one down, while Ctrl is held.
-  final void Function(bool bigger)? onWheelStep,
 }) extends StatelessWidget {
-  /// Claims a Ctrl+wheel notch for a size step, so the scroll views leave it alone.
-  ///
-  /// The listener is inside the scroll views, so it registers with the resolver first and
-  /// wins; a notch without Ctrl is not registered and scrolls as usual.
-  void _onPointerSignal(PointerSignalEvent event) {
-    if (event is! PointerScrollEvent || !HardwareKeyboard.instance.isControlPressed) {
-      return;
-    }
-    GestureBinding.instance.pointerSignalResolver.register(event, (event) {
-      onWheelStep?.call((event as PointerScrollEvent).scrollDelta.dy < 0);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final image = this.image;
@@ -43,25 +24,21 @@ class const ThumbicoCanvas({
       builder: (context, constraints) => SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: SingleChildScrollView(
-          child: Listener(
-            onPointerSignal: _onPointerSignal,
-            behavior: HitTestBehavior.opaque,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: constraints.maxWidth,
-                minHeight: constraints.maxHeight,
-              ),
-              child: Center(
-                child: CustomPaint(
-                  painter: const _Checkerboard(),
-                  // The display's scale is Flutter's resolution-aware asset mechanism: an image
-                  // with that scale draws one image pixel per device pixel. A scale of one
-                  // draws it as the display draws everything else.
-                  child: RawImage(
-                    image: image,
-                    scale: scaleToDisplay ? 1 : MediaQuery.devicePixelRatioOf(context),
-                    filterQuality: FilterQuality.none,
-                  ),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: constraints.maxWidth,
+              minHeight: constraints.maxHeight,
+            ),
+            child: Center(
+              child: CustomPaint(
+                painter: const _Checkerboard(),
+                // The display's scale is Flutter's resolution-aware asset mechanism: an image
+                // with that scale draws one image pixel per device pixel. A scale of one
+                // draws it as the display draws everything else.
+                child: RawImage(
+                  image: image,
+                  scale: scaleToDisplay ? 1 : MediaQuery.devicePixelRatioOf(context),
+                  filterQuality: FilterQuality.none,
                 ),
               ),
             ),

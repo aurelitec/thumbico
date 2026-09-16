@@ -3,8 +3,6 @@
 
 import 'dart:ui' as ui;
 
-import 'package:flutter/gestures.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:thumbico/widgets/thumbico_canvas.dart';
@@ -60,50 +58,5 @@ void main() {
     await tester.pumpWidget(host(ThumbicoCanvas(image: image, scaleToDisplay: true)));
 
     expect(tester.getSize(find.byType(RawImage)), const Size(200, 100));
-  });
-
-  /// A wheel notch over the canvas, up when [up], with the pointer where the image is.
-  Future<void> wheel(WidgetTester tester, {required bool up}) async {
-    await tester.sendEventToBinding(
-      PointerScrollEvent(
-        position: tester.getCenter(find.byType(ThumbicoCanvas)),
-        scrollDelta: Offset(0, up ? -50 : 50),
-      ),
-    );
-    await tester.pumpAndSettle();
-  }
-
-  testWidgets('Ctrl and the wheel over the image step the size instead of scrolling', (
-    tester,
-  ) async {
-    final image = await solidImage(2000, 2000);
-    addTearDown(image.dispose);
-    final steps = <bool>[];
-    await tester.pumpWidget(host(ThumbicoCanvas(image: image, onWheelStep: steps.add)));
-
-    await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
-    await wheel(tester, up: true);
-    await wheel(tester, up: false);
-    await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
-
-    expect(steps, [true, false]);
-    for (final scrollable in tester.stateList<ScrollableState>(find.byType(Scrollable))) {
-      expect(scrollable.position.pixels, 0, reason: 'a step must not scroll');
-    }
-  });
-
-  testWidgets('the wheel without Ctrl scrolls and does not step', (tester) async {
-    final image = await solidImage(2000, 2000);
-    addTearDown(image.dispose);
-    final steps = <bool>[];
-    await tester.pumpWidget(host(ThumbicoCanvas(image: image, onWheelStep: steps.add)));
-
-    await wheel(tester, up: false);
-
-    expect(steps, isEmpty);
-    final vertical = tester
-        .stateList<ScrollableState>(find.byType(Scrollable))
-        .map((state) => state.position.pixels);
-    expect(vertical, contains(greaterThan(0)));
   });
 }
