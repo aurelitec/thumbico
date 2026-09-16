@@ -30,6 +30,7 @@ import '../services/thumbico_service.dart';
 import '../widgets/overflow_menu.dart';
 import '../widgets/shortcut_scope.dart';
 import '../widgets/showcase_view.dart';
+import '../widgets/size_field.dart';
 import '../widgets/status_bar.dart';
 import '../widgets/thumbico_canvas.dart';
 import '../widgets/toolbar.dart';
@@ -193,12 +194,9 @@ class _MainWindowState extends State<MainWindow> {
     }
   }
 
-  /// How much Bigger and Smaller change the size: a nudge, about four steps per doubling.
-  static const _stepFactor = 1.25;
+  void _bigger() => _step((size) => size.scaled(SizeField.stepFactor));
 
-  void _bigger() => _step((size) => size.scaled(_stepFactor));
-
-  void _smaller() => _step((size) => size.scaled(1 / _stepFactor));
+  void _smaller() => _step((size) => size.scaled(1 / SizeField.stepFactor));
 
   /// Replaces the size in the field with [next] of it and reads.
   ///

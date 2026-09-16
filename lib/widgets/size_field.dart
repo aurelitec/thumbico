@@ -36,6 +36,9 @@ class const SizeField({
   /// Every icon size the Windows shell itself uses, then doubled twice for thumbnails.
   static const presets = [16, 24, 32, 48, 64, 96, 128, 256, 512, 1024, 2048];
 
+  /// What Bigger multiplies the size by and Smaller divides it by: a nudge, not a jump.
+  static const stepFactor = 1.25;
+
   /// Wide enough for the longest size and the chevron.
   static const _width = 150.0;
 

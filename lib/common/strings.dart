@@ -35,8 +35,9 @@ const optionsTooltip = 'Options';
 // ---------------------------------------------------------------------------
 
 const sizesTooltip = 'Sizes';
-const biggerTooltip = 'Bigger (Ctrl++)';
-const smallerTooltip = 'Smaller (Ctrl+-)';
+// The number is SizeField.stepFactor written out; a test keeps the two in step.
+const biggerTooltip = 'Bigger x 1.25 (Ctrl++)';
+const smallerTooltip = 'Smaller / 1.25 (Ctrl+-)';
 const displayScaleTooltip = 'Display scale instead of real pixels';
 
 // ---------------------------------------------------------------------------

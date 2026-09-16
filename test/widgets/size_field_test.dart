@@ -131,14 +131,23 @@ void main() {
     await tester.pumpWidget(field(onBigger: () => bigger++, onSmaller: () => smaller++));
     await openFlyout(tester);
 
-    await tester.tap(find.byTooltip('Bigger (Ctrl++)'));
+    await tester.tap(find.byTooltip('Bigger x 1.25 (Ctrl++)'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('Smaller (Ctrl+-)'));
+    await tester.tap(find.byTooltip('Smaller / 1.25 (Ctrl+-)'));
     await tester.pumpAndSettle();
 
     expect(bigger, 1);
     expect(smaller, 1);
     expect(presets, findsNWidgets(SizeField.presets.length), reason: 'a step keeps it open');
+  });
+
+  testWidgets('the step tooltips name the factor the steps use', (tester) async {
+    await tester.pumpWidget(field());
+    await openFlyout(tester);
+
+    final factor = SizeField.stepFactor.toString();
+    expect(find.byTooltip('Bigger x $factor (Ctrl++)'), findsOneWidget);
+    expect(find.byTooltip('Smaller / $factor (Ctrl+-)'), findsOneWidget);
   });
 
   testWidgets('the display-scale toggle shows the current state and reports the other', (
