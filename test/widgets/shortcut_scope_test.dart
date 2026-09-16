@@ -23,6 +23,19 @@ void main() {
     );
   }
 
+  testWidgets('a shortcut fires at start with no field focused', (tester) async {
+    var fired = 0;
+    await tester.pumpWidget(
+      host(ShortcutScope(bindings: {refresh: () => fired++}, child: const TextField())),
+    );
+    final field = tester.widget<EditableText>(find.byType(EditableText));
+    expect(field.focusNode.hasFocus, isFalse);
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.f5);
+
+    expect(fired, 1);
+  });
+
   testWidgets('a shortcut fires while the field has focus', (tester) async {
     var fired = 0;
     await tester.pumpWidget(scope(onRefresh: () => fired++));

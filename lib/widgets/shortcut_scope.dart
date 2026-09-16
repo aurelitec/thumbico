@@ -9,7 +9,8 @@ import 'package:material_ui/material_ui.dart';
 /// A click on the image makes a text field give up focus, and focus then falls to the nearest
 /// enclosing scope. Without a scope of its own, that would be the route's scope above the
 /// bindings, and the keys would go nowhere. The scope here catches that fall, so the bindings
-/// stay in the path of every key event.
+/// stay in the path of every key event. The scope also takes focus at start, so the keys work
+/// before anything is clicked without any field holding the caret.
 class const ShortcutScope({
   super.key,
 
@@ -22,7 +23,8 @@ class const ShortcutScope({
   Widget build(BuildContext context) {
     return CallbackShortcuts(
       bindings: bindings,
-      child: FocusScope(child: child),
+      // The scope takes focus at start, so the keys work before anything is clicked
+      child: FocusScope(autofocus: true, child: child),
     );
   }
 }

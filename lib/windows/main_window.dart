@@ -106,8 +106,8 @@ class _MainWindowState extends State<MainWindow> {
 
   /// Puts the caret in the path field with the whole path selected, ready to be replaced.
   ///
-  /// Exits Showcase mode first, since the field is hidden there; the field's autofocus then
-  /// takes the caret when the toolbar is back.
+  /// Exits Showcase mode first, since the field is hidden there; the focus request is deferred
+  /// by the framework until the field is back in the tree.
   void _focusPath() {
     _exitShowcase();
     _pathFocus.requestFocus();

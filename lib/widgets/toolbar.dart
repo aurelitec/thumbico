@@ -60,8 +60,6 @@ class const Toolbar({
               child: TextField(
                 controller: path,
                 focusNode: pathFocus,
-                // Focus starts here, so typing and the shortcuts work before any click
-                autofocus: true,
                 decoration: fieldDecoration.copyWith(hintText: strings.pathHint),
                 onSubmitted: (_) => onRefresh(),
               ),

@@ -91,7 +91,7 @@ void main() {
     expect(folders, 1);
   });
 
-  testWidgets('the path field has focus at start', (tester) async {
+  testWidgets('no field takes focus at start', (tester) async {
     await tester.pumpWidget(
       host(
         Toolbar(
@@ -110,7 +110,7 @@ void main() {
       ),
     );
 
-    expect(pathFocus.hasFocus, isTrue);
+    expect(pathFocus.hasFocus, isFalse);
   });
 
   testWidgets('the open buttons come before the path field', (tester) async {
