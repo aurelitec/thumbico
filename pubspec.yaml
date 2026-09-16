@@ -44,6 +44,7 @@ dependencies:
 
   image: ^4.10.1
   path: ^1.9.1
+  stream_transform: ^2.1.0
 
   simple_app_settings:
     path: packages/simple_app_settings

@@ -16,6 +16,7 @@ import 'package:material_ui/material_ui.dart';
 
 import 'package:thumbico_core/thumbico_core.dart';
 
+import '../common/sampled_runner.dart';
 import '../common/settings.dart' as settings;
 import '../common/shortcuts.dart' as shortcuts;
 import '../common/strings.dart' as strings;
@@ -139,8 +140,17 @@ class _MainWindowState extends State<MainWindow> {
     _read();
   }
 
-  /// Asks the shell for the item in the path field at the size in the size field.
-  Future<void> _read() async {
+  /// Reads run one at a time; requests during a read collapse into one more read afterwards.
+  ///
+  /// Every read looks at the fields and the modes when it starts, so a burst of steps or
+  /// toggles ends with one read of the final state and the image agrees with the field.
+  late final _reads = SampledRunner(_readNow);
+
+  /// Asks for a read of the item in the path field at the size in the size field.
+  void _read() => _reads.request();
+
+  /// The read itself; called only through [_reads].
+  Future<void> _readNow() async {
     final size = ThumbicoSize.tryParse(_size.text);
     if (size == null) {
       setState(() => _message = strings.invalidSize);
@@ -271,6 +281,7 @@ class _MainWindowState extends State<MainWindow> {
     _path.dispose();
     _pathFocus.dispose();
     _size.dispose();
+    _reads.dispose();
     _thumbico?.image.dispose();
     super.dispose();
   }
