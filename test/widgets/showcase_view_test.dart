@@ -11,16 +11,16 @@ import '../widget_host.dart';
 void main() {
   disableWindowingForTests();
 
-  const leaveTooltip = 'Show the toolbar and status bar (F11, Esc)';
+  const exitTooltip = 'Exit Showcase mode (F11, Esc)';
 
   /// The view in a box smaller than the screen, so the pointer can start outside it.
-  Widget view({VoidCallback? onLeave}) {
+  Widget view({VoidCallback? onExit}) {
     return host(
       Center(
         child: SizedBox(
           width: 300,
           height: 300,
-          child: ShowcaseView(onLeave: onLeave ?? () {}, child: const Text('the image')),
+          child: ShowcaseView(onExit: onExit ?? () {}, child: const Text('the image')),
         ),
       ),
     );
@@ -43,34 +43,35 @@ void main() {
     expect(find.text('the image'), findsOneWidget);
   });
 
-  testWidgets('keeps the leave button hidden and inert while the pointer is elsewhere', (
+  testWidgets('keeps the exit button hidden and inert while the pointer is elsewhere', (
     tester,
   ) async {
-    var left = 0;
-    await tester.pumpWidget(view(onLeave: () => left++));
+    var exits = 0;
+    await tester.pumpWidget(view(onExit: () => exits++));
     await mouseOutside(tester);
 
     expect(buttonOpacity(tester), 0);
-    await tester.tap(find.byTooltip(leaveTooltip), warnIfMissed: false);
-    expect(left, 0);
+    await tester.tap(find.byTooltip(exitTooltip), warnIfMissed: false);
+    expect(exits, 0);
   });
 
-  testWidgets('shows the leave button while the pointer is over the view, and it leaves', (
+  testWidgets('shows the exit button while the pointer is over the view, and it exits', (
     tester,
   ) async {
-    var left = 0;
-    await tester.pumpWidget(view(onLeave: () => left++));
+    var exits = 0;
+    await tester.pumpWidget(view(onExit: () => exits++));
     final mouse = await mouseOutside(tester);
 
     await mouse.moveTo(tester.getCenter(find.byType(ShowcaseView)));
     await tester.pumpAndSettle();
     expect(buttonOpacity(tester), 1);
+    expect(find.text('Exit Showcase'), findsOneWidget);
 
-    await tester.tap(find.byTooltip(leaveTooltip));
-    expect(left, 1);
+    await tester.tap(find.byTooltip(exitTooltip));
+    expect(exits, 1);
   });
 
-  testWidgets('hides the leave button again when the pointer leaves the view', (tester) async {
+  testWidgets('hides the exit button again when the pointer leaves the view', (tester) async {
     await tester.pumpWidget(view());
     final mouse = await mouseOutside(tester);
     await mouse.moveTo(tester.getCenter(find.byType(ShowcaseView)));
@@ -82,14 +83,14 @@ void main() {
     expect(buttonOpacity(tester), 0);
   });
 
-  testWidgets('puts the leave button in the top right corner', (tester) async {
+  testWidgets('puts the exit button in the top right corner', (tester) async {
     await tester.pumpWidget(view());
     final mouse = await mouseOutside(tester);
     await mouse.moveTo(tester.getCenter(find.byType(ShowcaseView)));
     await tester.pumpAndSettle();
 
     final viewRect = tester.getRect(find.byType(ShowcaseView));
-    final button = tester.getRect(find.byTooltip(leaveTooltip));
+    final button = tester.getRect(find.byTooltip(exitTooltip));
     expect(button.top, greaterThanOrEqualTo(viewRect.top));
     expect(button.right, lessThanOrEqualTo(viewRect.right));
     expect(button.center.dx, greaterThan(viewRect.center.dx));

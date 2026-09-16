@@ -101,22 +101,22 @@ class _MainWindowState extends State<MainWindow> {
     shortcuts.help: _help,
     shortcuts.showcase: _toggleShowcase,
     // Escape is taken only while there is a mode to leave
-    if (_showcase) shortcuts.leaveShowcase: _leaveShowcase,
+    if (_showcase) shortcuts.exitShowcase: _exitShowcase,
   };
 
   /// Puts the caret in the path field with the whole path selected, ready to be replaced.
   ///
-  /// Leaves Showcase mode first, since the field is hidden there; the field's autofocus then
+  /// Exits Showcase mode first, since the field is hidden there; the field's autofocus then
   /// takes the caret when the toolbar is back.
   void _focusPath() {
-    _leaveShowcase();
+    _exitShowcase();
     _pathFocus.requestFocus();
     _path.selection = TextSelection(baseOffset: 0, extentOffset: _path.text.length);
   }
 
   void _toggleShowcase() => setState(() => _showcase = !_showcase);
 
-  void _leaveShowcase() {
+  void _exitShowcase() {
     if (_showcase) {
       setState(() => _showcase = false);
     }
@@ -278,7 +278,7 @@ class _MainWindowState extends State<MainWindow> {
 
             // The image, alone with a way back while the bars are hidden
             Expanded(
-              child: _showcase ? ShowcaseView(onLeave: _leaveShowcase, child: canvas) : canvas,
+              child: _showcase ? ShowcaseView(onExit: _exitShowcase, child: canvas) : canvas,
             ),
 
             // The status bar, hidden in Showcase mode

@@ -7,14 +7,14 @@ import '../common/strings.dart' as strings;
 
 /// The image area while Showcase mode is on: the child alone, with a way back for the mouse.
 ///
-/// A button that leaves the mode floats in the top right corner and shows only while the
+/// A button that exits the mode floats in the top right corner and shows only while the
 /// pointer is over the view, so a screenshot taken with the mouse elsewhere holds nothing but
 /// the image.
 class const ShowcaseView({
   super.key,
 
-  /// Called when the user clicks the button that leaves Showcase mode.
-  required final VoidCallback onLeave,
+  /// Called when the user clicks the button that exits Showcase mode.
+  required final VoidCallback onExit,
 
   /// What the view shows, normally the canvas.
   required final Widget child,
@@ -24,10 +24,10 @@ class const ShowcaseView({
 }
 
 class _ShowcaseViewState extends State<ShowcaseView> {
-  /// How long the leave button takes to appear or fade.
+  /// How long the exit button takes to appear or fade.
   static const _fade = Duration(milliseconds: 150);
 
-  /// Whether the pointer is over the view, which is when the leave button shows.
+  /// Whether the pointer is over the view, which is when the exit button shows.
   var _hovering = false;
 
   @override
@@ -50,10 +50,13 @@ class _ShowcaseViewState extends State<ShowcaseView> {
               child: AnimatedOpacity(
                 opacity: _hovering ? 1 : 0,
                 duration: _fade,
-                child: IconButton.filledTonal(
-                  icon: const Icon(Icons.fullscreen_exit),
-                  tooltip: strings.leaveShowcaseTooltip,
-                  onPressed: widget.onLeave,
+                child: Tooltip(
+                  message: strings.exitShowcaseTooltip,
+                  child: FilledButton.tonalIcon(
+                    icon: const Icon(Icons.fullscreen_exit),
+                    label: const Text(strings.exitShowcaseLabel),
+                    onPressed: widget.onExit,
+                  ),
                 ),
               ),
             ),

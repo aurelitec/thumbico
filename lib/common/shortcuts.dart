@@ -25,5 +25,5 @@ const help = SingleActivator(LogicalKeyboardKey.f1);
 /// Enters and leaves Showcase mode; the key every full-screen view on Windows uses.
 const showcase = SingleActivator(LogicalKeyboardKey.f11);
 
-/// Leaves Showcase mode; bound only while the mode is on, so Escape stays free otherwise.
-const leaveShowcase = SingleActivator(LogicalKeyboardKey.escape);
+/// Exits Showcase mode; bound only while the mode is on, so Escape stays free otherwise.
+const exitShowcase = SingleActivator(LogicalKeyboardKey.escape);

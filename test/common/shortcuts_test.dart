@@ -27,7 +27,7 @@ void main() {
     ),
     'help': (shortcuts.help, [LogicalKeyboardKey.f1]),
     'showcase': (shortcuts.showcase, [LogicalKeyboardKey.f11]),
-    'leaveShowcase': (shortcuts.leaveShowcase, [LogicalKeyboardKey.escape]),
+    'exitShowcase': (shortcuts.exitShowcase, [LogicalKeyboardKey.escape]),
   };
 
   /// Presses the modifiers, taps the last key, and releases the modifiers.
