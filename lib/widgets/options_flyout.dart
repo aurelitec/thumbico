@@ -1,6 +1,7 @@
 // Copyright (c) 2011-2026 Aurelitec <https://www.aurelitec.com>
 // Licensed under the MIT License. See LICENSE file in the project root for more information.
 
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:thumbico_core/thumbico_core.dart';
@@ -74,7 +75,7 @@ class const OptionsFlyout({
         isLabelVisible: !_isDefault,
         smallSize: 8,
         child: IconButton(
-          icon: const Icon(Icons.tune),
+          icon: const Icon(FluentIcons.options_20_regular),
           tooltip: strings.optionsTooltip,
           onPressed: controller.isOpen ? controller.close : controller.open,
         ),
