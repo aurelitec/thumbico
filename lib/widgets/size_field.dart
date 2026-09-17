@@ -42,6 +42,9 @@ class const SizeField({
   /// Wide enough for the longest size and the chevron.
   static const _width = 150.0;
 
+  /// The side of the chevron button's highlight, which leaves room around it inside the field.
+  static const _chevronSize = 24.0;
+
   /// The same width as the options flyout.
   static const _flyoutWidth = 300.0;
 
@@ -109,11 +112,21 @@ class const SizeField({
               ),
             ],
 
-            // The chevron that anchors the flyout; it does not flip while open
-            builder: (context, menu, child) => IconButton(
-              icon: const Icon(Icons.expand_more),
-              tooltip: strings.sizesTooltip,
-              onPressed: menu.isOpen ? menu.close : menu.open,
+            // The chevron that anchors the flyout; it does not flip while open. Its highlight is
+            // smaller than the box it sits in, so it stays clear of the field's outline.
+            builder: (context, menu, child) => Center(
+              child: IconButton(
+                style: IconButton.styleFrom(
+                  minimumSize: const .square(_chevronSize),
+                  maximumSize: const .square(_chevronSize),
+                  padding: .zero,
+                  visualDensity: .standard,
+                  tapTargetSize: .shrinkWrap,
+                ),
+                icon: const Icon(Icons.expand_more),
+                tooltip: strings.sizesTooltip,
+                onPressed: menu.isOpen ? menu.close : menu.open,
+              ),
             ),
           ),
         ),

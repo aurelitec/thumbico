@@ -31,6 +31,9 @@ ThemeData appTheme() {
       ),
     ),
 
+    // A mark on a button states a fact, so it takes the accent rather than the error red
+    badgeTheme: const BadgeThemeData(backgroundColor: _accent),
+
     // Menu rows at Windows height, with a rounded hover. The density and the tap target are
     // stated so the height does not follow the platform's defaults.
     menuButtonTheme: MenuButtonThemeData(

@@ -188,4 +188,15 @@ void main() {
 
     expect(find.text('16 x 16'), findsOneWidget);
   });
+
+  testWidgets('the chevron highlight is smaller than the field and clear of its outline', (
+    tester,
+  ) async {
+    await tester.pumpWidget(field());
+
+    final chevron = tester.getRect(find.byTooltip('Sizes'));
+    final inside = tester.getRect(find.byType(TextField)).deflate(3);
+    expect(chevron.size, const Size.square(24));
+    expect(inside.contains(chevron.topLeft) && inside.contains(chevron.bottomRight), isTrue);
+  });
 }

@@ -131,4 +131,8 @@ void main() {
     expect(hovered, isNot(drawn.fillColor));
     expect(hovered.computeLuminance(), greaterThan(colors.surfaceContainer.computeLuminance()));
   });
+
+  test('the mark on a button is the same blue as everything else that is on, not an error red', () {
+    expect(appTheme().badgeTheme.backgroundColor, colors.primary);
+  });
 }
