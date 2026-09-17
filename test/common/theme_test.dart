@@ -32,4 +32,20 @@ void main() {
       );
     }
   });
+
+  test('nothing ripples', () {
+    expect(appTheme().splashFactory, NoSplash.splashFactory);
+  });
+
+  test('buttons and segments have square corners instead of pills and circles', () {
+    final theme = appTheme();
+    final shapes = [
+      theme.iconButtonTheme.style?.shape?.resolve({}),
+      theme.filledButtonTheme.style?.shape?.resolve({}),
+      theme.segmentedButtonTheme.style?.shape?.resolve({}),
+    ];
+    for (final shape in shapes) {
+      expect(shape, isA<RoundedRectangleBorder>());
+    }
+  });
 }

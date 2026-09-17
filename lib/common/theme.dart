@@ -5,8 +5,23 @@ import 'package:material_ui/material_ui.dart';
 
 /// The application theme, shared by every window.
 ThemeData appTheme() {
-  return ThemeData(colorScheme: _lightColors);
+  return ThemeData(
+    colorScheme: _lightColors,
+
+    // A press darkens the control, as on Windows, with no ripple spreading from the pointer
+    splashFactory: NoSplash.splashFactory,
+
+    // Windows corners on what Material draws as a circle or a pill
+    iconButtonTheme: IconButtonThemeData(style: IconButton.styleFrom(shape: _controlShape)),
+    filledButtonTheme: FilledButtonThemeData(style: FilledButton.styleFrom(shape: _controlShape)),
+    segmentedButtonTheme: SegmentedButtonThemeData(
+      style: SegmentedButton.styleFrom(shape: _controlShape),
+    ),
+  );
 }
+
+/// The corners of a Windows control.
+const _controlShape = RoundedRectangleBorder(borderRadius: .all(.circular(4)));
 
 /// The Aurelitec blue, darkened until white text on it and its own text on white both read
 /// clearly.
