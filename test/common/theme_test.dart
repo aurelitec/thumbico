@@ -125,5 +125,10 @@ void main() {
     expect(drawn.fillColor, colors.surface);
     expect(drawn.enabledBorder, isA<OutlineInputBorder>());
     expect(drawn.enabledBorder?.borderSide.color, colors.outlineVariant);
+
+    // Under the pointer the fill greys a little, and stays lighter than the bar behind it
+    final hovered = Color.alphaBlend(drawn.hoverColor!, drawn.fillColor!);
+    expect(hovered, isNot(drawn.fillColor));
+    expect(hovered.computeLuminance(), greaterThan(colors.surfaceContainer.computeLuminance()));
   });
 }

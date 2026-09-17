@@ -23,6 +23,8 @@ ThemeData appTheme() {
     inputDecorationTheme: InputDecorationThemeData(
       filled: true,
       fillColor: _lightColors.surface,
+      // Fainter than Material's, which greys the fill down to the bar's own colour
+      hoverColor: _lightColors.onSurface.withValues(alpha: 0.03),
       border: const OutlineInputBorder(),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(color: _lightColors.outlineVariant),
