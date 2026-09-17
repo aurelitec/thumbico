@@ -5,8 +5,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:thumbico/common/theme.dart';
+import 'package:thumbico/widgets/overflow_menu.dart';
+import 'package:thumbico/widgets/size_field.dart';
+
+import '../widget_host.dart';
 
 void main() {
+  disableWindowingForTests();
+
   final colors = appTheme().colorScheme;
 
   test('the canvas is pure white', () {
@@ -47,5 +53,54 @@ void main() {
     for (final shape in shapes) {
       expect(shape, isA<RoundedRectangleBorder>());
     }
+  });
+
+  /// A widget under the application theme, as the window shows it.
+  Widget themed(Widget child) => MaterialApp(
+    theme: appTheme(),
+    home: Material(child: child),
+  );
+
+  testWidgets('a menu row is as tall as a Windows menu row, with a rounded hover', (tester) async {
+    await tester.pumpWidget(
+      themed(
+        OverflowMenu(
+          callbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
+        ),
+      ),
+    );
+    await tester.tap(find.byTooltip('More'));
+    await tester.pumpAndSettle();
+
+    final row = find.widgetWithText(MenuItemButton, 'Help');
+    expect(tester.getSize(row).height, 32);
+    final shape =
+        tester.widget<MenuItemButton>(row).style?.shape ?? appTheme().menuButtonTheme.style?.shape;
+    expect(shape?.resolve({}), isA<RoundedRectangleBorder>());
+  });
+
+  test('a menu row is inset from the edges of its menu', () {
+    expect(appTheme().menuTheme.style?.padding?.resolve({}), const EdgeInsets.all(4));
+  });
+
+  testWidgets('a standard size row is as tall as a menu row', (tester) async {
+    final controller = TextEditingController(text: '256 x 256');
+    addTearDown(controller.dispose);
+    await tester.pumpWidget(
+      themed(
+        SizeField(
+          controller: controller,
+          onSubmitted: () {},
+          onBigger: () {},
+          onSmaller: () {},
+          scaleToDisplay: false,
+          onScaleToDisplayChanged: (_) {},
+        ),
+      ),
+    );
+    await tester.tap(find.byTooltip('Sizes'));
+    await tester.pumpAndSettle();
+
+    expect(tester.getSize(find.widgetWithText(MenuItemButton, '512 x 512')).height, 32);
   });
 }

@@ -102,7 +102,6 @@ class const SizeField({
                     // The standard sizes, in the format the field settles to
                     for (final side in presets)
                       MenuItemButton(
-                        style: MenuItemButton.styleFrom(visualDensity: .compact),
                         onPressed: () => _pick(side),
                         child: Text(ThumbicoSize.square(side).format()),
                       ),

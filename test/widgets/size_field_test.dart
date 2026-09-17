@@ -102,14 +102,6 @@ void main() {
     expect(find.text('2048 x 2048'), findsOneWidget);
   });
 
-  testWidgets('the preset rows are compact', (tester) async {
-    await tester.pumpWidget(field());
-    await openFlyout(tester);
-
-    // Material's 48 less the 8 that compact density takes off
-    expect(tester.getSize(presets.first).height, 40);
-  });
-
   testWidgets('picking a standard size writes it to the field, submits, and closes', (
     tester,
   ) async {

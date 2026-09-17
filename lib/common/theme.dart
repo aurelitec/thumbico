@@ -17,6 +17,20 @@ ThemeData appTheme() {
     segmentedButtonTheme: SegmentedButtonThemeData(
       style: SegmentedButton.styleFrom(shape: _controlShape),
     ),
+
+    // Menu rows at Windows height, with a rounded hover. The density and the tap target are
+    // stated so the height does not follow the platform's defaults.
+    menuButtonTheme: MenuButtonThemeData(
+      style: MenuItemButton.styleFrom(
+        minimumSize: const Size(64, 32),
+        visualDensity: .standard,
+        tapTargetSize: .shrinkWrap,
+        shape: _controlShape,
+      ),
+    ),
+
+    // Room around the rows, so the hover stops short of the menu's edges
+    menuTheme: const MenuThemeData(style: MenuStyle(padding: WidgetStatePropertyAll(.all(4)))),
   );
 }
 
