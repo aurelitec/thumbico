@@ -60,7 +60,6 @@ class const SizeField({
         onSubmitted: (_) => onSubmitted(),
         decoration: InputDecoration(
           isDense: true,
-          border: const OutlineInputBorder(),
           contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           hintText: strings.sizeHint,
           // A chevron box that does not grow the field past the path field's height

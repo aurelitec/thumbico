@@ -103,4 +103,27 @@ void main() {
 
     expect(tester.getSize(find.widgetWithText(MenuItemButton, '512 x 512')).height, 32);
   });
+
+  testWidgets('a field is a white box with a faint outline, as on Windows', (tester) async {
+    final controller = TextEditingController(text: '256 x 256');
+    addTearDown(controller.dispose);
+    await tester.pumpWidget(
+      themed(
+        SizeField(
+          controller: controller,
+          onSubmitted: () {},
+          onBigger: () {},
+          onSmaller: () {},
+          scaleToDisplay: false,
+          onScaleToDisplayChanged: (_) {},
+        ),
+      ),
+    );
+
+    final drawn = tester.widget<InputDecorator>(find.byType(InputDecorator)).decoration;
+    expect(drawn.filled, isTrue);
+    expect(drawn.fillColor, colors.surface);
+    expect(drawn.enabledBorder, isA<OutlineInputBorder>());
+    expect(drawn.enabledBorder?.borderSide.color, colors.outlineVariant);
+  });
 }

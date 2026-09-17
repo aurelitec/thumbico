@@ -18,6 +18,17 @@ ThemeData appTheme() {
       style: SegmentedButton.styleFrom(shape: _controlShape),
     ),
 
+    // Fields as Windows draws them: the white fill shows the field on the grey bar, and the
+    // outline stays faint until the field has focus
+    inputDecorationTheme: InputDecorationThemeData(
+      filled: true,
+      fillColor: _lightColors.surface,
+      border: const OutlineInputBorder(),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: _lightColors.outlineVariant),
+      ),
+    ),
+
     // Menu rows at Windows height, with a rounded hover. The density and the tap target are
     // stated so the height does not follow the platform's defaults.
     menuButtonTheme: MenuButtonThemeData(

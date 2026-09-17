@@ -43,7 +43,6 @@ class const Toolbar({
     final theme = Theme.of(context);
     const fieldDecoration = InputDecoration(
       isDense: true,
-      border: OutlineInputBorder(),
       contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
     );
 
