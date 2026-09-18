@@ -87,6 +87,29 @@ void main() {
     expect(toggled, [(ThumbicoOption.scaleUp, false)]);
   });
 
+  testWidgets('the source sits further in from the card than the rows do', (tester) async {
+    await tester.pumpWidget(flyout());
+    await open(tester);
+
+    final card = find
+        .ancestor(of: find.text('Best'), matching: find.byType(Material))
+        .evaluate()
+        .map((element) => element.widget as Material)
+        .firstWhere((material) => material.elevation > 0);
+    final cardBox = tester.getRect(find.byWidget(card));
+    final source = tester.getRect(find.byType(SegmentedButton<ThumbicoSource>));
+    final lastRow = tester.getRect(find.byType(CheckboxMenuButton).last);
+
+    // A row carries room of its own around its checkbox and the solid source control does not,
+    // so the top needs more for the two ends to look alike
+    expect(source.top - cardBox.top, 16);
+    expect(cardBox.bottom - lastRow.bottom, 8);
+
+    // The same room on its sides as above it, which is also where the rows draw their checkboxes
+    expect(source.left - cardBox.left, 16);
+    expect(cardBox.right - source.right, 16);
+  });
+
   testWidgets('each option shows whether it is on', (tester) async {
     await tester.pumpWidget(flyout(options: const {ThumbicoOption.scaleUp}));
     await open(tester);

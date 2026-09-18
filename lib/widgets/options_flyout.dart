@@ -35,7 +35,9 @@ class const OptionsFlyout({
   @override
   Widget build(BuildContext context) {
     return MenuAnchor(
-      style: const MenuStyle(padding: WidgetStatePropertyAll(.all(8))),
+      // More room at the top: the rows carry room of their own around their checkboxes and the
+      // solid source control does not, so equal padding looked crowded above it
+      style: const MenuStyle(padding: WidgetStatePropertyAll(.fromLTRB(8, 16, 8, 8))),
       menuChildren: [
         SizedBox(
           width: _width,
@@ -43,15 +45,19 @@ class const OptionsFlyout({
             mainAxisSize: .min,
             crossAxisAlignment: .stretch,
             children: [
-              // The source, one row of mutually exclusive choices
-              SegmentedButton<ThumbicoSource>(
-                showSelectedIcon: false,
-                segments: [
-                  for (final value in ThumbicoSource.values)
-                    ButtonSegment(value: value, label: Text(strings.sourceLabels[value]!)),
-                ],
-                selected: {source},
-                onSelectionChanged: (selected) => onSourceChanged(selected.single),
+              // The source, one row of mutually exclusive choices, set in from the card's sides
+              // as far as the rows set their checkboxes in
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: SegmentedButton<ThumbicoSource>(
+                  showSelectedIcon: false,
+                  segments: [
+                    for (final value in ThumbicoSource.values)
+                      ButtonSegment(value: value, label: Text(strings.sourceLabels[value]!)),
+                  ],
+                  selected: {source},
+                  onSelectionChanged: (selected) => onSourceChanged(selected.single),
+                ),
               ),
 
               const SizedBox(height: 8),
