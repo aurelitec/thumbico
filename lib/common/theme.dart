@@ -8,6 +8,12 @@ ThemeData appTheme() {
   return ThemeData(
     colorScheme: _lightColors,
 
+    // Sizes come from Material's own desktop density rather than from numbers of ours. Both are
+    // already the defaults on Windows; stating them gives a test, which counts as a touch
+    // platform, the same sizes as the app.
+    visualDensity: .compact,
+    materialTapTargetSize: .shrinkWrap,
+
     // A press darkens the control, as on Windows, with no ripple spreading from the pointer
     splashFactory: NoSplash.splashFactory,
 
@@ -40,16 +46,8 @@ ThemeData appTheme() {
     // A mark on a button states a fact, so it takes the accent rather than the error red
     badgeTheme: const BadgeThemeData(backgroundColor: _accent),
 
-    // Menu rows at Windows height, with a rounded hover. The density and the tap target are
-    // stated so the height does not follow the platform's defaults.
-    menuButtonTheme: MenuButtonThemeData(
-      style: MenuItemButton.styleFrom(
-        minimumSize: const Size(64, 32),
-        visualDensity: .standard,
-        tapTargetSize: .shrinkWrap,
-        shape: _controlShape,
-      ),
-    ),
+    // Menu rows with a rounded hover
+    menuButtonTheme: MenuButtonThemeData(style: MenuItemButton.styleFrom(shape: _controlShape)),
 
     // Room around the rows, so the hover stops short of the menu's edges
     menuTheme: const MenuThemeData(style: MenuStyle(padding: WidgetStatePropertyAll(.all(4)))),

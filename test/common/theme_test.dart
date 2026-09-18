@@ -62,7 +62,12 @@ void main() {
     home: Material(child: child),
   );
 
-  testWidgets('a menu row is as tall as a Windows menu row, with a rounded hover', (tester) async {
+  test('density and tap targets are the desktop ones on every platform, tests included', () {
+    expect(appTheme().visualDensity, VisualDensity.compact);
+    expect(appTheme().materialTapTargetSize, MaterialTapTargetSize.shrinkWrap);
+  });
+
+  testWidgets('a menu row has Material\'s compact height, with a rounded hover', (tester) async {
     await tester.pumpWidget(
       themed(
         OverflowMenu(
@@ -74,7 +79,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final row = find.widgetWithText(MenuItemButton, 'Help');
-    expect(tester.getSize(row).height, 32);
+    expect(tester.getSize(row).height, 40);
     final shape =
         tester.widget<MenuItemButton>(row).style?.shape ?? appTheme().menuButtonTheme.style?.shape;
     expect(shape?.resolve({}), isA<RoundedRectangleBorder>());
@@ -102,7 +107,7 @@ void main() {
     await tester.tap(find.byTooltip('Sizes'));
     await tester.pumpAndSettle();
 
-    expect(tester.getSize(find.widgetWithText(MenuItemButton, '512 x 512')).height, 32);
+    expect(tester.getSize(find.widgetWithText(MenuItemButton, '512 x 512')).height, 40);
   });
 
   testWidgets('a field is a white box with a faint outline, as on Windows', (tester) async {
