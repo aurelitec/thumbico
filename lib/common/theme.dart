@@ -56,6 +56,7 @@ ThemeData appTheme() {
         shape: _controlShape,
         iconSize: _iconSize,
         iconColor: _lightColors.onSurface,
+        disabledIconColor: _lightColors.onSurface.withValues(alpha: 0.38),
         textStyle: _menuLabelStyle(),
       ).copyWith(overlayColor: WidgetStateProperty.fromMap(_menuRowTints)),
     ),

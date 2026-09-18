@@ -106,6 +106,31 @@ void main() {
     expect(style.color, colors.onSurface);
   });
 
+  testWidgets('a disabled menu row fades its icon with its label', (tester) async {
+    await tester.pumpWidget(
+      themed(
+        // No Save As callback, which is how the window disables the item
+        OverflowMenu(
+          callbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
+        ),
+      ),
+    );
+    await tester.tap(find.byTooltip('More'));
+    await tester.pumpAndSettle();
+
+    Color drawnColor(Finder finder) => tester
+        .widget<RichText>(find.descendant(of: finder, matching: find.byType(RichText)))
+        .text
+        .style!
+        .color!;
+
+    final icon = drawnColor(find.byIcon(Symbols.save));
+    final label = drawnColor(find.text('Save As...'));
+    expect(icon.withValues(alpha: 1), label.withValues(alpha: 1));
+    expect(icon.a, closeTo(label.a, 0.01));
+    expect(icon.a, lessThan(0.5));
+  });
+
   testWidgets('a menu label is regular weight, and otherwise Material\'s own label style', (
     tester,
   ) async {
