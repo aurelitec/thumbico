@@ -1,8 +1,8 @@
 // Copyright (c) 2011-2026 Aurelitec <https://www.aurelitec.com>
 // Licensed under the MIT License. See LICENSE file in the project root for more information.
 
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:thumbico/common/theme.dart';
@@ -149,10 +149,10 @@ void main() {
       themed(
         Row(
           children: [
-            IconButton(icon: const Icon(FluentIcons.folder_20_regular), onPressed: () {}),
+            IconButton(icon: const Icon(Symbols.folder), onPressed: () {}),
             IconButton(
               isSelected: true,
-              icon: const Icon(FluentIcons.desktop_20_regular),
+              icon: const Icon(Symbols.monitor),
               onPressed: () {},
             ),
           ],
@@ -166,7 +166,7 @@ void main() {
         .style
         ?.color;
 
-    expect(drawnColor(FluentIcons.folder_20_regular), colors.onSurface);
-    expect(drawnColor(FluentIcons.desktop_20_regular), colors.primary);
+    expect(drawnColor(Symbols.folder), colors.onSurface);
+    expect(drawnColor(Symbols.monitor), colors.primary);
   });
 }

@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2026 Aurelitec <https://www.aurelitec.com>
 // Licensed under the MIT License. See LICENSE file in the project root for more information.
 
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../common/shortcuts.dart' as shortcuts;
@@ -84,7 +84,7 @@ class const OverflowMenu({
 
       // The More button that anchors the menu
       builder: (context, controller, child) => IconButton(
-        icon: const Icon(FluentIcons.more_horizontal_20_regular),
+        icon: const Icon(Symbols.more_horiz),
         tooltip: strings.moreTooltip,
         onPressed: controller.isOpen ? controller.close : controller.open,
       ),

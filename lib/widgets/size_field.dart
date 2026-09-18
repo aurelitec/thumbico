@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2026 Aurelitec <https://www.aurelitec.com>
 // Licensed under the MIT License. See LICENSE file in the project root for more information.
 
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:thumbico_core/thumbico_core.dart';
@@ -124,7 +124,8 @@ class const SizeField({
                   visualDensity: .standard,
                   tapTargetSize: .shrinkWrap,
                 ),
-                icon: const Icon(FluentIcons.chevron_down_16_regular, size: 16),
+                // The smallest size the symbols are drawn for
+                icon: const Icon(Symbols.keyboard_arrow_down, size: 20, opticalSize: 20),
                 tooltip: strings.sizesTooltip,
                 onPressed: menu.isOpen ? menu.close : menu.open,
               ),

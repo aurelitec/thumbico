@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2026 Aurelitec <https://www.aurelitec.com>
 // Licensed under the MIT License. See LICENSE file in the project root for more information.
 
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:thumbico_core/thumbico_core.dart';
@@ -54,12 +54,12 @@ class const Toolbar({
         child: Row(
           children: [
             IconButton(
-              icon: const Icon(FluentIcons.document_20_regular),
+              icon: const Icon(Symbols.draft),
               tooltip: strings.openFileTooltip,
               onPressed: onOpenFile,
             ),
             IconButton(
-              icon: const Icon(FluentIcons.folder_20_regular),
+              icon: const Icon(Symbols.folder),
               tooltip: strings.openFolderTooltip,
               onPressed: onOpenFolder,
             ),
@@ -83,7 +83,7 @@ class const Toolbar({
             ),
             const SizedBox(width: 4),
             IconButton(
-              icon: const Icon(FluentIcons.arrow_clockwise_20_regular),
+              icon: const Icon(Symbols.refresh),
               tooltip: strings.refreshTooltip,
               onPressed: onRefresh,
             ),

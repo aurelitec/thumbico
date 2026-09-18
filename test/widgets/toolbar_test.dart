@@ -1,8 +1,8 @@
 // Copyright (c) 2011-2026 Aurelitec <https://www.aurelitec.com>
 // Licensed under the MIT License. See LICENSE file in the project root for more information.
 
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:thumbico/widgets/overflow_menu.dart';
 import 'package:thumbico/widgets/toolbar.dart';
@@ -51,7 +51,7 @@ void main() {
       ),
     );
 
-    await tester.tap(find.byIcon(FluentIcons.arrow_clockwise_20_regular));
+    await tester.tap(find.byIcon(Symbols.refresh));
     expect(reads, 1);
 
     await tester.enterText(find.byType(TextField).first, r'C:\');
@@ -235,7 +235,7 @@ void main() {
       ),
     );
 
-    await tester.tap(find.byIcon(FluentIcons.chevron_down_16_regular).hitTestable());
+    await tester.tap(find.byIcon(Symbols.keyboard_arrow_down).hitTestable());
     await tester.pumpAndSettle();
 
     expect(find.text('2048 x 2048').hitTestable(), findsOneWidget);

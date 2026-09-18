@@ -17,12 +17,10 @@ ThemeData appTheme() {
     // A press darkens the control, as on Windows, with no ripple spreading from the pointer
     splashFactory: NoSplash.splashFactory,
 
-    // Windows corners on what Material draws as a circle or a pill, and icons at the size the
-    // Fluent set is drawn for, in the text colour its thin strokes need
+    // Small corners on what Material draws as a circle or a pill, and icons in the text colour
     iconButtonTheme: IconButtonThemeData(
       style: IconButton.styleFrom(
         shape: _controlShape,
-        iconSize: 20,
       ).copyWith(foregroundColor: WidgetStateProperty.fromMap(_iconButtonColors)),
     ),
     filledButtonTheme: FilledButtonThemeData(style: FilledButton.styleFrom(shape: _controlShape)),
@@ -55,7 +53,7 @@ ThemeData appTheme() {
 }
 
 /// What an icon button draws its icon in: the accent while selected, faded while disabled, and
-/// otherwise the text colour, which the Fluent set's thin strokes need to stay legible.
+/// otherwise the text colour, so the outlined icons read as strongly as the labels.
 final _iconButtonColors = <WidgetStatesConstraint, Color>{
   WidgetState.disabled: _lightColors.onSurface.withValues(alpha: 0.38),
   WidgetState.selected: _lightColors.primary,
