@@ -24,7 +24,7 @@ class const OptionsFlyout({
   /// Called with the new source when the user picks one.
   required final ValueChanged<ThumbicoSource> onSourceChanged,
 
-  /// Called with the option and its new state when the user flips a switch.
+  /// Called with the option and its new state when the user checks or unchecks it.
   required final void Function(ThumbicoOption option, bool isOn) onOptionToggled,
 }) extends StatelessWidget {
   static const _width = 300.0;
@@ -56,14 +56,13 @@ class const OptionsFlyout({
 
               const SizedBox(height: 8),
 
-              // The shell options, one switch per line
+              // The shell options, one checked row per line; a change leaves the flyout open
               for (final option in ThumbicoOption.values)
-                SwitchListTile(
-                  dense: true,
-                  visualDensity: .compact,
-                  title: Text(strings.optionLabels[option]!),
+                CheckboxMenuButton(
+                  closeOnActivate: false,
                   value: options.contains(option),
-                  onChanged: (isOn) => onOptionToggled(option, isOn),
+                  onChanged: (isOn) => onOptionToggled(option, isOn ?? false),
+                  child: Text(strings.optionLabels[option]!),
                 ),
             ],
           ),

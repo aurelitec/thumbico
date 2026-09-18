@@ -36,14 +36,14 @@ void main() {
     tester,
   ) async {
     await tester.pumpWidget(flyout());
-    expect(find.byType(SwitchListTile), findsNothing);
+    expect(find.byType(CheckboxMenuButton), findsNothing);
 
     await open(tester);
 
     expect(find.text('Best'), findsOneWidget);
     expect(find.text('Thumbnail'), findsOneWidget);
     expect(find.text('Icon'), findsOneWidget);
-    expect(find.byType(SwitchListTile), findsNWidgets(ThumbicoOption.values.length));
+    expect(find.byType(CheckboxMenuButton), findsNWidgets(ThumbicoOption.values.length));
   });
 
   testWidgets('picking a source reports it', (tester) async {
@@ -57,7 +57,7 @@ void main() {
     expect(picked, ThumbicoSource.iconOnly);
   });
 
-  testWidgets('switching an option on reports it and keeps the flyout open', (tester) async {
+  testWidgets('checking an option reports it on and keeps the flyout open', (tester) async {
     final toggled = <(ThumbicoOption, bool)>[];
     await tester.pumpWidget(
       flyout(onOptionToggled: (option, isOn) => toggled.add((option, isOn))),
@@ -68,10 +68,10 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(toggled, [(ThumbicoOption.cropToSquare, true)]);
-    expect(find.byType(SwitchListTile), findsNWidgets(ThumbicoOption.values.length));
+    expect(find.byType(CheckboxMenuButton), findsNWidgets(ThumbicoOption.values.length));
   });
 
-  testWidgets('switching an option that is on reports it off', (tester) async {
+  testWidgets('unchecking an option that is on reports it off', (tester) async {
     final toggled = <(ThumbicoOption, bool)>[];
     await tester.pumpWidget(
       flyout(
@@ -85,6 +85,16 @@ void main() {
     await tester.pump();
 
     expect(toggled, [(ThumbicoOption.scaleUp, false)]);
+  });
+
+  testWidgets('each option shows whether it is on', (tester) async {
+    await tester.pumpWidget(flyout(options: const {ThumbicoOption.scaleUp}));
+    await open(tester);
+
+    bool? checked(String label) =>
+        tester.widget<CheckboxMenuButton>(find.widgetWithText(CheckboxMenuButton, label)).value;
+    expect(checked('Scale small images up'), isTrue);
+    expect(checked('Crop to square'), isFalse);
   });
 
   testWidgets('the button carries a mark only when a mode is not at its default', (tester) async {
