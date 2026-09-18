@@ -68,6 +68,8 @@ ThemeData appTheme() {
         backgroundColor: WidgetStatePropertyAll(_lightColors.surfaceContainerLow),
         shape: const WidgetStatePropertyAll(_overlayShape),
         side: WidgetStatePropertyAll(BorderSide(color: _lightColors.outlineVariant)),
+        // Raised further than Material's menu, for a wider and softer shadow
+        elevation: const WidgetStatePropertyAll(8),
         padding: const WidgetStatePropertyAll(.all(4)),
       ),
     ),

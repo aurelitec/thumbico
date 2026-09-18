@@ -69,6 +69,33 @@ void main() {
     expect(lines[1], inExclusiveRange(row('Showcase mode'), row('Help')));
   });
 
+  testWidgets('the menu hangs from the button with no gap, as a Windows menu does', (
+    tester,
+  ) async {
+    // At the top right, where the toolbar puts it, so the menu has room to open downwards
+    await tester.pumpWidget(
+      host(
+        Align(
+          alignment: .topRight,
+          child: OverflowMenu(
+            callbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
+          ),
+        ),
+      ),
+    );
+    await open(tester);
+
+    final card = find
+        .ancestor(of: find.text('Help'), matching: find.byType(Material))
+        .evaluate()
+        .map((element) => element.widget as Material)
+        .firstWhere((material) => material.elevation > 0);
+    expect(
+      tester.getRect(find.byWidget(card)).top,
+      tester.getRect(find.byType(IconButton)).bottom,
+    );
+  });
+
   testWidgets('picking Save As reports it', (tester) async {
     var saves = 0;
     await tester.pumpWidget(menu(onSaveAs: () => saves++));

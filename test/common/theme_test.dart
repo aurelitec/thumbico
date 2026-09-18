@@ -167,6 +167,7 @@ void main() {
     final shape = card.shape! as RoundedRectangleBorder;
     expect(shape.borderRadius, BorderRadius.circular(8));
     expect(shape.side.color, colors.outlineVariant);
+    expect(card.elevation, greaterThan(3), reason: 'a wider, softer shadow than Material\'s');
   }
 
   testWidgets('a menu is a light card with round corners and a faint edge', (tester) async {
