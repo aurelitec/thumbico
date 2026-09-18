@@ -133,6 +133,40 @@ void main() {
     expect(presets, findsNWidgets(SizeField.presets.length), reason: 'a step keeps it open');
   });
 
+  testWidgets('the flyout hangs under the field and is as wide as it, as a combo box list is', (
+    tester,
+  ) async {
+    // Placed as the toolbar places it, at its own width with room below
+    await tester.pumpWidget(
+      host(
+        Align(
+          alignment: .topCenter,
+          child: SizeField(
+            controller: controller,
+            onSubmitted: () {},
+            onBigger: () {},
+            onSmaller: () {},
+            scaleToDisplay: false,
+            onScaleToDisplayChanged: (_) {},
+          ),
+        ),
+      ),
+    );
+    await openFlyout(tester);
+
+    final card = find
+        .ancestor(of: find.text('512 x 512'), matching: find.byType(Material))
+        .evaluate()
+        .map((element) => element.widget as Material)
+        .firstWhere((material) => material.elevation > 0);
+    final cardBox = tester.getRect(find.byWidget(card));
+    final fieldBox = tester.getRect(find.byType(TextField));
+
+    expect(cardBox.left, fieldBox.left);
+    expect(cardBox.width, fieldBox.width);
+    expect(cardBox.top, fieldBox.bottom);
+  });
+
   testWidgets('the step tooltips name the factor the steps use', (tester) async {
     await tester.pumpWidget(field());
     await openFlyout(tester);

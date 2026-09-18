@@ -46,8 +46,11 @@ class const SizeField({
   /// The side of the chevron button's highlight, which leaves room around it inside the field.
   static const _chevronSize = 24.0;
 
-  /// The same width as the options flyout.
-  static const _flyoutWidth = 300.0;
+  /// The box at the field's end that holds the chevron, and that the flyout hangs from.
+  static const _chevronBox = 32.0;
+
+  /// The room inside the flyout's card, around its rows.
+  static const _flyoutPadding = 8.0;
 
   /// Writes a standard size into the field in the one format, then submits as Enter does.
   void _pick(int side) {
@@ -67,12 +70,18 @@ class const SizeField({
           contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           hintText: strings.sizeHint,
           // A chevron box that does not grow the field past the path field's height
-          suffixIconConstraints: const BoxConstraints.tightFor(width: 32, height: 32),
+          suffixIconConstraints: const BoxConstraints.tightFor(
+            width: _chevronBox,
+            height: _chevronBox,
+          ),
           suffixIcon: MenuAnchor(
-            style: const MenuStyle(padding: WidgetStatePropertyAll(.all(8))),
+            // Moved left from the chevron to the field's own edge and made as wide as the field,
+            // so the list hangs under the field as a combo box's does
+            alignmentOffset: const Offset(_chevronBox - _width, 0),
+            style: const MenuStyle(padding: WidgetStatePropertyAll(.all(_flyoutPadding))),
             menuChildren: [
               SizedBox(
-                width: _flyoutWidth,
+                width: _width - 2 * _flyoutPadding,
                 child: Column(
                   mainAxisSize: .min,
                   crossAxisAlignment: .stretch,

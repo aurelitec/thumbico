@@ -7,6 +7,7 @@
 
 import 'package:flutter/src/foundation/_features.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:thumbico/common/theme.dart';
 
 /// Call first in a widget test's `main`, before any `testWidgets`.
 ///
@@ -17,5 +18,12 @@ void disableWindowingForTests() {
   isWindowingEnabled = false;
 }
 
-/// Wraps a widget under test in what a window gives it: a MaterialApp and a Material.
-Widget host(Widget child) => MaterialApp(home: Material(child: child));
+/// Wraps a widget under test in what a window gives it: a MaterialApp under the application
+/// theme, and a Material.
+///
+/// The theme matters for sizes: under Material's default a test counts as a touch platform and
+/// pads every button, so a row that fits in the app overflows in the test.
+Widget host(Widget child) => MaterialApp(
+  theme: appTheme(),
+  home: Material(child: child),
+);
