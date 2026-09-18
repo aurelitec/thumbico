@@ -179,6 +179,28 @@ void main() {
     expectCard(cardAround(tester, '512 x 512'));
   });
 
+  test('a menu row under the pointer is tinted as a toolbar button is, and a pressed one more', () {
+    final overlay = appTheme().menuButtonTheme.style!.overlayColor!;
+    final hovered = overlay.resolve({WidgetState.hovered})!;
+    final focused = overlay.resolve({WidgetState.focused})!;
+    final pressed = overlay.resolve({WidgetState.pressed})!;
+
+    // A row takes focus when the pointer enters it, and measured on screen it then shows the
+    // hover tint twice, one layer over the other
+    Color twice(Color tint) =>
+        Color.alphaBlend(tint, Color.alphaBlend(tint, colors.surfaceContainerLow));
+    int levelsDarker(Color color) => ((colors.surfaceContainerLow.r - color.r) * 255).round();
+
+    // As strong as Material's own hover on a toolbar button, which measures 19 levels
+    expect(levelsDarker(twice(hovered)), inInclusiveRange(15, 22));
+
+    // A row reached by keyboard alone shows one layer, and must be as clear as a hovered one
+    final byKeyboard = Color.alphaBlend(focused, colors.surfaceContainerLow);
+    expect(levelsDarker(byKeyboard), inInclusiveRange(15, 22));
+
+    expect(pressed.a, greaterThan(hovered.a));
+  });
+
   test('a menu row is inset from the edges of its menu', () {
     expect(appTheme().menuTheme.style?.padding?.resolve({}), const EdgeInsets.all(4));
   });

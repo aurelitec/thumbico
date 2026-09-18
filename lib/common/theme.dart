@@ -57,7 +57,7 @@ ThemeData appTheme() {
         iconSize: _iconSize,
         iconColor: _lightColors.onSurface,
         textStyle: _menuLabelStyle(),
-      ),
+      ).copyWith(overlayColor: WidgetStateProperty.fromMap(_menuRowTints)),
     ),
 
     // Menus and flyouts as a light card with a faint edge, so they stand off the bar and the
@@ -83,6 +83,17 @@ TextStyle _menuLabelStyle() {
       .merge(typography.black.labelLarge)
       .copyWith(fontWeight: .w400);
 }
+
+/// What a menu row is tinted with, fainter than Material's.
+///
+/// A row takes focus when the pointer enters it and then shows its hover tint twice, so hover
+/// is half of what a toolbar button shows, and focus, shown alone by keyboard, is all of it.
+final _menuRowTints = <WidgetStatesConstraint, Color>{
+  WidgetState.pressed: _lightColors.onSurface.withValues(alpha: 0.06),
+  WidgetState.hovered: _lightColors.onSurface.withValues(alpha: 0.04),
+  WidgetState.focused: _lightColors.onSurface.withValues(alpha: 0.08),
+  WidgetState.any: Colors.transparent,
+};
 
 /// What an icon button draws its icon in: the accent while selected, faded while disabled, and
 /// otherwise the text colour, so the outlined icons read as strongly as the labels.
