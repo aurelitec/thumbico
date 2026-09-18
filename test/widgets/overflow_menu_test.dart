@@ -55,6 +55,20 @@ void main() {
     },
   );
 
+  testWidgets('lines separate what leaves with the image, the view, and the rest', (
+    tester,
+  ) async {
+    await tester.pumpWidget(menu());
+    await open(tester);
+
+    expect(find.byType(Divider), findsNWidgets(2));
+    final lines = [for (var i = 0; i < 2; i++) tester.getCenter(find.byType(Divider).at(i)).dy];
+    double row(String label) => tester.getCenter(find.text(label)).dy;
+
+    expect(lines[0], inExclusiveRange(row('Copy'), row('Showcase mode')));
+    expect(lines[1], inExclusiveRange(row('Showcase mode'), row('Help')));
+  });
+
   testWidgets('picking Save As reports it', (tester) async {
     var saves = 0;
     await tester.pumpWidget(menu(onSaveAs: () => saves++));

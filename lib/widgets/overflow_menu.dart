@@ -30,14 +30,18 @@ class const OverflowCallbacks({
 
 /// The More button and the menu it opens: the commands used occasionally.
 ///
-/// A flat list of items with icons. Picking an item closes the menu. An item shows its
-/// shortcut, but the key itself is bound by the window, which is where focus lives.
+/// A flat list of items with icons, in groups parted by lines. Picking an item closes the menu.
+/// An item shows its shortcut, but the key itself is bound by the window, which is where focus
+/// lives.
 class const OverflowMenu({
   super.key,
 
   /// What each item does.
   required final OverflowCallbacks callbacks,
 }) extends StatelessWidget {
+  /// The line between two groups of items, with less air around it than a divider has on a page.
+  static const _separator = Divider(height: 8);
+
   @override
   Widget build(BuildContext context) {
     return MenuAnchor(
@@ -58,6 +62,8 @@ class const OverflowMenu({
           child: const Text(strings.copyLabel),
         ),
 
+        _separator,
+
         // Hide the bars and show the image alone
         MenuItemButton(
           leadingIcon: const Icon(Symbols.fullscreen),
@@ -66,6 +72,8 @@ class const OverflowMenu({
           child: const Text(strings.showcaseLabel),
         ),
 
+        _separator,
+
         // Help on the website
         MenuItemButton(
           leadingIcon: const Icon(Symbols.help),
@@ -73,6 +81,8 @@ class const OverflowMenu({
           onPressed: callbacks.onHelp,
           child: const Text(strings.helpLabel),
         ),
+
+        // _separator,
 
         // Exit the application
         MenuItemButton(

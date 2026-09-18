@@ -85,6 +85,27 @@ void main() {
     expect(shape?.resolve({}), isA<RoundedRectangleBorder>());
   });
 
+  testWidgets('a menu row draws its icon as a toolbar button does', (tester) async {
+    await tester.pumpWidget(
+      themed(
+        OverflowMenu(
+          callbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
+        ),
+      ),
+    );
+    await tester.tap(find.byTooltip('More'));
+    await tester.pumpAndSettle();
+
+    final style = tester
+        .widget<RichText>(
+          find.descendant(of: find.byIcon(Symbols.help), matching: find.byType(RichText)),
+        )
+        .text
+        .style!;
+    expect(style.fontSize, 20);
+    expect(style.color, colors.onSurface);
+  });
+
   test('a menu row is inset from the edges of its menu', () {
     expect(appTheme().menuTheme.style?.padding?.resolve({}), const EdgeInsets.all(4));
   });

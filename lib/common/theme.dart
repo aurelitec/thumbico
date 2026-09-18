@@ -50,8 +50,15 @@ ThemeData appTheme() {
     // A mark on a button states a fact, so it takes the accent rather than the error red
     badgeTheme: const BadgeThemeData(backgroundColor: _accent),
 
-    // Menu rows with a rounded hover
-    menuButtonTheme: MenuButtonThemeData(style: MenuItemButton.styleFrom(shape: _controlShape)),
+    // Menu rows with a rounded hover. A menu row sizes and colours its own icon, as an icon
+    // button does, so both are repeated here to match the toolbar.
+    menuButtonTheme: MenuButtonThemeData(
+      style: MenuItemButton.styleFrom(
+        shape: _controlShape,
+        iconSize: _iconSize,
+        iconColor: _lightColors.onSurface,
+      ),
+    ),
 
     // Room around the rows, so the hover stops short of the menu's edges
     menuTheme: const MenuThemeData(style: MenuStyle(padding: WidgetStatePropertyAll(.all(4)))),
