@@ -60,8 +60,16 @@ ThemeData appTheme() {
       ),
     ),
 
-    // Room around the rows, so the hover stops short of the menu's edges
-    menuTheme: const MenuThemeData(style: MenuStyle(padding: WidgetStatePropertyAll(.all(4)))),
+    // Menus and flyouts as a light card with a faint edge, so they stand off the bar and the
+    // image, and with room around the rows, so the hover stops short of the card's edges
+    menuTheme: MenuThemeData(
+      style: MenuStyle(
+        backgroundColor: WidgetStatePropertyAll(_lightColors.surfaceContainerLow),
+        shape: const WidgetStatePropertyAll(_overlayShape),
+        side: WidgetStatePropertyAll(BorderSide(color: _lightColors.outlineVariant)),
+        padding: const WidgetStatePropertyAll(.all(4)),
+      ),
+    ),
   );
 }
 
@@ -87,8 +95,11 @@ final _iconButtonColors = <WidgetStatesConstraint, Color>{
 /// The size of an icon, and the optical size it is drawn for.
 const _iconSize = 20.0;
 
-/// The corners of a Windows control.
+/// The corners of a control.
 const _controlShape = RoundedRectangleBorder(borderRadius: .all(.circular(4)));
+
+/// The corners of what floats over the window, rounder than a control's.
+const _overlayShape = RoundedRectangleBorder(borderRadius: .all(.circular(8)));
 
 /// The Aurelitec blue, darkened until white text on it and its own text on white both read
 /// clearly.

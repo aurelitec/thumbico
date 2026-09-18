@@ -132,6 +132,53 @@ void main() {
     expect(drawn.letterSpacing, material.letterSpacing);
   });
 
+  /// The raised surface a menu or a flyout is drawn on, found from some text inside it.
+  Material cardAround(WidgetTester tester, String text) => tester
+      .widgetList<Material>(find.ancestor(of: find.text(text), matching: find.byType(Material)))
+      .firstWhere((material) => material.elevation > 0);
+
+  void expectCard(Material card) {
+    expect(card.color, colors.surfaceContainerLow);
+    final shape = card.shape! as RoundedRectangleBorder;
+    expect(shape.borderRadius, BorderRadius.circular(8));
+    expect(shape.side.color, colors.outlineVariant);
+  }
+
+  testWidgets('a menu is a light card with round corners and a faint edge', (tester) async {
+    await tester.pumpWidget(
+      themed(
+        OverflowMenu(
+          callbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
+        ),
+      ),
+    );
+    await tester.tap(find.byTooltip('More'));
+    await tester.pumpAndSettle();
+
+    expectCard(cardAround(tester, 'Help'));
+  });
+
+  testWidgets('a flyout with a style of its own is the same card', (tester) async {
+    final controller = TextEditingController(text: '256 x 256');
+    addTearDown(controller.dispose);
+    await tester.pumpWidget(
+      themed(
+        SizeField(
+          controller: controller,
+          onSubmitted: () {},
+          onBigger: () {},
+          onSmaller: () {},
+          scaleToDisplay: false,
+          onScaleToDisplayChanged: (_) {},
+        ),
+      ),
+    );
+    await tester.tap(find.byTooltip('Sizes'));
+    await tester.pumpAndSettle();
+
+    expectCard(cardAround(tester, '512 x 512'));
+  });
+
   test('a menu row is inset from the edges of its menu', () {
     expect(appTheme().menuTheme.style?.padding?.resolve({}), const EdgeInsets.all(4));
   });
