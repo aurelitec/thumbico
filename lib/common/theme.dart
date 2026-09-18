@@ -1,6 +1,7 @@
 // Copyright (c) 2011-2026 Aurelitec <https://www.aurelitec.com>
 // Licensed under the MIT License. See LICENSE file in the project root for more information.
 
+import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:material_ui/material_ui.dart';
 
 /// The application theme, shared by every window.
@@ -8,17 +9,15 @@ ThemeData appTheme() {
   return ThemeData(
     colorScheme: _lightColors,
 
-    // Sizes come from Material's own desktop density rather than from numbers of ours. Both are
-    // already the defaults on Windows; stating them gives a test, which counts as a touch
-    // platform, the same sizes as the app.
+    // Material's desktop defaults, stated so that a test, which counts as a touch platform,
+    // measures the same sizes as the app
     visualDensity: .compact,
     materialTapTargetSize: .shrinkWrap,
 
     // A press darkens the control, as on Windows, with no ripple spreading from the pointer
     splashFactory: NoSplash.splashFactory,
 
-    // Icons at the smallest size the symbols are designed for, which sits closer to the text
-    // height than Material's 24, drawn in the shape the font has for that size
+    // Icons at the smallest size the symbols are designed for, in the shape drawn for that size
     iconTheme: const IconThemeData(size: _iconSize, opticalSize: _iconSize),
 
     // Small corners on what Material draws as a circle or a pill, and icons in the text colour.
@@ -57,12 +56,24 @@ ThemeData appTheme() {
         shape: _controlShape,
         iconSize: _iconSize,
         iconColor: _lightColors.onSurface,
+        textStyle: _menuLabelStyle(),
       ),
     ),
 
     // Room around the rows, so the hover stops short of the menu's edges
     menuTheme: const MenuThemeData(style: MenuStyle(padding: WidgetStatePropertyAll(.all(4)))),
   );
+}
+
+/// Material's label style at regular weight, as desktop menus set their items.
+///
+/// Given whole, because a button's text style replaces its default rather than merging over it.
+TextStyle _menuLabelStyle() {
+  // The platform defaults to Android if it is not named
+  final typography = Typography.material2021(platform: defaultTargetPlatform);
+  return typography.englishLike.labelLarge!
+      .merge(typography.black.labelLarge)
+      .copyWith(fontWeight: .w400);
 }
 
 /// What an icon button draws its icon in: the accent while selected, faded while disabled, and

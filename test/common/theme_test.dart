@@ -106,6 +106,32 @@ void main() {
     expect(style.color, colors.onSurface);
   });
 
+  testWidgets('a menu label is regular weight, and otherwise Material\'s own label style', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      themed(
+        OverflowMenu(
+          callbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
+        ),
+      ),
+    );
+    await tester.tap(find.byTooltip('More'));
+    await tester.pumpAndSettle();
+
+    final label = find.text('Help');
+    final drawn = tester
+        .widget<RichText>(find.descendant(of: label, matching: find.byType(RichText)))
+        .text
+        .style!;
+    final material = Theme.of(tester.element(label)).textTheme.labelLarge!;
+
+    expect(drawn.fontWeight, FontWeight.w400);
+    expect(drawn.fontSize, material.fontSize);
+    expect(drawn.fontFamily, material.fontFamily);
+    expect(drawn.letterSpacing, material.letterSpacing);
+  });
+
   test('a menu row is inset from the edges of its menu', () {
     expect(appTheme().menuTheme.style?.padding?.resolve({}), const EdgeInsets.all(4));
   });
