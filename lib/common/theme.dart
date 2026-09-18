@@ -17,10 +17,16 @@ ThemeData appTheme() {
     // A press darkens the control, as on Windows, with no ripple spreading from the pointer
     splashFactory: NoSplash.splashFactory,
 
-    // Small corners on what Material draws as a circle or a pill, and icons in the text colour
+    // Icons at the smallest size the symbols are designed for, which sits closer to the text
+    // height than Material's 24, drawn in the shape the font has for that size
+    iconTheme: const IconThemeData(size: _iconSize, opticalSize: _iconSize),
+
+    // Small corners on what Material draws as a circle or a pill, and icons in the text colour.
+    // An icon button sizes its own icon, so the size is repeated here.
     iconButtonTheme: IconButtonThemeData(
       style: IconButton.styleFrom(
         shape: _controlShape,
+        iconSize: _iconSize,
       ).copyWith(foregroundColor: WidgetStateProperty.fromMap(_iconButtonColors)),
     ),
     filledButtonTheme: FilledButtonThemeData(style: FilledButton.styleFrom(shape: _controlShape)),
@@ -59,6 +65,9 @@ final _iconButtonColors = <WidgetStatesConstraint, Color>{
   WidgetState.selected: _lightColors.primary,
   WidgetState.any: _lightColors.onSurface,
 };
+
+/// The size of an icon, and the optical size it is drawn for.
+const _iconSize = 20.0;
 
 /// The corners of a Windows control.
 const _controlShape = RoundedRectangleBorder(borderRadius: .all(.circular(4)));

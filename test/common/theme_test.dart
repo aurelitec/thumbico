@@ -169,4 +169,21 @@ void main() {
     expect(drawnColor(Symbols.folder), colors.onSurface);
     expect(drawnColor(Symbols.monitor), colors.primary);
   });
+
+  testWidgets('a button icon is drawn small, in the shape the symbols have for that size', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      themed(IconButton(icon: const Icon(Symbols.refresh), onPressed: () {})),
+    );
+
+    final style = tester
+        .widget<RichText>(
+          find.descendant(of: find.byIcon(Symbols.refresh), matching: find.byType(RichText)),
+        )
+        .text
+        .style!;
+    expect(style.fontSize, 20);
+    expect(style.fontVariations, contains(const FontVariation('opsz', 20)));
+  });
 }

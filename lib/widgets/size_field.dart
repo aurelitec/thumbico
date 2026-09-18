@@ -124,8 +124,7 @@ class const SizeField({
                   visualDensity: .standard,
                   tapTargetSize: .shrinkWrap,
                 ),
-                // The smallest size the symbols are drawn for
-                icon: const Icon(Symbols.keyboard_arrow_down, size: 20, opticalSize: 20),
+                icon: const Icon(Symbols.keyboard_arrow_down),
                 tooltip: strings.sizesTooltip,
                 onPressed: menu.isOpen ? menu.close : menu.open,
               ),
