@@ -172,6 +172,12 @@ void main() {
       find.ancestor(of: toggle, matching: find.byType(IconButton)),
     );
     expect(button.isSelected, isTrue);
+
+    // The same symbol, drawn solid through the font's fill axis
+    final drawn = tester.widget<RichText>(
+      find.descendant(of: toggle, matching: find.byType(RichText)),
+    );
+    expect(drawn.text.style?.fontVariations, contains(const FontVariation('FILL', 1)));
   });
 
   testWidgets('Tab from the field reaches the chevron and Enter opens the flyout', (

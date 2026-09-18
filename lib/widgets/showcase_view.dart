@@ -1,6 +1,7 @@
 // Copyright (c) 2011-2026 Aurelitec <https://www.aurelitec.com>
 // Licensed under the MIT License. See LICENSE file in the project root for more information.
 
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../common/strings.dart' as strings;
@@ -53,7 +54,7 @@ class _ShowcaseViewState extends State<ShowcaseView> {
                 child: Tooltip(
                   message: strings.exitShowcaseTooltip,
                   child: FilledButton.tonalIcon(
-                    icon: const Icon(Icons.fullscreen_exit),
+                    icon: const Icon(Symbols.fullscreen_exit),
                     label: const Text(strings.exitShowcaseLabel),
                     onPressed: widget.onExit,
                   ),

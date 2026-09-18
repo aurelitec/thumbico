@@ -81,19 +81,21 @@ class const SizeField({
                     Row(
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.remove),
+                          icon: const Icon(Symbols.remove),
                           tooltip: strings.smallerTooltip,
                           onPressed: onSmaller,
                         ),
                         IconButton(
-                          icon: const Icon(Icons.add),
+                          icon: const Icon(Symbols.add),
                           tooltip: strings.biggerTooltip,
                           onPressed: onBigger,
                         ),
                         const Spacer(),
                         IconButton(
                           isSelected: scaleToDisplay,
-                          icon: const Icon(Icons.monitor),
+                          icon: const Icon(Symbols.desktop_windows),
+                          // Filled while on, the way the symbols mark a selected state
+                          selectedIcon: const Icon(Symbols.desktop_windows, fill: 1),
                           tooltip: strings.displayScaleTooltip,
                           onPressed: () => onScaleToDisplayChanged(!scaleToDisplay),
                         ),

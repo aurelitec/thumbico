@@ -44,7 +44,7 @@ class const OverflowMenu({
       menuChildren: [
         // Save the image to a file
         MenuItemButton(
-          leadingIcon: const Icon(Icons.save_as),
+          leadingIcon: const Icon(Symbols.save),
           shortcut: shortcuts.saveAs,
           onPressed: callbacks.onSaveAs,
           child: const Text(strings.saveAsLabel),
@@ -52,7 +52,7 @@ class const OverflowMenu({
 
         // Copy the image to the clipboard
         MenuItemButton(
-          leadingIcon: const Icon(Icons.content_copy),
+          leadingIcon: const Icon(Symbols.content_copy),
           shortcut: shortcuts.copy,
           onPressed: callbacks.onCopy,
           child: const Text(strings.copyLabel),
@@ -60,7 +60,7 @@ class const OverflowMenu({
 
         // Hide the bars and show the image alone
         MenuItemButton(
-          leadingIcon: const Icon(Icons.fullscreen),
+          leadingIcon: const Icon(Symbols.fullscreen),
           shortcut: shortcuts.showcase,
           onPressed: callbacks.onShowcase,
           child: const Text(strings.showcaseLabel),
@@ -68,7 +68,7 @@ class const OverflowMenu({
 
         // Help on the website
         MenuItemButton(
-          leadingIcon: const Icon(Icons.help_outline),
+          leadingIcon: const Icon(Symbols.help),
           shortcut: shortcuts.help,
           onPressed: callbacks.onHelp,
           child: const Text(strings.helpLabel),
@@ -76,7 +76,7 @@ class const OverflowMenu({
 
         // Exit the application
         MenuItemButton(
-          leadingIcon: const Icon(Icons.close),
+          leadingIcon: const Icon(Symbols.close),
           onPressed: callbacks.onExit,
           child: const Text(strings.exitLabel),
         ),
