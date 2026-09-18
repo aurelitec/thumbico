@@ -37,12 +37,29 @@ import '../widgets/toolbar.dart';
 
 /// The main window of the application.
 class const MainWindow({super.key}) extends StatefulWidget {
-  // Constructing the controller is what creates the native window
+  /// The smallest the window can be made.
+  ///
+  /// Wide enough for the toolbar with a path field still worth reading and for the status bar's
+  /// panes, and tall enough for the options flyout, which is drawn inside the window.
+  static const minimumSize = Size(540, 420);
+
+  static final _constraints = BoxConstraints(
+    minWidth: minimumSize.width,
+    minHeight: minimumSize.height,
+  );
+
+  // Constructing the controller is what creates the native window.
+  //
+  // The constraints are set a second time because this SDK's Windows engine keeps the ones given
+  // at creation for the view only: the window's own copy, which answers Windows when it asks for
+  // the smallest size, is stored by the setter alone. Without the second call the minimum size
+  // is ignored. Remove it when the engine stores the creation constraints on the window.
   static final _controller = WindowController(
     size: const Size(800, 600),
+    constraints: _constraints,
     title: strings.mainWindowTitle,
     delegate: _MainWindowControllerDelegate(),
-  );
+  )..setConstraints(_constraints);
 
   /// Returns a [WindowEntry] for the main window. Call before `runWidget`.
   static WindowEntry windowEntry() {
