@@ -55,6 +55,9 @@ class const _Checkerboard() extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    // Squares are drawn whole, so without this the last ones reach past the image's edge
+    canvas.clipRect(Offset.zero & size);
+
     final light = Paint()..color = const Color(0xFFFFFFFF);
     final dark = Paint()..color = const Color(0xFFCCCCCC);
     for (var y = 0.0; y < size.height; y += _square) {
