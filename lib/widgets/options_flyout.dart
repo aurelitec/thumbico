@@ -79,6 +79,10 @@ class const OptionsFlyout({
       builder: (context, controller, child) => Badge(
         isLabelVisible: !_isDefault,
         smallSize: 8,
+        // In from the corner of the button's box, toward the icon, so the mark belongs to this
+        // button and not to the one beside it. A mark without text ignores the badge's offset,
+        // so it is placed by alignment.
+        alignment: const Alignment(0.8125, -0.85),
         child: IconButton(
           icon: const Icon(Symbols.tune),
           tooltip: strings.optionsTooltip,

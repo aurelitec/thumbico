@@ -120,6 +120,35 @@ void main() {
     expect(checked('Crop to square'), isFalse);
   });
 
+  testWidgets('the mark sits beside the corner of the icon, clear of the next button', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      host(
+        Center(
+          child: OptionsFlyout(
+            source: ThumbicoSource.iconOnly,
+            options: const {},
+            onSourceChanged: (_) {},
+            onOptionToggled: (_, _) {},
+          ),
+        ),
+      ),
+    );
+
+    // The mark is the one small square box inside the badge
+    final button = tester.getRect(find.byType(IconButton));
+    final mark = find
+        .descendant(of: find.byType(Badge), matching: find.byType(DecoratedBox))
+        .evaluate()
+        .map((element) => tester.getRect(find.byElementPredicate((e) => e == element)))
+        .firstWhere((rect) => rect.width == 8 && rect.height == 8);
+
+    // Clear of the next button's edge, and just short of touching the icon's own corner
+    expect(button.right - mark.right, closeTo(3, 0.01), reason: 'in from the right edge');
+    expect(mark.top - button.top, closeTo(3, 0.01), reason: 'down from the top edge');
+  });
+
   testWidgets('the button carries a mark only when a mode is not at its default', (tester) async {
     bool marked() => tester.widget<Badge>(find.byType(Badge)).isLabelVisible;
 
