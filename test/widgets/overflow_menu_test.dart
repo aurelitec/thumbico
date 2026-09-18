@@ -155,6 +155,23 @@ void main() {
     expect(find.text('F1'), findsOneWidget);
   });
 
+  testWidgets('a shortcut is fainter than its label and stands clear of it', (tester) async {
+    await tester.pumpWidget(menu());
+    await open(tester);
+
+    Color colorOf(String text) => tester
+        .widget<RichText>(find.descendant(of: find.text(text), matching: find.byType(RichText)))
+        .text
+        .style!
+        .color!;
+    expect(colorOf('F11').a, lessThan(colorOf('Showcase mode').a));
+
+    // The widest row is the one where the two come closest
+    final gap =
+        tester.getTopLeft(find.text('F11')).dx - tester.getTopRight(find.text('Showcase mode')).dx;
+    expect(gap, greaterThanOrEqualTo(24));
+  });
+
   testWidgets('every item carries an icon', (tester) async {
     await tester.pumpWidget(menu());
     await open(tester);

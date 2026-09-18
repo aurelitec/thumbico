@@ -69,6 +69,13 @@ const saveAsLabel = 'Save As...';
 const copyLabel = 'Copy';
 const showcaseLabel = 'Showcase mode';
 
+// The keys as the menu shows them; a test keeps each equal to the framework's own label for
+// the shortcut in common/shortcuts.dart.
+const saveAsShortcut = 'Ctrl+S';
+const copyShortcut = 'Ctrl+Shift+C';
+const showcaseShortcut = 'F11';
+const helpShortcut = 'F1';
+
 // ---------------------------------------------------------------------------
 // Showcase mode
 // ---------------------------------------------------------------------------

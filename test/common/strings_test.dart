@@ -36,4 +36,13 @@ void main() {
     expect(strings.openFolderTooltip, endsWith('(${await label(tester, shortcuts.openFolder)})'));
     expect(strings.refreshTooltip, endsWith('(${await label(tester, shortcuts.refresh)})'));
   });
+
+  testWidgets('the menu shortcut texts are the labels the framework gives their shortcuts', (
+    tester,
+  ) async {
+    expect(strings.saveAsShortcut, await label(tester, shortcuts.saveAs));
+    expect(strings.copyShortcut, await label(tester, shortcuts.copy));
+    expect(strings.showcaseShortcut, await label(tester, shortcuts.showcase));
+    expect(strings.helpShortcut, await label(tester, shortcuts.help));
+  });
 }

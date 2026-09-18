@@ -3,9 +3,9 @@
 
 /// The keyboard shortcuts, one activator per command.
 ///
-/// The menu shows them and the window binds them, both from here, so a label can never
-/// disagree with the key that fires. The editing keys, Ctrl with C, V, X, A, and Z, are
-/// left to the text fields, which is why Copy takes Shift.
+/// The window binds them. The menu and the tooltips show them as text of their own, which a
+/// test keeps equal to these. The editing keys, Ctrl with C, V, X, A, and Z, are left to the
+/// text fields, which is why Copy takes Shift.
 library;
 
 import 'package:flutter/services.dart';
