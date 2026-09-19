@@ -112,6 +112,33 @@ void main() {
     expect(closes, 0);
   });
 
+  for (final brightness in Brightness.values) {
+    testWidgets('a link is underlined in its own colour, in the ${brightness.name} theme', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: appTheme(brightness),
+          home: AboutWindow(onClose: () {}, onOpenUrl: (_) {}),
+        ),
+      );
+
+      // What is finally drawn, after the button has put its own colour on the text
+      final drawn = tester
+          .widget<RichText>(
+            find.descendant(
+              of: find.text('Source code on GitHub'),
+              matching: find.byType(RichText),
+            ),
+          )
+          .text
+          .style!;
+      expect(drawn.decoration, TextDecoration.underline);
+      expect(drawn.color, appTheme(brightness).colorScheme.primary);
+      expect(drawn.decorationColor, drawn.color);
+    });
+  }
+
   testWidgets('a link shows no box under the pointer, only for keyboard focus', (tester) async {
     await tester.pumpWidget(hosted());
 

@@ -96,6 +96,14 @@ void main() {
       }
     });
 
+    test('has a dark tooltip with a faint edge, where Material would show a white box', () {
+      final decoration = appTheme(.dark).tooltipTheme.decoration! as BoxDecoration;
+      expect(decoration.color, dark.surfaceContainerLow);
+      expect((decoration.border! as Border).top.color, dark.outlineVariant);
+      expect(appTheme(.dark).tooltipTheme.textStyle?.color, dark.onSurface);
+      expect(appTheme().tooltipTheme.decoration, isNull, reason: 'the light theme keeps its own');
+    });
+
     test('shares every shape and size with the light theme', () {
       final light = appTheme();
       final darkTheme = appTheme(.dark);
@@ -320,6 +328,45 @@ void main() {
 
     expect(pressed.a, greaterThan(hovered.a));
   });
+
+  for (final brightness in Brightness.values) {
+    testWidgets('a hovered icon button stands off its bar as a hovered menu row does off its '
+        'menu, in the ${brightness.name} theme', (tester) async {
+      final theme = appTheme(brightness);
+      final scheme = theme.colorScheme;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: theme,
+          home: Material(
+            child: IconButton(icon: const Icon(Symbols.folder), onPressed: () {}),
+          ),
+        ),
+      );
+
+      // What the button really draws with, whatever the theme or Material's defaults say
+      final tint = tester
+          .widget<InkWell>(
+            find.descendant(of: find.byType(IconButton), matching: find.byType(InkWell)),
+          )
+          .overlayColor!
+          .resolve({WidgetState.hovered})!;
+      final onBar = Color.alphaBlend(tint, scheme.surfaceContainer);
+      int levels(Color a, Color b) => ((a.r - b.r).abs() * 255).round();
+
+      // A menu row shows its hover tint twice, as measured on screen
+      final rowTint = theme.menuButtonTheme.style!.overlayColor!.resolve({WidgetState.hovered})!;
+      final onMenu = Color.alphaBlend(
+        rowTint,
+        Color.alphaBlend(rowTint, scheme.surfaceContainerLow),
+      );
+
+      expect(levels(onBar, scheme.surfaceContainer), inInclusiveRange(15, 22));
+      expect(
+        levels(onBar, scheme.surfaceContainer),
+        closeTo(levels(onMenu, scheme.surfaceContainerLow), 3),
+      );
+    });
+  }
 
   test('a menu row is inset from the edges of its menu', () {
     expect(appTheme().menuTheme.style?.padding?.resolve({}), const EdgeInsets.all(4));

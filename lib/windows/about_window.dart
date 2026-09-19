@@ -173,14 +173,21 @@ class const _Link(final String label, {required final VoidCallback onPressed})
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final color = theme.colorScheme.primary;
     return TextButton(
       style:
           TextButton.styleFrom(
+            foregroundColor: color,
             enabledMouseCursor: SystemMouseCursors.click,
-            textStyle: theme.textTheme.labelLarge?.copyWith(decoration: .underline),
+            // The underline's colour is named, since Material's label style carries a black or
+            // white one of its own, which the button's text colour does not replace
+            textStyle: theme.textTheme.labelLarge?.copyWith(
+              decoration: .underline,
+              decorationColor: color,
+            ),
           ).copyWith(
             overlayColor: WidgetStateProperty.fromMap({
-              WidgetState.focused: theme.colorScheme.primary.withValues(alpha: 0.1),
+              WidgetState.focused: color.withValues(alpha: 0.1),
               WidgetState.any: Colors.transparent,
             }),
           ),

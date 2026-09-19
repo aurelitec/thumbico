@@ -10,6 +10,7 @@ import 'package:material_ui/material_ui.dart';
 /// nothing else. A window gives its app both, and the app follows the Windows setting.
 ThemeData appTheme([Brightness brightness = .light]) {
   final colors = _colors(brightness);
+  final isDark = brightness == .dark;
 
   return ThemeData(
     colorScheme: colors,
@@ -26,12 +27,14 @@ ThemeData appTheme([Brightness brightness = .light]) {
     iconTheme: const IconThemeData(size: _iconSize, opticalSize: _iconSize),
 
     // Small corners on what Material draws as a circle or a pill, and icons in the text colour.
-    // An icon button sizes its own icon, so the size is repeated here.
+    // An icon button sizes its own icon, so the size is repeated here. Its tints are stated
+    // too: left to Material they came out black in either theme, and on a dark bar a black
+    // hover cannot be seen.
     iconButtonTheme: IconButtonThemeData(
-      style: IconButton.styleFrom(
-        shape: _controlShape,
-        iconSize: _iconSize,
-      ).copyWith(foregroundColor: WidgetStateProperty.fromMap(_iconButtonColors(colors))),
+      style: IconButton.styleFrom(shape: _controlShape, iconSize: _iconSize).copyWith(
+        foregroundColor: WidgetStateProperty.fromMap(_iconButtonColors(colors)),
+        overlayColor: WidgetStateProperty.fromMap(_iconButtonTints(colors)),
+      ),
     ),
     filledButtonTheme: FilledButtonThemeData(style: FilledButton.styleFrom(shape: _controlShape)),
     segmentedButtonTheme: SegmentedButtonThemeData(
@@ -44,7 +47,7 @@ ThemeData appTheme([Brightness brightness = .light]) {
     // has focus
     inputDecorationTheme: InputDecorationThemeData(
       filled: true,
-      fillColor: brightness == .dark ? colors.surfaceContainerHigh : colors.surface,
+      fillColor: isDark ? colors.surfaceContainerHigh : colors.surface,
       // Fainter than Material's, which greys the fill down to the bar's own colour
       hoverColor: colors.onSurface.withValues(alpha: 0.03),
       border: const OutlineInputBorder(),
@@ -67,6 +70,20 @@ ThemeData appTheme([Brightness brightness = .light]) {
         textStyle: _menuLabelStyle(brightness),
       ).copyWith(overlayColor: WidgetStateProperty.fromMap(_menuRowTints(colors))),
     ),
+
+    // In the dark theme a tooltip is the menus' dark card with their faint edge; Material
+    // inverts it to a white box there, a glare spot in a dark window. The light theme keeps
+    // Material's own.
+    tooltipTheme: isDark
+        ? TooltipThemeData(
+            decoration: BoxDecoration(
+              color: colors.surfaceContainerLow,
+              border: Border.all(color: colors.outlineVariant),
+              borderRadius: const BorderRadius.all(.circular(4)),
+            ),
+            textStyle: TextStyle(color: colors.onSurface),
+          )
+        : null,
 
     // Menus and flyouts as a light card with a faint edge, so they stand off the bar and the
     // image, and with room around the rows, so the hover stops short of the card's edges
@@ -102,6 +119,15 @@ Map<WidgetStatesConstraint, Color> _menuRowTints(ColorScheme colors) => {
   WidgetState.pressed: colors.onSurface.withValues(alpha: 0.06),
   WidgetState.hovered: colors.onSurface.withValues(alpha: 0.04),
   WidgetState.focused: colors.onSurface.withValues(alpha: 0.08),
+  WidgetState.any: Colors.transparent,
+};
+
+/// What an icon button is tinted with: Material's own strengths, from the text colour, so that
+/// the tint darkens a light bar and lightens a dark one, and matches a menu row's.
+Map<WidgetStatesConstraint, Color> _iconButtonTints(ColorScheme colors) => {
+  WidgetState.pressed: colors.onSurface.withValues(alpha: 0.1),
+  WidgetState.hovered: colors.onSurface.withValues(alpha: 0.08),
+  WidgetState.focused: colors.onSurface.withValues(alpha: 0.1),
   WidgetState.any: Colors.transparent,
 };
 
@@ -158,17 +184,17 @@ ColorScheme _colors(Brightness brightness) {
     onError: const Color(0xFFFFFFFF),
 
     // The canvas, the quietest surface in either theme, and the text on every surface
-    surface: isLight ? const Color(0xFFFFFFFF) : const Color(0xFF1C1C1C),
+    surface: isLight ? const Color(0xFFFFFFFF) : const Color(0xFF161616),
     onSurface: isLight ? const Color(0xFF1B1B1B) : const Color(0xFFFFFFFF),
     onSurfaceVariant: isLight ? const Color(0xFF5D5D5D) : const Color(0xFFC5C5C5),
 
     // The menus and flyouts, the bars, and the dark theme's field fill, in steps of one grey
-    surfaceContainerLowest: isLight ? const Color(0xFFFFFFFF) : const Color(0xFF1C1C1C),
+    surfaceContainerLowest: isLight ? const Color(0xFFFFFFFF) : const Color(0xFF161616),
     surfaceContainerLow: isLight ? const Color(0xFFF9F9F9) : const Color(0xFF2C2C2C),
     surfaceContainer: isLight ? const Color(0xFFF3F3F3) : const Color(0xFF202020),
     surfaceContainerHigh: isLight ? const Color(0xFFEBEBEB) : const Color(0xFF2D2D2D),
     surfaceContainerHighest: isLight ? const Color(0xFFE5E5E5) : const Color(0xFF343434),
-    surfaceDim: isLight ? const Color(0xFFE5E5E5) : const Color(0xFF1C1C1C),
+    surfaceDim: isLight ? const Color(0xFFE5E5E5) : const Color(0xFF161616),
     surfaceBright: isLight ? const Color(0xFFFFFFFF) : const Color(0xFF343434),
 
     // Field and control borders, then the fainter dividers
