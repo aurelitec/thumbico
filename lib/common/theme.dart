@@ -4,10 +4,15 @@
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:material_ui/material_ui.dart';
 
-/// The application theme, shared by every window.
-ThemeData appTheme() {
+/// The application theme for [brightness], shared by every window.
+///
+/// One builder for the light and the dark theme, so that the two differ in their colours and in
+/// nothing else. A window gives its app both, and the app follows the Windows setting.
+ThemeData appTheme([Brightness brightness = .light]) {
+  final colors = _colors(brightness);
+
   return ThemeData(
-    colorScheme: _lightColors,
+    colorScheme: colors,
 
     // Material's desktop defaults, stated so that a test, which counts as a touch platform,
     // measures the same sizes as the app
@@ -26,7 +31,7 @@ ThemeData appTheme() {
       style: IconButton.styleFrom(
         shape: _controlShape,
         iconSize: _iconSize,
-      ).copyWith(foregroundColor: WidgetStateProperty.fromMap(_iconButtonColors)),
+      ).copyWith(foregroundColor: WidgetStateProperty.fromMap(_iconButtonColors(colors))),
     ),
     filledButtonTheme: FilledButtonThemeData(style: FilledButton.styleFrom(shape: _controlShape)),
     segmentedButtonTheme: SegmentedButtonThemeData(
@@ -34,21 +39,22 @@ ThemeData appTheme() {
     ),
     textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(shape: _controlShape)),
 
-    // Fields as Windows draws them: the white fill shows the field on the grey bar, and the
-    // outline stays faint until the field has focus
+    // Fields as Windows draws them: the fill shows the field on the bar, white on the light
+    // grey one and a lighter grey on the dark one, and the outline stays faint until the field
+    // has focus
     inputDecorationTheme: InputDecorationThemeData(
       filled: true,
-      fillColor: _lightColors.surface,
+      fillColor: brightness == .dark ? colors.surfaceContainerHigh : colors.surface,
       // Fainter than Material's, which greys the fill down to the bar's own colour
-      hoverColor: _lightColors.onSurface.withValues(alpha: 0.03),
+      hoverColor: colors.onSurface.withValues(alpha: 0.03),
       border: const OutlineInputBorder(),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: _lightColors.outlineVariant),
+        borderSide: BorderSide(color: colors.outlineVariant),
       ),
     ),
 
     // A mark on a button states a fact, so it takes the accent rather than the error red
-    badgeTheme: const BadgeThemeData(backgroundColor: _accent),
+    badgeTheme: BadgeThemeData(backgroundColor: colors.primary),
 
     // Menu rows with a rounded hover. A menu row sizes and colours its own icon, as an icon
     // button does, so both are repeated here to match the toolbar.
@@ -56,19 +62,19 @@ ThemeData appTheme() {
       style: MenuItemButton.styleFrom(
         shape: _controlShape,
         iconSize: _iconSize,
-        iconColor: _lightColors.onSurface,
-        disabledIconColor: _lightColors.onSurface.withValues(alpha: 0.38),
-        textStyle: _menuLabelStyle(),
-      ).copyWith(overlayColor: WidgetStateProperty.fromMap(_menuRowTints)),
+        iconColor: colors.onSurface,
+        disabledIconColor: colors.onSurface.withValues(alpha: 0.38),
+        textStyle: _menuLabelStyle(brightness),
+      ).copyWith(overlayColor: WidgetStateProperty.fromMap(_menuRowTints(colors))),
     ),
 
     // Menus and flyouts as a light card with a faint edge, so they stand off the bar and the
     // image, and with room around the rows, so the hover stops short of the card's edges
     menuTheme: MenuThemeData(
       style: MenuStyle(
-        backgroundColor: WidgetStatePropertyAll(_lightColors.surfaceContainerLow),
+        backgroundColor: WidgetStatePropertyAll(colors.surfaceContainerLow),
         shape: const WidgetStatePropertyAll(_overlayShape),
-        side: WidgetStatePropertyAll(BorderSide(color: _lightColors.outlineVariant)),
+        side: WidgetStatePropertyAll(BorderSide(color: colors.outlineVariant)),
         // Raised further than Material's menu, for a wider and softer shadow
         elevation: const WidgetStatePropertyAll(8),
         padding: const WidgetStatePropertyAll(.all(4)),
@@ -80,31 +86,31 @@ ThemeData appTheme() {
 /// Material's label style at regular weight, as desktop menus set their items.
 ///
 /// Given whole, because a button's text style replaces its default rather than merging over it.
-TextStyle _menuLabelStyle() {
+TextStyle _menuLabelStyle(Brightness brightness) {
   // The platform defaults to Android if it is not named
   final typography = Typography.material2021(platform: defaultTargetPlatform);
-  return typography.englishLike.labelLarge!
-      .merge(typography.black.labelLarge)
-      .copyWith(fontWeight: .w400);
+  // The black set is the one for a light theme, and the white set for a dark one
+  final fonts = brightness == .dark ? typography.white : typography.black;
+  return typography.englishLike.labelLarge!.merge(fonts.labelLarge).copyWith(fontWeight: .w400);
 }
 
 /// What a menu row is tinted with, fainter than Material's.
 ///
 /// A row takes focus when the pointer enters it and then shows its hover tint twice, so hover
 /// is half of what a toolbar button shows, and focus, shown alone by keyboard, is all of it.
-final _menuRowTints = <WidgetStatesConstraint, Color>{
-  WidgetState.pressed: _lightColors.onSurface.withValues(alpha: 0.06),
-  WidgetState.hovered: _lightColors.onSurface.withValues(alpha: 0.04),
-  WidgetState.focused: _lightColors.onSurface.withValues(alpha: 0.08),
+Map<WidgetStatesConstraint, Color> _menuRowTints(ColorScheme colors) => {
+  WidgetState.pressed: colors.onSurface.withValues(alpha: 0.06),
+  WidgetState.hovered: colors.onSurface.withValues(alpha: 0.04),
+  WidgetState.focused: colors.onSurface.withValues(alpha: 0.08),
   WidgetState.any: Colors.transparent,
 };
 
 /// What an icon button draws its icon in: the accent while selected, faded while disabled, and
 /// otherwise the text colour, so the outlined icons read as strongly as the labels.
-final _iconButtonColors = <WidgetStatesConstraint, Color>{
-  WidgetState.disabled: _lightColors.onSurface.withValues(alpha: 0.38),
-  WidgetState.selected: _lightColors.primary,
-  WidgetState.any: _lightColors.onSurface,
+Map<WidgetStatesConstraint, Color> _iconButtonColors(ColorScheme colors) => {
+  WidgetState.disabled: colors.onSurface.withValues(alpha: 0.38),
+  WidgetState.selected: colors.primary,
+  WidgetState.any: colors.onSurface,
 };
 
 /// The size of an icon, and the optical size it is drawn for.
@@ -116,49 +122,60 @@ const _controlShape = RoundedRectangleBorder(borderRadius: .all(.circular(4)));
 /// The corners of what floats over the window, rounder than a control's.
 const _overlayShape = RoundedRectangleBorder(borderRadius: .all(.circular(8)));
 
-/// The green of the app icon's ears, the lightest of its tones that still carries white text.
-const _accent = Color(0xFF2E8F2B);
-
-/// Windows 11 greys around a pure white canvas, with the accent as the only colour.
+/// The colours of the light or the dark theme, each role given as its light and its dark value.
 ///
-/// Written out rather than seeded: a seed tints every surface, and the chrome must stay neutral
-/// beside whatever image is shown. Roles left out fall back to the ones given here.
-const _lightColors = ColorScheme(
-  brightness: .light,
+/// Windows 11's greys, with a green from the app icon as the only colour. Written out rather
+/// than seeded: a seed tints every surface, and the chrome must stay neutral beside whatever
+/// image is shown. Roles left out fall back to the ones given here.
+ColorScheme _colors(Brightness brightness) {
+  // Every value is a colour literal, light first, so that the editor previews it
+  final isLight = brightness == .light;
 
-  // The accent, for whatever is on, selected, or focused
-  primary: _accent,
-  onPrimary: Color(0xFFFFFFFF),
-  // Must differ from the accent: a switch that is on draws its knob in this colour under the pointer
-  primaryContainer: Color(0xFFDCF3D9),
-  onPrimaryContainer: Color(0xFF1B5E20),
-  secondary: _accent,
-  onSecondary: Color(0xFFFFFFFF),
-  secondaryContainer: _accent,
-  onSecondaryContainer: Color(0xFFFFFFFF),
+  // The icon's ear green, the lightest of its tones that carries white text; on dark its face
+  // green, which has the contrast there that it lacks on white, under near-black text
+  final accent = isLight ? const Color(0xFF2E8F2B) : const Color(0xFF4CC23A);
+  final onAccent = isLight ? const Color(0xFFFFFFFF) : const Color(0xFF0A1F0A);
 
-  // Windows' own critical red, and the text on it: the status bar while it reports a problem
-  error: Color(0xFFC42B1C),
-  onError: Color(0xFFFFFFFF),
+  return ColorScheme(
+    brightness: brightness,
 
-  // The canvas, and the text on every surface
-  surface: Color(0xFFFFFFFF),
-  onSurface: Color(0xFF1B1B1B),
-  onSurfaceVariant: Color(0xFF5D5D5D),
+    // The accent, for whatever is on, selected, or focused. The secondary roles carry it too,
+    // since the segmented button and the tonal filled button colour themselves from those.
+    primary: accent,
+    onPrimary: onAccent,
+    secondary: accent,
+    onSecondary: onAccent,
+    secondaryContainer: accent,
+    onSecondaryContainer: onAccent,
+    // Must differ from the accent: a switch that is on draws its knob in this colour under the
+    // pointer
+    primaryContainer: isLight ? const Color(0xFFDCF3D9) : const Color(0xFF1B5E20),
+    onPrimaryContainer: isLight ? const Color(0xFF1B5E20) : const Color(0xFFDCF3D9),
 
-  // The bars, the flyouts, and the menus, in steps of the same grey
-  surfaceContainerLowest: Color(0xFFFFFFFF),
-  surfaceContainerLow: Color(0xFFF9F9F9),
-  surfaceContainer: Color(0xFFF3F3F3),
-  surfaceContainerHigh: Color(0xFFEBEBEB),
-  surfaceContainerHighest: Color(0xFFE5E5E5),
-  surfaceDim: Color(0xFFE5E5E5),
-  surfaceBright: Color(0xFFFFFFFF),
+    // Windows' own critical red, which carries white text in either theme: the status bar
+    // while it reports a problem
+    error: const Color(0xFFC42B1C),
+    onError: const Color(0xFFFFFFFF),
 
-  // Field and control borders, then the fainter dividers
-  outline: Color(0xFF8D8D8D),
-  outlineVariant: Color(0xFFD1D1D1),
+    // The canvas, the quietest surface in either theme, and the text on every surface
+    surface: isLight ? const Color(0xFFFFFFFF) : const Color(0xFF1C1C1C),
+    onSurface: isLight ? const Color(0xFF1B1B1B) : const Color(0xFFFFFFFF),
+    onSurfaceVariant: isLight ? const Color(0xFF5D5D5D) : const Color(0xFFC5C5C5),
 
-  // Raised surfaces keep their own grey instead of taking a wash of the accent
-  surfaceTint: Color(0x00000000),
-);
+    // The menus and flyouts, the bars, and the dark theme's field fill, in steps of one grey
+    surfaceContainerLowest: isLight ? const Color(0xFFFFFFFF) : const Color(0xFF1C1C1C),
+    surfaceContainerLow: isLight ? const Color(0xFFF9F9F9) : const Color(0xFF2C2C2C),
+    surfaceContainer: isLight ? const Color(0xFFF3F3F3) : const Color(0xFF202020),
+    surfaceContainerHigh: isLight ? const Color(0xFFEBEBEB) : const Color(0xFF2D2D2D),
+    surfaceContainerHighest: isLight ? const Color(0xFFE5E5E5) : const Color(0xFF343434),
+    surfaceDim: isLight ? const Color(0xFFE5E5E5) : const Color(0xFF1C1C1C),
+    surfaceBright: isLight ? const Color(0xFFFFFFFF) : const Color(0xFF343434),
+
+    // Field and control borders, then the fainter dividers
+    outline: isLight ? const Color(0xFF8D8D8D) : const Color(0xFF8A8A8A),
+    outlineVariant: isLight ? const Color(0xFFD1D1D1) : const Color(0xFF3A3A3A),
+
+    // Raised surfaces keep their own grey instead of taking a wash of the accent
+    surfaceTint: const Color(0x00000000),
+  );
+}

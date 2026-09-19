@@ -72,7 +72,9 @@ class const MainWindow({super.key}) extends StatefulWidget {
       builder: (context) => MaterialApp(
         debugShowCheckedModeBanner: false,
         title: strings.appName,
+        // Both themes, so that the app follows the Windows light or dark setting by itself
         theme: appTheme(),
+        darkTheme: appTheme(.dark),
         home: const MainWindow(),
       ),
     );

@@ -100,6 +100,7 @@ class const AboutWindow({
         debugShowCheckedModeBanner: false,
         title: strings.aboutWindowTitle,
         theme: appTheme(),
+        darkTheme: appTheme(.dark),
         home: AboutWindow(onClose: close, onOpenUrl: onOpenUrl),
       ),
     );

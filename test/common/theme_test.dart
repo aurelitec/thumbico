@@ -40,6 +40,75 @@ void main() {
     }
   });
 
+  group('the dark theme', () {
+    final dark = appTheme(.dark).colorScheme;
+
+    test('is dark, and the light one is light', () {
+      expect(dark.brightness, Brightness.dark);
+      expect(colors.brightness, Brightness.light);
+    });
+
+    test('carries no tint on any surface either', () {
+      final surfaces = [
+        dark.surface,
+        dark.surfaceContainerLowest,
+        dark.surfaceContainerLow,
+        dark.surfaceContainer,
+        dark.surfaceContainerHigh,
+        dark.surfaceContainerHighest,
+        dark.surfaceDim,
+        dark.surfaceBright,
+      ];
+      for (final surface in surfaces) {
+        expect(
+          surface.r == surface.g && surface.g == surface.b,
+          isTrue,
+          reason: '$surface is tinted',
+        );
+      }
+    });
+
+    test('keeps the canvas the quietest surface, darker than the bars and the menus', () {
+      expect(dark.surface.computeLuminance(), lessThan(dark.surfaceContainer.computeLuminance()));
+      expect(
+        dark.surfaceContainer.computeLuminance(),
+        lessThan(dark.surfaceContainerLow.computeLuminance()),
+      );
+    });
+
+    /// The contrast ratio of two colours, as the accessibility guidance defines it.
+    double contrast(Color a, Color b) {
+      final high = a.computeLuminance() > b.computeLuminance() ? a : b;
+      final low = identical(high, a) ? b : a;
+      return (high.computeLuminance() + 0.05) / (low.computeLuminance() + 0.05);
+    }
+
+    test('has an accent that reads on the dark bars, and text that reads on the accent', () {
+      expect(contrast(dark.primary, dark.surfaceContainer), greaterThan(4.5));
+      expect(contrast(dark.onPrimary, dark.primary), greaterThan(4.5));
+      expect(contrast(dark.onSecondaryContainer, dark.secondaryContainer), greaterThan(4.5));
+    });
+
+    test('has text and hints that read on every surface they sit on', () {
+      for (final surface in [dark.surface, dark.surfaceContainer, dark.surfaceContainerLow]) {
+        expect(contrast(dark.onSurface, surface), greaterThan(7));
+        expect(contrast(dark.onSurfaceVariant, surface), greaterThan(4.5));
+      }
+    });
+
+    test('shares every shape and size with the light theme', () {
+      final light = appTheme();
+      final darkTheme = appTheme(.dark);
+      expect(darkTheme.visualDensity, light.visualDensity);
+      expect(darkTheme.iconTheme.size, light.iconTheme.size);
+      expect(
+        darkTheme.iconButtonTheme.style?.shape?.resolve({}),
+        light.iconButtonTheme.style?.shape?.resolve({}),
+      );
+      expect(darkTheme.badgeTheme.backgroundColor, dark.primary);
+    });
+  });
+
   test('nothing ripples', () {
     expect(appTheme().splashFactory, NoSplash.splashFactory);
   });
