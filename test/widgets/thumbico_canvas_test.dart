@@ -5,8 +5,10 @@ import 'dart:ui' as ui;
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:thumbico/common/strings.dart' as strings;
 import 'package:thumbico/common/theme.dart';
 import 'package:thumbico/widgets/thumbico_canvas.dart';
+import 'package:thumbico/widgets/two_axis_scroll_view.dart';
 
 import '../widget_host.dart';
 
@@ -23,9 +25,61 @@ Future<ui.Image> solidImage(int width, int height) async {
 void main() {
   disableWindowingForTests();
 
-  testWidgets('draws nothing without an image', (tester) async {
+  testWidgets('shows the icon and a hint in place of the checkerboard until there is an image', (
+    tester,
+  ) async {
     await tester.pumpWidget(host(const ThumbicoCanvas()));
-    expect(find.byType(RawImage), findsNothing);
+
+    expect(find.text(strings.emptyCanvasHint), findsOneWidget);
+    expect(find.byType(Image), findsOneWidget);
+    expect(find.byType(TwoAxisScrollView), findsNothing);
+
+    final image = await solidImage(32, 32);
+    addTearDown(image.dispose);
+    await tester.pumpWidget(host(ThumbicoCanvas(image: image)));
+
+    expect(find.text(strings.emptyCanvasHint), findsNothing);
+    expect(find.byType(Image), findsNothing);
+  });
+
+  testWidgets('draws the icon without its colour, so it does not read as an image', (tester) async {
+    await tester.pumpWidget(host(const ThumbicoCanvas()));
+
+    expect(
+      find.ancestor(of: find.byType(Image), matching: find.byType(ColorFiltered)),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('fades the icon further in the dark theme, where grey stands out more', (
+    tester,
+  ) async {
+    Future<double> iconOpacity(Brightness brightness) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: appTheme(brightness),
+          home: const Material(child: ThumbicoCanvas()),
+        ),
+      );
+      // The app animates a change of theme, and the second pump starts that animation
+      await tester.pumpAndSettle();
+
+      // An image without an opacity is drawn fully opaque
+      return tester.widget<Image>(find.byType(Image)).opacity?.value ?? 1;
+    }
+
+    final light = await iconOpacity(.light);
+    final dark = await iconOpacity(.dark);
+
+    expect(dark, lessThan(light));
+  });
+
+  testWidgets('sets the hint in the hint grey', (tester) async {
+    await tester.pumpWidget(host(const ThumbicoCanvas()));
+
+    final hint = tester.widget<Text>(find.text(strings.emptyCanvasHint));
+    final theme = Theme.of(tester.element(find.byType(ThumbicoCanvas)));
+    expect(hint.style?.color, theme.colorScheme.onSurfaceVariant);
   });
 
   testWidgets('lays the image out at one image pixel per device pixel', (tester) async {

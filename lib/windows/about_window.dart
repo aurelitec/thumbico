@@ -10,6 +10,7 @@ import 'package:flutter/src/widgets/_window.dart';
 
 import 'package:material_ui/material_ui.dart';
 
+import '../common/assets.dart' as assets;
 import '../common/strings.dart' as strings;
 import '../common/theme.dart';
 import '../common/urls.dart' as urls;
@@ -24,10 +25,6 @@ class const AboutWindow({
   /// Opens one of the window's links in the browser.
   required final void Function(String url) onOpenUrl,
 }) extends StatelessWidget {
-  /// The app icon, stored at more than twice its drawn size so it stays sharp on a scaled
-  /// display.
-  static const _iconAsset = 'assets/app_icon.png';
-
   /// The size the icon is drawn at.
   static const _iconSize = 96.0;
 
@@ -126,7 +123,7 @@ class const AboutWindow({
             children: [
               // The app icon
               Image.asset(
-                _iconAsset,
+                assets.appIcon,
                 width: _iconSize,
                 height: _iconSize,
                 filterQuality: .medium,

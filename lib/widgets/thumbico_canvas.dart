@@ -5,11 +5,15 @@ import 'dart:ui' as ui;
 
 import 'package:material_ui/material_ui.dart';
 
+import '../common/assets.dart' as assets;
+import '../common/strings.dart' as strings;
 import 'two_axis_scroll_view.dart';
 
 /// Shows a shell image at its real pixel size, centred, scrolling when it does not fit.
 class const ThumbicoCanvas({
   super.key,
+
+  /// The image to show; while there is none, the canvas shows the ways to open an item.
   final ui.Image? image,
 
   /// Whether to draw the image at the display's scale instead of one image pixel per screen pixel.
@@ -19,7 +23,7 @@ class const ThumbicoCanvas({
   Widget build(BuildContext context) {
     final image = this.image;
     if (image == null) {
-      return const SizedBox.expand();
+      return const _EmptyCanvas();
     }
 
     // The greys of an image editor's checkerboard, light or dark with the theme. Both dark ones
@@ -40,6 +44,60 @@ class const ThumbicoCanvas({
           scale: scaleToDisplay ? 1 : MediaQuery.devicePixelRatioOf(context),
           filterQuality: FilterQuality.none,
         ),
+      ),
+    );
+  }
+}
+
+/// What the canvas shows while there is no image: the app icon as a grey watermark, and a hint.
+class const _EmptyCanvas() extends StatelessWidget {
+  /// The size the icon is drawn at, large enough to read as a watermark rather than an image.
+  static const _iconSize = 256.0;
+
+  // Each colour channel takes the pixel's luminance, which keeps the icon's features as greys.
+  // Colour on the canvas means an image, so the icon must not keep its own.
+  // dart format off
+  static const _greyscale = ColorFilter.matrix([
+    0.2126, 0.7152, 0.0722, 0, 0,
+    0.2126, 0.7152, 0.0722, 0, 0,
+    0.2126, 0.7152, 0.0722, 0, 0,
+    0,      0,      0,      1, 0,
+  ]);
+  // dart format on
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    // Grey stands out twice as far from a dark canvas as from white at the same opacity, so the
+    // dark theme fades it by half to match
+    final isLight = theme.brightness == .light;
+
+    return Center(
+      child: Column(
+        mainAxisSize: .min,
+        children: [
+          // The app icon, as a watermark
+          ColorFiltered(
+            colorFilter: _greyscale,
+            child: Image.asset(
+              assets.appIcon,
+              width: _iconSize,
+              height: _iconSize,
+              opacity: AlwaysStoppedAnimation(isLight ? 0.4 : 0.2),
+              filterQuality: .medium,
+              excludeFromSemantics: true,
+            ),
+          ),
+
+          // The ways in
+          const SizedBox(height: 16),
+          Text(
+            strings.emptyCanvasHint,
+            textAlign: .center,
+            style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+          ),
+        ],
       ),
     );
   }

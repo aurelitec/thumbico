@@ -97,7 +97,9 @@ class _MainWindowState extends State<MainWindow> {
   LoadedThumbico? _thumbico;
 
   /// What the status bar says; a problem is marked as one, so the bar can show it as one.
-  var _message = const StatusMessage(strings.enterPath);
+  ///
+  /// Nothing at start, since the canvas already shows the ways to open an item.
+  StatusMessage _message = .none;
 
   /// Whether the bars are hidden and the image shown alone. Never remembered between runs.
   var _showcase = false;
@@ -233,7 +235,7 @@ class _MainWindowState extends State<MainWindow> {
     } on ThumbicoException catch (e) {
       setState(() => _message = .error(_describe(e)));
     } on ArgumentError {
-      setState(() => _message = const StatusMessage(strings.enterPath));
+      setState(() => _message = const StatusMessage(strings.openOrDropFirst));
     }
   }
 

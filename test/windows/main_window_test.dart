@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:thumbico/widgets/overflow_menu.dart';
 import 'package:thumbico/widgets/status_bar.dart';
+import 'package:thumbico/widgets/thumbico_canvas.dart';
 import 'package:thumbico/widgets/toolbar.dart';
 import 'package:thumbico/windows/main_window.dart';
 import 'package:thumbico_core/thumbico_core.dart';
@@ -25,7 +26,7 @@ void main() {
     await (FontLoader('Roboto')..addFont(font.then((bytes) => ByteData.sublistView(bytes)))).load();
   });
 
-  /// The window's bars around an empty image area, as the window lays them out.
+  /// The window's bars around the canvas before any image, as the window lays them out.
   Widget bars(TextEditingController path, TextEditingController size, FocusNode pathFocus) {
     return host(
       Column(
@@ -52,7 +53,7 @@ void main() {
               onExit: () {},
             ),
           ),
-          const Expanded(child: SizedBox.expand()),
+          const Expanded(child: ThumbicoCanvas()),
 
           // The widest the panes get: five-digit sizes and the longer kind
           const StatusBar(
@@ -81,7 +82,7 @@ void main() {
     addTearDown(size.dispose);
     addTearDown(pathFocus.dispose);
 
-    // An overflow anywhere in the bars fails the test as an exception
+    // An overflow anywhere in the bars or the empty canvas fails the test as an exception
     await tester.pumpWidget(bars(path, size, pathFocus));
 
     expect(tester.getSize(find.byType(TextField).first).width, greaterThanOrEqualTo(150));

@@ -115,6 +115,12 @@ const Map<String, String> saveFilters = {
 };
 
 // ---------------------------------------------------------------------------
+// Canvas
+// ---------------------------------------------------------------------------
+
+const emptyCanvasHint = 'Drop a file, folder, or drive here, or open one.';
+
+// ---------------------------------------------------------------------------
 // Status bar
 // ---------------------------------------------------------------------------
 
@@ -127,7 +133,7 @@ const kindThumbnail = 'Thumbnail';
 // Messages
 // ---------------------------------------------------------------------------
 
-const enterPath = 'Enter a path and press Enter.';
+const openOrDropFirst = 'Open or drop a file, folder, or drive first.';
 const invalidSize =
     'The size must be a whole number from 1 up, or two such numbers like 256 x 160.';
 
