@@ -280,9 +280,12 @@ void main() {
     expect(hovered.computeLuminance(), greaterThan(colors.surfaceContainer.computeLuminance()));
   });
 
-  test('the mark on a button is the same blue as everything else that is on, not an error red', () {
-    expect(appTheme().badgeTheme.backgroundColor, colors.primary);
-  });
+  test(
+    'the mark on a button is the same accent as everything else that is on, not an error red',
+    () {
+      expect(appTheme().badgeTheme.backgroundColor, colors.primary);
+    },
+  );
 
   testWidgets('button icons are drawn in the text colour, and a selected one in the accent', (
     tester,

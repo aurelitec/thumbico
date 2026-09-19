@@ -115,9 +115,8 @@ const _controlShape = RoundedRectangleBorder(borderRadius: .all(.circular(4)));
 /// The corners of what floats over the window, rounder than a control's.
 const _overlayShape = RoundedRectangleBorder(borderRadius: .all(.circular(8)));
 
-/// The Aurelitec blue, darkened until white text on it and its own text on white both read
-/// clearly.
-const _accent = Color(0xFF0A78AD);
+/// The green of the app icon's ears, the lightest of its tones that still carries white text.
+const _accent = Color(0xFF2E8F2B);
 
 /// Windows 11 greys around a pure white canvas, with the accent as the only colour.
 ///
@@ -130,8 +129,8 @@ const _lightColors = ColorScheme(
   primary: _accent,
   onPrimary: Color(0xFFFFFFFF),
   // Must differ from the accent: a switch that is on draws its knob in this colour under the pointer
-  primaryContainer: Color(0xFFD6EEFA),
-  onPrimaryContainer: Color(0xFF0A3A52),
+  primaryContainer: Color(0xFFDCF3D9),
+  onPrimaryContainer: Color(0xFF1B5E20),
   secondary: _accent,
   onSecondary: Color(0xFFFFFFFF),
   secondaryContainer: _accent,
