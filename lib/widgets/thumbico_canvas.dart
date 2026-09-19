@@ -5,6 +5,8 @@ import 'dart:ui' as ui;
 
 import 'package:material_ui/material_ui.dart';
 
+import 'two_axis_scroll_view.dart';
+
 /// Shows a shell image at its real pixel size, centred, scrolling when it does not fit.
 class const ThumbicoCanvas({
   super.key,
@@ -20,29 +22,16 @@ class const ThumbicoCanvas({
       return const SizedBox.expand();
     }
 
-    return LayoutBuilder(
-      builder: (context, constraints) => SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minWidth: constraints.maxWidth,
-              minHeight: constraints.maxHeight,
-            ),
-            child: Center(
-              child: CustomPaint(
-                painter: const _Checkerboard(),
-                // The display's scale is Flutter's resolution-aware asset mechanism: an image
-                // with that scale draws one image pixel per device pixel. A scale of one
-                // draws it as the display draws everything else.
-                child: RawImage(
-                  image: image,
-                  scale: scaleToDisplay ? 1 : MediaQuery.devicePixelRatioOf(context),
-                  filterQuality: FilterQuality.none,
-                ),
-              ),
-            ),
-          ),
+    return TwoAxisScrollView(
+      child: CustomPaint(
+        painter: const _Checkerboard(),
+        // The display's scale is Flutter's resolution-aware asset mechanism: an image with that
+        // scale draws one image pixel per device pixel. A scale of one draws it as the display
+        // draws everything else.
+        child: RawImage(
+          image: image,
+          scale: scaleToDisplay ? 1 : MediaQuery.devicePixelRatioOf(context),
+          filterQuality: FilterQuality.none,
         ),
       ),
     );
