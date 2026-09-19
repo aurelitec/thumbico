@@ -51,7 +51,7 @@ void main() {
 
           // The widest the panes get: five-digit sizes and the longer kind
           const StatusBar(
-            message: 'The shell could not render this item',
+            message: StatusMessage('The shell could not render this item'),
             info: ThumbicoInfo(
               size: ThumbicoSize(16384, 16384),
               requestedSize: ThumbicoSize(16384, 16384),

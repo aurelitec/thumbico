@@ -90,7 +90,9 @@ class _MainWindowState extends State<MainWindow> {
   final _size = TextEditingController(text: settings.sizeText.value);
 
   LoadedThumbico? _thumbico;
-  var _message = strings.enterPath;
+
+  /// What the status bar says; a problem is marked as one, so the bar can show it as one.
+  var _message = const StatusMessage(strings.enterPath);
 
   /// Whether the bars are hidden and the image shown alone. Never remembered between runs.
   var _showcase = false;
@@ -179,13 +181,13 @@ class _MainWindowState extends State<MainWindow> {
     debugPrint('${_stamp()} TEMP read STARTED for ${_size.text}'); // TEMP: remove after checking
     final size = ThumbicoSize.tryParse(_size.text);
     if (size == null) {
-      setState(() => _message = strings.invalidSize);
+      setState(() => _message = const .error(strings.invalidSize));
       return;
     }
     // A size past the maximum is refused like text that is not a size, however it arrived:
     // typed, or restored from a settings file written before there was a maximum
     if (exceedsMaximum(size)) {
-      setState(() => _message = _largestSizeMessage);
+      setState(() => _message = .error(_largestSizeMessage));
       return;
     }
     // The field settles to the one format however the size was typed
@@ -209,12 +211,12 @@ class _MainWindowState extends State<MainWindow> {
       _thumbico?.image.dispose();
       setState(() {
         _thumbico = thumbico;
-        _message = '';
+        _message = .none;
       });
     } on ThumbicoException catch (e) {
-      setState(() => _message = _describe(e));
+      setState(() => _message = .error(_describe(e)));
     } on ArgumentError {
-      setState(() => _message = strings.enterPath);
+      setState(() => _message = const StatusMessage(strings.enterPath));
     }
   }
 
@@ -234,7 +236,7 @@ class _MainWindowState extends State<MainWindow> {
       // over and over
       if (stepped == size) {
         if (wanted != size) {
-          setState(() => _message = _largestSizeMessage);
+          setState(() => _message = .error(_largestSizeMessage));
         }
         return;
       }
@@ -285,10 +287,10 @@ class _MainWindowState extends State<MainWindow> {
     }
     setState(() {
       _message = switch (result) {
-        Saved() => '${strings.savedTo} $path',
-        UnknownFormat() => strings.unknownSaveFormat,
-        TooLargeForIco() => strings.tooLargeForIco,
-        WriteFailed(:final reason) => '${strings.couldNotSave} $reason',
+        Saved() => StatusMessage('${strings.savedTo} $path'),
+        UnknownFormat() => const .error(strings.unknownSaveFormat),
+        TooLargeForIco() => const .error(strings.tooLargeForIco),
+        WriteFailed(:final reason) => .error('${strings.couldNotSave} $reason'),
       };
     });
   }
@@ -301,7 +303,11 @@ class _MainWindowState extends State<MainWindow> {
     }
     final copied = await copyImage(image, _background);
     if (mounted) {
-      setState(() => _message = copied ? strings.copied : strings.couldNotCopy);
+      setState(
+        () => _message = copied
+            ? const StatusMessage(strings.copied)
+            : const .error(strings.couldNotCopy),
+      );
     }
   }
 
@@ -309,7 +315,7 @@ class _MainWindowState extends State<MainWindow> {
   Future<void> _help() async {
     final opened = await openUrl(urls.help);
     if (!opened && mounted) {
-      setState(() => _message = strings.couldNotOpenBrowser);
+      setState(() => _message = const .error(strings.couldNotOpenBrowser));
     }
   }
 

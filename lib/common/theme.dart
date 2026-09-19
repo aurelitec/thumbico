@@ -136,6 +136,7 @@ const _lightColors = ColorScheme(
   secondaryContainer: _accent,
   onSecondaryContainer: Color(0xFFFFFFFF),
 
+  // Windows' own critical red, and the text on it: the status bar while it reports a problem
   error: Color(0xFFC42B1C),
   onError: Color(0xFFFFFFFF),
 
