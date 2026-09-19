@@ -29,9 +29,17 @@ class const AboutWindow({
 
   /// Opens the window over [parent], which it blocks until it is closed.
   ///
-  /// Call from an event handler, never from a build.
+  /// Creating a native window pumps the Windows message loop, so it is done from a message-loop
+  /// task of its own, never inside a frame. That makes it safe from any handler, including a
+  /// menu item's, which the framework runs in a post-frame callback; made right there, the
+  /// window's first frame began inside the menu's and tripped the scheduler's idle check.
   static void open(BuildContext context, BaseWindowController parent) {
     final registry = WindowRegistry.of(context);
+    Future(() => _open(registry, parent));
+  }
+
+  /// Creates the native window and hands its content to [registry] to be rendered.
+  static void _open(WindowRegistry registry, BaseWindowController parent) {
     late final WindowEntry entry;
     late final DialogWindowController controller;
 
