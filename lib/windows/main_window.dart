@@ -19,6 +19,7 @@ import 'package:thumbico_core/thumbico_core.dart';
 import '../common/sampled_runner.dart';
 import '../common/settings.dart' as settings;
 import '../common/shortcuts.dart' as shortcuts;
+import '../common/size_limit.dart';
 import '../common/strings.dart' as strings;
 import '../common/theme.dart';
 import '../common/urls.dart' as urls;
@@ -181,6 +182,12 @@ class _MainWindowState extends State<MainWindow> {
       setState(() => _message = strings.invalidSize);
       return;
     }
+    // A size past the maximum is refused like text that is not a size, however it arrived:
+    // typed, or restored from a settings file written before there was a maximum
+    if (exceedsMaximum(size)) {
+      setState(() => _message = _largestSizeMessage);
+      return;
+    }
     // The field settles to the one format however the size was typed
     _size.text = size.format();
     settings.sizeText.value = _size.text;
@@ -215,16 +222,29 @@ class _MainWindowState extends State<MainWindow> {
 
   void _smaller() => _step((size) => size.scaled(1 / SizeField.stepFactor));
 
-  /// Replaces the size in the field with [next] of it and reads.
+  /// Replaces the size in the field with [next] of it, stopping at the maximum, and reads.
   ///
   /// Text that is not a size is left alone, so the read reports it as it would for Enter.
   void _step(ThumbicoSize Function(ThumbicoSize size) next) {
     final size = ThumbicoSize.tryParse(_size.text);
     if (size != null) {
-      _size.text = next(size).format();
+      final wanted = next(size);
+      final stepped = fittedToMaximum(wanted);
+      // Nothing to read again, and at the maximum a held key would read the largest image
+      // over and over
+      if (stepped == size) {
+        if (wanted != size) {
+          setState(() => _message = _largestSizeMessage);
+        }
+        return;
+      }
+      _size.text = stepped.format();
     }
     _read();
   }
+
+  /// What the status bar says when a size past the maximum is asked for.
+  String get _largestSizeMessage => '${strings.largestSizeIs} ${maximumSize.format()}.';
 
   // The display scale only changes how the image is drawn, so nothing is read again.
   void _setScaleToDisplay(bool value) => setState(() => settings.scaleToDisplay.value = value);

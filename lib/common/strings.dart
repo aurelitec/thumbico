@@ -113,6 +113,9 @@ const kindThumbnail = 'Thumbnail';
 
 const enterPath = 'Enter a path and press Enter.';
 const invalidSize = 'The size must be a number, or two numbers like 256 x 160.';
+
+/// Followed by the largest size, which the window adds.
+const largestSizeIs = 'The largest size you can ask for is';
 const itemNotFound = 'Not found';
 const noThumbnail = 'No thumbnail';
 const shellError = 'The shell could not render this item';
