@@ -5,6 +5,7 @@
 // ignore_for_file: invalid_use_of_internal_member
 // ignore_for_file: implementation_imports
 
+import 'dart:async';
 import 'dart:ffi' show Pointer, Void, nullptr;
 import 'dart:ui' as ui;
 
@@ -25,6 +26,7 @@ import '../common/theme.dart';
 import '../common/urls.dart' as urls;
 import '../services/copy_image.dart';
 import '../services/file_dialogs.dart';
+import '../services/file_drop.dart';
 import '../services/open_url.dart';
 import '../services/save_image.dart';
 import '../services/thumbico_service.dart';
@@ -152,11 +154,22 @@ class _MainWindowState extends State<MainWindow> {
     }
   }
 
+  /// Drops on the window; listening is what makes the window take them.
+  late final StreamSubscription<List<String>> _drops;
+
+  @override
+  void initState() {
+    super.initState();
+    // One item is shown at a time, so of several dropped together the first is read, as of
+    // several command-line arguments
+    _drops = fileDrops(_handle).listen((paths) => _open(paths.first));
+  }
+
   void _openFile() => _open(pickFile(_handle));
 
   void _openFolder() => _open(pickFolder(_handle));
 
-  /// Puts a picked path in the field and reads it; a cancelled dialog changes nothing.
+  /// Puts a picked or dropped path in the field and reads it; a cancelled dialog changes nothing.
   void _open(String? path) {
     if (path == null) {
       return;
@@ -340,6 +353,7 @@ class _MainWindowState extends State<MainWindow> {
 
   @override
   void dispose() {
+    _drops.cancel();
     _path.dispose();
     _pathFocus.dispose();
     _size.dispose();

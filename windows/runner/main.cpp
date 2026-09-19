@@ -2,6 +2,7 @@
 #include <flutter/flutter_engine.h>
 #include <flutter/generated_plugin_registrant.h>
 
+#include "file_drop.h"
 #include "utils.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
@@ -24,6 +25,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
 
   auto const engine{std::make_shared<flutter::FlutterEngine>(project)};
   RegisterPlugins(engine.get());
+  RegisterFileDrop(engine.get());
   engine->Run();
 
   ::MSG msg;
