@@ -35,6 +35,7 @@ import '../widgets/size_field.dart';
 import '../widgets/status_bar.dart';
 import '../widgets/thumbico_canvas.dart';
 import '../widgets/toolbar.dart';
+import 'about_window.dart';
 
 /// The main window of the application.
 class const MainWindow({super.key}) extends StatefulWidget {
@@ -103,6 +104,7 @@ class _MainWindowState extends State<MainWindow> {
     onCopy: _thumbico == null ? null : _copy,
     onShowcase: _toggleShowcase,
     onHelp: _help,
+    onAbout: _about,
     onExit: _exit,
   );
 
@@ -318,6 +320,9 @@ class _MainWindowState extends State<MainWindow> {
       setState(() => _message = const .error(strings.couldNotOpenBrowser));
     }
   }
+
+  /// Opens the About window over this one, which it blocks until it is closed.
+  void _about() => AboutWindow.open(context, MainWindow._controller);
 
   /// Closes the window, which is what exits the application, so Exit and the close button share one path.
   void _exit() => MainWindow._controller.destroy();

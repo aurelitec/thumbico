@@ -23,6 +23,9 @@ class const OverflowCallbacks({
   /// Called when the user picks Help.
   required final VoidCallback onHelp,
 
+  /// Called when the user picks About.
+  required final VoidCallback onAbout,
+
   /// Called when the user picks Exit.
   required final VoidCallback onExit,
 });
@@ -81,7 +84,12 @@ class const OverflowMenu({
           child: const Text(strings.helpLabel),
         ),
 
-        // _separator,
+        // About the application
+        MenuItemButton(
+          leadingIcon: const Icon(Symbols.info),
+          onPressed: callbacks.onAbout,
+          child: const Text(strings.aboutLabel),
+        ),
 
         // Exit the application
         MenuItemButton(

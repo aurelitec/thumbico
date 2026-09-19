@@ -71,7 +71,12 @@ void main() {
     await tester.pumpWidget(
       themed(
         OverflowMenu(
-          callbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
+          callbacks: OverflowCallbacks(
+            onShowcase: () {},
+            onHelp: () {},
+            onAbout: () {},
+            onExit: () {},
+          ),
         ),
       ),
     );
@@ -89,7 +94,12 @@ void main() {
     await tester.pumpWidget(
       themed(
         OverflowMenu(
-          callbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
+          callbacks: OverflowCallbacks(
+            onShowcase: () {},
+            onHelp: () {},
+            onAbout: () {},
+            onExit: () {},
+          ),
         ),
       ),
     );
@@ -111,7 +121,12 @@ void main() {
       themed(
         // No Save As callback, which is how the window disables the item
         OverflowMenu(
-          callbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
+          callbacks: OverflowCallbacks(
+            onShowcase: () {},
+            onHelp: () {},
+            onAbout: () {},
+            onExit: () {},
+          ),
         ),
       ),
     );
@@ -137,7 +152,12 @@ void main() {
     await tester.pumpWidget(
       themed(
         OverflowMenu(
-          callbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
+          callbacks: OverflowCallbacks(
+            onShowcase: () {},
+            onHelp: () {},
+            onAbout: () {},
+            onExit: () {},
+          ),
         ),
       ),
     );
@@ -174,7 +194,12 @@ void main() {
     await tester.pumpWidget(
       themed(
         OverflowMenu(
-          callbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
+          callbacks: OverflowCallbacks(
+            onShowcase: () {},
+            onHelp: () {},
+            onAbout: () {},
+            onExit: () {},
+          ),
         ),
       ),
     );

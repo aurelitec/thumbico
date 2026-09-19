@@ -45,7 +45,12 @@ void main() {
             options: const {},
             onSourceChanged: (_) {},
             onOptionToggled: (_, _) {},
-            overflowCallbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
+            overflowCallbacks: OverflowCallbacks(
+              onShowcase: () {},
+              onHelp: () {},
+              onAbout: () {},
+              onExit: () {},
+            ),
           ),
           const Expanded(child: SizedBox.expand()),
 

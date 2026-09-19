@@ -20,6 +20,17 @@ const companyName = 'Aurelitec';
 const mainWindowTitle = 'Thumbico';
 
 // ---------------------------------------------------------------------------
+// About Window
+// ---------------------------------------------------------------------------
+
+const aboutWindowTitle = 'About Thumbico';
+
+/// Kept equal to the version in pubspec.yaml by a test.
+const appVersion = '1.0.0';
+const versionLabel = 'Version';
+const closeLabel = 'Close';
+
+// ---------------------------------------------------------------------------
 // Toolbar
 // ---------------------------------------------------------------------------
 
@@ -83,6 +94,7 @@ const helpShortcut = 'F1';
 const exitShowcaseLabel = 'Exit Showcase';
 const exitShowcaseTooltip = 'Exit Showcase mode (F11, Esc)';
 const helpLabel = 'Help';
+const aboutLabel = 'About Thumbico';
 const exitLabel = 'Exit';
 
 // ---------------------------------------------------------------------------

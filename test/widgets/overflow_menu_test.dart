@@ -15,6 +15,7 @@ void main() {
     VoidCallback? onCopy,
     VoidCallback? onShowcase,
     VoidCallback? onHelp,
+    VoidCallback? onAbout,
     VoidCallback? onExit,
   }) {
     return host(
@@ -24,6 +25,7 @@ void main() {
           onCopy: onCopy,
           onShowcase: onShowcase ?? () {},
           onHelp: onHelp ?? () {},
+          onAbout: onAbout ?? () {},
           onExit: onExit ?? () {},
         ),
       ),
@@ -36,7 +38,7 @@ void main() {
   }
 
   testWidgets(
-    'the More button opens the menu with Save As, Copy, Showcase mode, Help, and Exit in that order',
+    'the More button opens the menu with Save As, Copy, Showcase mode, Help, About, and Exit in that order',
     (tester) async {
       await tester.pumpWidget(menu());
       expect(find.text('Help'), findsNothing);
@@ -47,11 +49,13 @@ void main() {
       final copy = tester.getCenter(find.text('Copy'));
       final showcase = tester.getCenter(find.text('Showcase mode'));
       final help = tester.getCenter(find.text('Help'));
+      final about = tester.getCenter(find.text('About Thumbico'));
       final exit = tester.getCenter(find.text('Exit'));
       expect(saveAs.dy, lessThan(copy.dy));
       expect(copy.dy, lessThan(showcase.dy));
       expect(showcase.dy, lessThan(help.dy));
-      expect(help.dy, lessThan(exit.dy));
+      expect(help.dy, lessThan(about.dy));
+      expect(about.dy, lessThan(exit.dy));
     },
   );
 
@@ -78,7 +82,12 @@ void main() {
         Align(
           alignment: .topRight,
           child: OverflowMenu(
-            callbacks: OverflowCallbacks(onShowcase: () {}, onHelp: () {}, onExit: () {}),
+            callbacks: OverflowCallbacks(
+              onShowcase: () {},
+              onHelp: () {},
+              onAbout: () {},
+              onExit: () {},
+            ),
           ),
         ),
       ),
@@ -161,6 +170,18 @@ void main() {
     expect(find.text('Help'), findsNothing);
   });
 
+  testWidgets('picking About reports it and closes the menu', (tester) async {
+    var abouts = 0;
+    await tester.pumpWidget(menu(onAbout: () => abouts++));
+    await open(tester);
+
+    await tester.tap(find.text('About Thumbico'));
+    await tester.pumpAndSettle();
+
+    expect(abouts, 1);
+    expect(find.text('About Thumbico'), findsNothing);
+  });
+
   testWidgets('picking Exit reports it', (tester) async {
     var exits = 0;
     await tester.pumpWidget(menu(onExit: () => exits++));
@@ -203,7 +224,7 @@ void main() {
     await tester.pumpWidget(menu());
     await open(tester);
 
-    expect(find.byType(MenuItemButton), findsNWidgets(5));
-    expect(find.byType(Icon), findsNWidgets(6));
+    expect(find.byType(MenuItemButton), findsNWidgets(6));
+    expect(find.byType(Icon), findsNWidgets(7));
   });
 }
