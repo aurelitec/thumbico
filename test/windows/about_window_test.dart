@@ -15,17 +15,24 @@ import '../widget_host.dart';
 void main() {
   disableWindowingForTests();
 
-  /// The content as the window hosts it: a theme and a text direction, with no app around it
-  /// and no bounds, since the window is sized to its content.
+  /// The content as the window hosts it: a theme and a text direction with no app around it,
+  /// in exactly the room the window gives it.
   Widget hosted({required VoidCallback onClose}) => Theme(
     data: appTheme(),
     child: Directionality(
       textDirection: .ltr,
-      child: UnconstrainedBox(child: AboutWindow(onClose: onClose)),
+      child: Center(
+        child: SizedBox.fromSize(
+          size: AboutWindow.size,
+          child: AboutWindow(onClose: onClose),
+        ),
+      ),
     ),
   );
 
-  testWidgets('shows the name and the version, and lays out without bounds', (tester) async {
+  testWidgets('shows the name and the version, and fits the window without overflowing', (
+    tester,
+  ) async {
     await tester.pumpWidget(hosted(onClose: () {}));
 
     expect(find.text('Thumbico'), findsOneWidget);

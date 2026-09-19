@@ -13,13 +13,20 @@ import 'package:material_ui/material_ui.dart';
 import '../common/strings.dart' as strings;
 import '../common/theme.dart';
 
-/// The About window: a real dialog window, modal to the main window and sized to its content.
+/// The About window: a real dialog window, modal to the main window and centred over it.
 class const AboutWindow({
   super.key,
 
   /// Closes the window; the Close button and Escape both call it.
   required final VoidCallback onClose,
 }) extends StatelessWidget {
+  /// The size of the window's content.
+  ///
+  /// Stated rather than taken from the content, because the engine centres a dialog over its
+  /// parent only when it is given a size; one sized to its content opens wherever Windows'
+  /// cascade puts it.
+  static const size = Size(360, 240);
+
   /// Opens the window over [parent], which it blocks until it is closed.
   ///
   /// Call from an event handler, never from a build.
@@ -43,16 +50,18 @@ class const AboutWindow({
       controller.destroy();
     }
 
-    // Constructing the controller is what creates the native window
-    controller = DialogWindowController.shrinkWrap(
+    // Creating the controller is what creates the native window. Made through the owner
+    // because the controller's own sized constructor hardcodes a resizable window.
+    controller = WidgetsBinding.instance.windowingOwner.createDialogWindowController(
+      size: size,
+      resizable: false,
       title: strings.aboutWindowTitle,
       parent: parent,
       delegate: _AboutWindowDelegate(onClose: close, onDestroyed: leaveRegistry),
     );
 
     // A view of its own at the root, so it brings its own theme and text direction. Not a whole
-    // MaterialApp: an app's navigator fills whatever room it is given, and a window sized to
-    // its content gives it no bounds to fill.
+    // MaterialApp, since the content needs no navigator, overlay, or localizations.
     entry = WindowEntry(
       controller: controller,
       builder: (context) => Theme(
@@ -79,8 +88,7 @@ class const AboutWindow({
       child: FocusScope(
         autofocus: true,
         child: Material(
-          child: Padding(
-            padding: const EdgeInsets.all(32),
+          child: Center(
             child: Column(
               mainAxisSize: .min,
               spacing: 16,
