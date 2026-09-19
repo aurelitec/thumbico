@@ -100,9 +100,10 @@ void _checkDimension(int value, String name) {
 }
 
 /// Makes a filesystem path fully qualified, which the shell parser requires.
-/// Shell namespace strings are passed through unchanged.
+/// Shell namespace strings are passed through unchanged. Quotes are dropped,
+/// since no path or shell string can hold one and Explorer copies paths in them.
 String normalizeShellPath(String path) {
-  final trimmed = path.trim();
+  final trimmed = path.trim().replaceAll('"', '');
   if (trimmed.toLowerCase().startsWith('shell:') || trimmed.startsWith('::')) {
     return trimmed;
   }

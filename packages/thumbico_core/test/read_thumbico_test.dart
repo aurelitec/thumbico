@@ -168,6 +168,11 @@ void main() {
       expect(image.info.size, size256);
     });
 
+    test('accepts a path in quotes, as Explorer copies it', () {
+      final image = readThumbico(' "$notepad" ', size256, source: ThumbicoSource.iconOnly);
+      expect(image.info.size, size256);
+    });
+
     test('rejects an empty path', () {
       expect(() => readThumbico('  ', size256), throwsArgumentError);
     });
