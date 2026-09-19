@@ -90,16 +90,17 @@ class const AboutWindow({
       delegate: _AboutWindowDelegate(onClose: close, onDestroyed: leaveRegistry),
     );
 
-    // A view of its own at the root, so it brings its own theme and text direction. Not a whole
-    // MaterialApp, since the content needs no navigator, overlay, or localizations.
+    // A view of its own at the root, so it carries its own app, as the main window does. The
+    // app is what makes it a keyboard citizen: Tab and the arrows between controls, and Enter
+    // and Space on the focused one, are its default shortcuts and actions. Hosted under a bare
+    // theme at first, the window heard only the Escape it binds itself.
     entry = WindowEntry(
       controller: controller,
-      builder: (context) => Theme(
-        data: appTheme(),
-        child: Directionality(
-          textDirection: .ltr,
-          child: AboutWindow(onClose: close, onOpenUrl: onOpenUrl),
-        ),
+      builder: (context) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: strings.aboutWindowTitle,
+        theme: appTheme(),
+        home: AboutWindow(onClose: close, onOpenUrl: onOpenUrl),
       ),
     );
 
@@ -114,46 +115,47 @@ class const AboutWindow({
     // Fainter than the name and the version, which are what the window is opened for
     final muted = theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant);
 
-    // Escape closes the window, as in every Windows dialog; the scope takes focus so that the
-    // key is heard before anything is clicked
+    // Escape closes the window, as in every Windows dialog
     return CallbackShortcuts(
       bindings: {const SingleActivator(LogicalKeyboardKey.escape): onClose},
-      child: FocusScope(
-        autofocus: true,
-        child: Material(
-          child: Center(
-            child: Column(
-              mainAxisSize: .min,
-              children: [
-                // The app icon
-                Image.asset(
-                  _iconAsset,
-                  width: _iconSize,
-                  height: _iconSize,
-                  filterQuality: .medium,
-                  excludeFromSemantics: true,
-                ),
+      child: Material(
+        child: Center(
+          child: Column(
+            mainAxisSize: .min,
+            children: [
+              // The app icon
+              Image.asset(
+                _iconAsset,
+                width: _iconSize,
+                height: _iconSize,
+                filterQuality: .medium,
+                excludeFromSemantics: true,
+              ),
 
-                // The name and the version
-                _sectionGap,
-                Text(strings.appName, style: theme.textTheme.headlineSmall),
-                const Text('${strings.versionLabel} ${strings.appVersion}'),
+              // The name and the version
+              _sectionGap,
+              Text(strings.appName, style: theme.textTheme.headlineSmall),
+              const Text('${strings.versionLabel} ${strings.appVersion}'),
 
-                // Whose it is, and where it lives on the web
-                _sectionGap,
-                Text(strings.copyright, style: muted),
-                _Link(strings.homeLinkLabel, onPressed: () => onOpenUrl(urls.home)),
+              // Whose it is, and where it lives on the web
+              _sectionGap,
+              Text(strings.copyright, style: muted),
+              _Link(strings.homeLinkLabel, onPressed: () => onOpenUrl(urls.home)),
 
-                // The licence, and where the source is
-                _sectionGap,
-                Text(strings.license, style: muted),
-                _Link(strings.sourceLinkLabel, onPressed: () => onOpenUrl(urls.source)),
+              // The licence, and where the source is
+              _sectionGap,
+              Text(strings.license, style: muted),
+              _Link(strings.sourceLinkLabel, onPressed: () => onOpenUrl(urls.source)),
 
-                // The way out for the mouse
-                _sectionGap,
-                FilledButton(onPressed: onClose, child: const Text(strings.closeLabel)),
-              ],
-            ),
+              // The way out, holding the focus from the start as a Windows default button
+              // does, so that Enter closes the window and Escape is heard at once
+              _sectionGap,
+              FilledButton(
+                autofocus: true,
+                onPressed: onClose,
+                child: const Text(strings.closeLabel),
+              ),
+            ],
           ),
         ),
       ),
@@ -162,15 +164,25 @@ class const AboutWindow({
 }
 
 /// A text button drawn as a link: underlined, in the accent, with the hand under the pointer.
+///
+/// A link shows no box under the pointer, as a button does; the tint is kept for keyboard focus
+/// alone, which has no other sign.
 class const _Link(final String label, {required final VoidCallback onPressed})
     extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return TextButton(
-      style: TextButton.styleFrom(
-        enabledMouseCursor: SystemMouseCursors.click,
-        textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(decoration: .underline),
-      ),
+      style:
+          TextButton.styleFrom(
+            enabledMouseCursor: SystemMouseCursors.click,
+            textStyle: theme.textTheme.labelLarge?.copyWith(decoration: .underline),
+          ).copyWith(
+            overlayColor: WidgetStateProperty.fromMap({
+              WidgetState.focused: theme.colorScheme.primary.withValues(alpha: 0.1),
+              WidgetState.any: Colors.transparent,
+            }),
+          ),
       onPressed: onPressed,
       child: Text(label),
     );

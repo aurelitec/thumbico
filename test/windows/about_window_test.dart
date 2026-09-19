@@ -24,17 +24,14 @@ void main() {
     await (FontLoader('Roboto')..addFont(font.then((bytes) => ByteData.sublistView(bytes)))).load();
   });
 
-  /// The content as the window hosts it: a theme and a text direction with no app around it,
-  /// in exactly the room the window gives it.
-  Widget hosted({VoidCallback? onClose, void Function(String url)? onOpenUrl}) => Theme(
-    data: appTheme(),
-    child: Directionality(
-      textDirection: .ltr,
-      child: Center(
-        child: SizedBox.fromSize(
-          size: AboutWindow.size,
-          child: AboutWindow(onClose: onClose ?? () {}, onOpenUrl: onOpenUrl ?? (_) {}),
-        ),
+  /// The content as the window hosts it: in an app of its own, in exactly the room the window
+  /// gives it.
+  Widget hosted({VoidCallback? onClose, void Function(String url)? onOpenUrl}) => MaterialApp(
+    theme: appTheme(),
+    home: Center(
+      child: SizedBox.fromSize(
+        size: AboutWindow.size,
+        child: AboutWindow(onClose: onClose ?? () {}, onOpenUrl: onOpenUrl ?? (_) {}),
       ),
     ),
   );
@@ -84,6 +81,47 @@ void main() {
     await tester.tap(find.text('Close'));
 
     expect(closes, 1);
+  });
+
+  testWidgets('Enter closes the window at once, the Close button being the default', (
+    tester,
+  ) async {
+    var closes = 0;
+    await tester.pumpWidget(hosted(onClose: () => closes++));
+    await tester.pump();
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+    await tester.pump();
+
+    expect(closes, 1);
+  });
+
+  testWidgets('Tab walks the controls, and Enter opens the link it lands on', (tester) async {
+    final opened = <String>[];
+    var closes = 0;
+    await tester.pumpWidget(hosted(onClose: () => closes++, onOpenUrl: opened.add));
+    await tester.pump();
+
+    // From Close, the last control, round to the first link
+    await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+    await tester.pump();
+    await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+    await tester.pump();
+
+    expect(opened, [urls.home]);
+    expect(closes, 0);
+  });
+
+  testWidgets('a link shows no box under the pointer, only for keyboard focus', (tester) async {
+    await tester.pumpWidget(hosted());
+
+    final overlay = tester
+        .widget<TextButton>(find.widgetWithText(TextButton, 'Source code on GitHub'))
+        .style!
+        .overlayColor!;
+    expect(overlay.resolve({WidgetState.hovered}), Colors.transparent);
+    expect(overlay.resolve({WidgetState.pressed}), Colors.transparent);
+    expect(overlay.resolve({WidgetState.focused})!.a, greaterThan(0));
   });
 
   testWidgets('Escape closes the window before anything is clicked', (tester) async {
