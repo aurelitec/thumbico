@@ -112,7 +112,8 @@ const kindThumbnail = 'Thumbnail';
 // ---------------------------------------------------------------------------
 
 const enterPath = 'Enter a path and press Enter.';
-const invalidSize = 'The size must be a number, or two numbers like 256 x 160.';
+const invalidSize =
+    'The size must be a whole number from 1 up, or two such numbers like 256 x 160.';
 
 /// Followed by the largest size, which the window adds.
 const largestSizeIs = 'The largest size you can ask for is';
