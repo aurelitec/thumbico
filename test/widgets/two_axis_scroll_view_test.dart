@@ -10,9 +10,14 @@ import '../widget_host.dart';
 void main() {
   disableWindowingForTests();
 
+  late TwoAxisScrollController controller;
+  setUp(() => controller = TwoAxisScrollController());
+  tearDown(() => controller.dispose());
+
   /// The view around a box of the given size.
   Widget viewOf(double width, double height) => host(
     TwoAxisScrollView(
+      controller: controller,
       child: SizedBox(key: const Key('child'), width: width, height: height),
     ),
   );
@@ -56,5 +61,39 @@ void main() {
         .map((bar) => bar.controller!.position.axis)
         .toSet();
     expect(axes, {Axis.horizontal, Axis.vertical});
+  });
+
+  testWidgets('a line step moves one axis and leaves the other', (tester) async {
+    await tester.pumpWidget(viewOf(5000, 5000));
+
+    controller.scroll(.right);
+    await tester.pumpAndSettle();
+    expect(controller.horizontal.offset, 50);
+    expect(controller.vertical.offset, 0);
+
+    controller.scroll(.down);
+    controller.scroll(.left);
+    await tester.pumpAndSettle();
+    expect(controller.horizontal.offset, 0);
+    expect(controller.vertical.offset, 50);
+  });
+
+  testWidgets('a page step moves most of the view, and stops at the end', (tester) async {
+    await tester.pumpWidget(viewOf(5000, 5000));
+    final viewHeight = tester.getSize(find.byType(TwoAxisScrollView)).height;
+
+    controller.scroll(.down, type: .page);
+    await tester.pumpAndSettle();
+    expect(controller.vertical.offset, closeTo(viewHeight * 0.8, 0.01));
+
+    for (var i = 0; i < 20; i++) {
+      controller.scroll(.down, type: .page);
+      await tester.pumpAndSettle();
+    }
+    expect(controller.vertical.offset, controller.vertical.position.maxScrollExtent);
+  });
+
+  test('a step before any view is attached does nothing', () {
+    expect(() => controller.scroll(.down), returnsNormally);
   });
 }

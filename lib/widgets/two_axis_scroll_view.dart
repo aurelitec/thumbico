@@ -10,27 +10,12 @@ import 'package:material_ui/material_ui.dart';
 class const TwoAxisScrollView({
   super.key,
 
+  /// The view's two positions, owned and disposed by the caller, which can scroll through it.
+  required final TwoAxisScrollController controller,
+
   /// What is scrolled, at its own size.
   required final Widget child,
-}) extends StatefulWidget {
-  @override
-  State<TwoAxisScrollView> createState() => _TwoAxisScrollViewState();
-}
-
-class _TwoAxisScrollViewState extends State<TwoAxisScrollView> {
-  /// The position of the outer view, which scrolls sideways.
-  final _horizontal = ScrollController();
-
-  /// The position of the inner view, which scrolls up and down.
-  final _vertical = ScrollController();
-
-  @override
-  void dispose() {
-    _horizontal.dispose();
-    _vertical.dispose();
-    super.dispose();
-  }
-
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -41,25 +26,25 @@ class _TwoAxisScrollViewState extends State<TwoAxisScrollView> {
 
         // Both bars wrap both views, so each lies along an edge of the whole view
         child: Scrollbar(
-          controller: _horizontal,
+          controller: controller.horizontal,
           thumbVisibility: true,
           child: Scrollbar(
-            controller: _vertical,
+            controller: controller.vertical,
             thumbVisibility: true,
             // The inner view's notifications arrive from one scroll view deeper
             notificationPredicate: (notification) => notification.depth == 1,
             child: SingleChildScrollView(
-              controller: _horizontal,
+              controller: controller.horizontal,
               scrollDirection: .horizontal,
               child: SingleChildScrollView(
-                controller: _vertical,
+                controller: controller.vertical,
                 // At least as large as the view, so a child that fits is centred in it
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
                     minWidth: constraints.maxWidth,
                     minHeight: constraints.maxHeight,
                   ),
-                  child: Center(child: widget.child),
+                  child: Center(child: child),
                 ),
               ),
             ),
@@ -67,5 +52,53 @@ class _TwoAxisScrollViewState extends State<TwoAxisScrollView> {
         ),
       ),
     );
+  }
+}
+
+/// The two positions of a [TwoAxisScrollView], and the steps a key scrolls it by.
+class TwoAxisScrollController {
+  /// How far a line step goes, in logical pixels. The framework's own value.
+  static const _lineStep = 50.0;
+
+  /// How much of the view a page step goes. The framework's own value.
+  static const _pageFraction = 0.8;
+
+  /// How long a step glides, so that a held key scrolls smoothly. The framework's own value.
+  static const _glide = Duration(milliseconds: 100);
+
+  /// The position of the outer view, which scrolls sideways.
+  final horizontal = ScrollController();
+
+  /// The position of the inner view, which scrolls up and down.
+  final vertical = ScrollController();
+
+  /// Scrolls one step towards [direction], a line or most of a view, stopping at the child's
+  /// edge. Does nothing while no view is attached.
+  void scroll(AxisDirection direction, {ScrollIncrementType type = .line}) {
+    final controller = switch (axisDirectionToAxis(direction)) {
+      .horizontal => horizontal,
+      .vertical => vertical,
+    };
+    if (!controller.hasClients) {
+      return;
+    }
+
+    final position = controller.position;
+    final step = switch (type) {
+      .line => _lineStep,
+      .page => _pageFraction * position.viewportDimension,
+    };
+    final forward = direction == .right || direction == .down;
+    position.moveTo(
+      position.pixels + (forward ? step : -step),
+      duration: _glide,
+      curve: Curves.easeInOut,
+    );
+  }
+
+  /// Releases both positions; call it from the owner's own dispose.
+  void dispose() {
+    horizontal.dispose();
+    vertical.dispose();
   }
 }

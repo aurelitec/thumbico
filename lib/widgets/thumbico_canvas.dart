@@ -12,6 +12,9 @@ class const ThumbicoCanvas({
   super.key,
   final ui.Image? image,
 
+  /// The scroll positions, owned by the window so that its keys can scroll the image.
+  required final TwoAxisScrollController scroll,
+
   /// Whether to draw the image at the display's scale instead of one image pixel per screen pixel.
   final bool scaleToDisplay = false,
 }) extends StatelessWidget {
@@ -23,6 +26,7 @@ class const ThumbicoCanvas({
     }
 
     return TwoAxisScrollView(
+      controller: scroll,
       child: CustomPaint(
         painter: const _Checkerboard(),
         // The display's scale is Flutter's resolution-aware asset mechanism: an image with that
