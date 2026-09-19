@@ -54,17 +54,6 @@ class const _EmptyCanvas() extends StatelessWidget {
   /// The size the icon is drawn at, large enough to read as a watermark rather than an image.
   static const _iconSize = 256.0;
 
-  // Each colour channel takes the pixel's luminance, which keeps the icon's features as greys.
-  // Colour on the canvas means an image, so the icon must not keep its own.
-  // dart format off
-  static const _greyscale = ColorFilter.matrix([
-    0.2126, 0.7152, 0.0722, 0, 0,
-    0.2126, 0.7152, 0.0722, 0, 0,
-    0.2126, 0.7152, 0.0722, 0, 0,
-    0,      0,      0,      1, 0,
-  ]);
-  // dart format on
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -77,9 +66,9 @@ class const _EmptyCanvas() extends StatelessWidget {
       child: Column(
         mainAxisSize: .min,
         children: [
-          // The app icon, as a watermark
+          // The app icon in grey, since colour on the canvas means an image
           ColorFiltered(
-            colorFilter: _greyscale,
+            colorFilter: .saturation(0),
             child: Image.asset(
               assets.appIcon,
               width: _iconSize,
