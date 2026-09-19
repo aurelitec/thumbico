@@ -12,6 +12,7 @@ import 'package:material_ui/material_ui.dart';
 
 import '../common/strings.dart' as strings;
 import '../common/theme.dart';
+import '../common/urls.dart' as urls;
 
 /// The About window: a real dialog window, modal to the main window and centred over it.
 class const AboutWindow({
@@ -19,13 +20,26 @@ class const AboutWindow({
 
   /// Closes the window; the Close button and Escape both call it.
   required final VoidCallback onClose,
+
+  /// Opens one of the window's links in the browser.
+  required final void Function(String url) onOpenUrl,
 }) extends StatelessWidget {
+  /// The app icon, stored at more than twice its drawn size so it stays sharp on a scaled
+  /// display.
+  static const _iconAsset = 'assets/app_icon.png';
+
+  /// The size the icon is drawn at.
+  static const _iconSize = 96.0;
+
+  /// The room between the window's sections.
+  static const _sectionGap = SizedBox(height: 16);
+
   /// The size of the window's content.
   ///
   /// Stated rather than taken from the content, because the engine centres a dialog over its
   /// parent only when it is given a size; one sized to its content opens wherever Windows'
   /// cascade puts it.
-  static const size = Size(360, 240);
+  static const size = Size(360, 400);
 
   /// Opens the window over [parent], which it blocks until it is closed.
   ///
@@ -33,13 +47,21 @@ class const AboutWindow({
   /// task of its own, never inside a frame. That makes it safe from any handler, including a
   /// menu item's, which the framework runs in a post-frame callback; made right there, the
   /// window's first frame began inside the menu's and tripped the scheduler's idle check.
-  static void open(BuildContext context, BaseWindowController parent) {
+  static void open(
+    BuildContext context,
+    BaseWindowController parent, {
+    required void Function(String url) onOpenUrl,
+  }) {
     final registry = WindowRegistry.of(context);
-    Future(() => _open(registry, parent));
+    Future(() => _open(registry, parent, onOpenUrl));
   }
 
   /// Creates the native window and hands its content to [registry] to be rendered.
-  static void _open(WindowRegistry registry, BaseWindowController parent) {
+  static void _open(
+    WindowRegistry registry,
+    BaseWindowController parent,
+    void Function(String url) onOpenUrl,
+  ) {
     late final WindowEntry entry;
     late final DialogWindowController controller;
 
@@ -76,7 +98,7 @@ class const AboutWindow({
         data: appTheme(),
         child: Directionality(
           textDirection: .ltr,
-          child: AboutWindow(onClose: close),
+          child: AboutWindow(onClose: close, onOpenUrl: onOpenUrl),
         ),
       ),
     );
@@ -89,6 +111,9 @@ class const AboutWindow({
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    // Fainter than the name and the version, which are what the window is opened for
+    final muted = theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant);
+
     // Escape closes the window, as in every Windows dialog; the scope takes focus so that the
     // key is heard before anything is clicked
     return CallbackShortcuts(
@@ -99,19 +124,55 @@ class const AboutWindow({
           child: Center(
             child: Column(
               mainAxisSize: .min,
-              spacing: 16,
               children: [
+                // The app icon
+                Image.asset(
+                  _iconAsset,
+                  width: _iconSize,
+                  height: _iconSize,
+                  filterQuality: .medium,
+                  excludeFromSemantics: true,
+                ),
+
                 // The name and the version
+                _sectionGap,
                 Text(strings.appName, style: theme.textTheme.headlineSmall),
                 const Text('${strings.versionLabel} ${strings.appVersion}'),
 
+                // Whose it is, and where it lives on the web
+                _sectionGap,
+                Text(strings.copyright, style: muted),
+                _Link(strings.homeLinkLabel, onPressed: () => onOpenUrl(urls.home)),
+
+                // The licence, and where the source is
+                _sectionGap,
+                Text(strings.license, style: muted),
+                _Link(strings.sourceLinkLabel, onPressed: () => onOpenUrl(urls.source)),
+
                 // The way out for the mouse
+                _sectionGap,
                 FilledButton(onPressed: onClose, child: const Text(strings.closeLabel)),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+/// A text button drawn as a link: underlined, in the accent, with the hand under the pointer.
+class const _Link(final String label, {required final VoidCallback onPressed})
+    extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      style: TextButton.styleFrom(
+        enabledMouseCursor: SystemMouseCursors.click,
+        textStyle: Theme.of(context).textTheme.labelLarge?.copyWith(decoration: .underline),
+      ),
+      onPressed: onPressed,
+      child: Text(label),
     );
   }
 }

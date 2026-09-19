@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:thumbico/common/strings.dart' as strings;
 import 'package:thumbico/common/theme.dart';
+import 'package:thumbico/common/urls.dart' as urls;
 import 'package:thumbico/windows/about_window.dart';
 
 import '../widget_host.dart';
@@ -15,16 +16,24 @@ import '../widget_host.dart';
 void main() {
   disableWindowingForTests();
 
+  // The content must fit a window of a stated size, and the test font draws every character as
+  // a full square, about twice the real width. Windows' own font is loaded under the name a
+  // test's theme asks for, since a test counts as Android.
+  setUpAll(() async {
+    final font = File(r'C:\Windows\Fonts\segoeui.ttf').readAsBytes();
+    await (FontLoader('Roboto')..addFont(font.then((bytes) => ByteData.sublistView(bytes)))).load();
+  });
+
   /// The content as the window hosts it: a theme and a text direction with no app around it,
   /// in exactly the room the window gives it.
-  Widget hosted({required VoidCallback onClose}) => Theme(
+  Widget hosted({VoidCallback? onClose, void Function(String url)? onOpenUrl}) => Theme(
     data: appTheme(),
     child: Directionality(
       textDirection: .ltr,
       child: Center(
         child: SizedBox.fromSize(
           size: AboutWindow.size,
-          child: AboutWindow(onClose: onClose),
+          child: AboutWindow(onClose: onClose ?? () {}, onOpenUrl: onOpenUrl ?? (_) {}),
         ),
       ),
     ),
@@ -33,11 +42,39 @@ void main() {
   testWidgets('shows the name and the version, and fits the window without overflowing', (
     tester,
   ) async {
-    await tester.pumpWidget(hosted(onClose: () {}));
+    await tester.pumpWidget(hosted());
 
     expect(find.text('Thumbico'), findsOneWidget);
     expect(find.text('Version ${strings.appVersion}'), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('the content has room around it in a window of the stated size', (tester) async {
+    await tester.pumpWidget(hosted());
+    await tester.pumpAndSettle();
+
+    final content = tester.getSize(find.byType(Column));
+    expect(content.width, lessThanOrEqualTo(AboutWindow.size.width - 2 * 24));
+    expect(content.height, lessThanOrEqualTo(AboutWindow.size.height - 2 * 24));
+  });
+
+  testWidgets('shows the icon, whose it is, and the licence', (tester) async {
+    await tester.pumpWidget(hosted());
+    await tester.pumpAndSettle();
+
+    expect(find.byType(Image), findsOneWidget);
+    expect(find.textContaining('Aurelitec'), findsOneWidget);
+    expect(find.textContaining('MIT License'), findsOneWidget);
+  });
+
+  testWidgets('each link asks for its own address', (tester) async {
+    final opened = <String>[];
+    await tester.pumpWidget(hosted(onOpenUrl: opened.add));
+
+    await tester.tap(find.text('www.aurelitec.com/thumbico'));
+    await tester.tap(find.text('Source code on GitHub'));
+
+    expect(opened, [urls.home, urls.source]);
   });
 
   testWidgets('the Close button closes the window', (tester) async {

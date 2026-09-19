@@ -28,6 +28,10 @@ const aboutWindowTitle = 'About Thumbico';
 /// Kept equal to the version in pubspec.yaml by a test.
 const appVersion = '1.0.0';
 const versionLabel = 'Version';
+const copyright = '© 2011-2026 Aurelitec';
+const homeLinkLabel = 'www.aurelitec.com/thumbico';
+const license = 'Free and open source, under the MIT License';
+const sourceLinkLabel = 'Source code on GitHub';
 const closeLabel = 'Close';
 
 // ---------------------------------------------------------------------------

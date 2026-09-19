@@ -32,6 +32,7 @@ ThemeData appTheme() {
     segmentedButtonTheme: SegmentedButtonThemeData(
       style: SegmentedButton.styleFrom(shape: _controlShape),
     ),
+    textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(shape: _controlShape)),
 
     // Fields as Windows draws them: the white fill shows the field on the grey bar, and the
     // outline stays faint until the field has focus

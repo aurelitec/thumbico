@@ -314,15 +314,18 @@ class _MainWindowState extends State<MainWindow> {
   }
 
   /// Opens the help page in the browser, or says in the status bar that it could not.
-  Future<void> _help() async {
-    final opened = await openUrl(urls.help);
+  Future<void> _help() => _openInBrowser(urls.help);
+
+  /// Opens [url] in the browser, or says in the status bar that it could not.
+  Future<void> _openInBrowser(String url) async {
+    final opened = await openUrl(url);
     if (!opened && mounted) {
       setState(() => _message = const .error(strings.couldNotOpenBrowser));
     }
   }
 
   /// Opens the About window over this one, which it blocks until it is closed.
-  void _about() => AboutWindow.open(context, MainWindow._controller);
+  void _about() => AboutWindow.open(context, MainWindow._controller, onOpenUrl: _openInBrowser);
 
   /// Closes the window, which is what exits the application, so Exit and the close button share one path.
   void _exit() => MainWindow._controller.destroy();

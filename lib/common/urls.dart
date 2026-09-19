@@ -4,5 +4,11 @@
 /// The web addresses the application opens.
 library;
 
+/// The product's page for the Windows version.
+const home = 'https://www.aurelitec.com/thumbico/windows/';
+
 /// The help page for the Windows version.
 const help = 'https://www.aurelitec.com/thumbico/windows/help/';
+
+/// The public source repository.
+const source = 'https://github.com/aurelitec/thumbico';
