@@ -21,13 +21,9 @@ class _TwoAxisScrollViewState extends State<TwoAxisScrollView> {
   /// The position of the outer view, which scrolls sideways.
   final _horizontal = ScrollController();
 
-  /// The position of the inner view, which scrolls up and down.
-  final _vertical = ScrollController();
-
   @override
   void dispose() {
     _horizontal.dispose();
-    _vertical.dispose();
     super.dispose();
   }
 
@@ -43,8 +39,8 @@ class _TwoAxisScrollViewState extends State<TwoAxisScrollView> {
         child: Scrollbar(
           controller: _horizontal,
           thumbVisibility: true,
+          // With no controller named, this bar follows the primary one, as its view does
           child: Scrollbar(
-            controller: _vertical,
             thumbVisibility: true,
             // The inner view's notifications arrive from one scroll view deeper
             notificationPredicate: (notification) => notification.depth == 1,
@@ -52,7 +48,10 @@ class _TwoAxisScrollViewState extends State<TwoAxisScrollView> {
               controller: _horizontal,
               scrollDirection: .horizontal,
               child: SingleChildScrollView(
-                controller: _vertical,
+                // The window's primary scroll view is the one the framework's own scroll keys
+                // reach while nothing scrollable has focus: the Page keys, and Ctrl with the
+                // up and down arrows. Only one view can be primary, so no key scrolls sideways.
+                primary: true,
                 // At least as large as the view, so a child that fits is centred in it
                 child: ConstrainedBox(
                   constraints: BoxConstraints(

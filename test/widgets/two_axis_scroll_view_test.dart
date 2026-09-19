@@ -1,6 +1,7 @@
 // Copyright (c) 2011-2026 Aurelitec <https://www.aurelitec.com>
 // Licensed under the MIT License. See LICENSE file in the project root for more information.
 
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:thumbico/widgets/two_axis_scroll_view.dart';
@@ -16,6 +17,10 @@ void main() {
       child: SizedBox(key: const Key('child'), width: width, height: height),
     ),
   );
+
+  /// How far down the view is scrolled, read from the window's primary scroll position.
+  double verticalOffset(WidgetTester tester) =>
+      PrimaryScrollController.of(tester.element(find.byType(TwoAxisScrollView))).offset;
 
   testWidgets('centres a child that fits', (tester) async {
     await tester.pumpWidget(viewOf(100, 100));
@@ -51,10 +56,23 @@ void main() {
   testWidgets('each scroll bar follows its own axis', (tester) async {
     await tester.pumpWidget(viewOf(5000, 5000));
 
-    final axes = tester
-        .widgetList<Scrollbar>(find.byType(Scrollbar))
-        .map((bar) => bar.controller!.position.axis)
-        .toSet();
-    expect(axes, {Axis.horizontal, Axis.vertical});
+    // The vertical bar names no controller and so follows the primary one, as its view does
+    final bars = tester.widgetList<Scrollbar>(find.byType(Scrollbar)).toList();
+    expect(bars.map((bar) => bar.controller?.position.axis), [Axis.horizontal, null]);
   });
+
+  testWidgets('the framework\'s own scroll keys move the image up and down', (tester) async {
+    await tester.pumpWidget(viewOf(5000, 5000));
+    final viewHeight = tester.getSize(find.byType(TwoAxisScrollView)).height;
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.pageDown);
+    await tester.pumpAndSettle();
+    expect(verticalOffset(tester), closeTo(viewHeight * 0.8, 0.01));
+
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowUp);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
+    await tester.pumpAndSettle();
+    expect(verticalOffset(tester), closeTo(viewHeight * 0.8 - 50, 0.01));
+  }, variant: TargetPlatformVariant.only(TargetPlatform.windows));
 }
