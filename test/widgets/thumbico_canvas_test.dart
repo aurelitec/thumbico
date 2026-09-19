@@ -6,7 +6,6 @@ import 'dart:ui' as ui;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:thumbico/widgets/thumbico_canvas.dart';
-import 'package:thumbico/widgets/two_axis_scroll_view.dart';
 
 import '../widget_host.dart';
 
@@ -23,12 +22,8 @@ Future<ui.Image> solidImage(int width, int height) async {
 void main() {
   disableWindowingForTests();
 
-  late TwoAxisScrollController scroll;
-  setUp(() => scroll = TwoAxisScrollController());
-  tearDown(() => scroll.dispose());
-
   testWidgets('draws nothing without an image', (tester) async {
-    await tester.pumpWidget(host(ThumbicoCanvas(scroll: scroll)));
+    await tester.pumpWidget(host(const ThumbicoCanvas()));
     expect(find.byType(RawImage), findsNothing);
   });
 
@@ -38,7 +33,7 @@ void main() {
     final image = await solidImage(200, 100);
     addTearDown(image.dispose);
 
-    await tester.pumpWidget(host(ThumbicoCanvas(image: image, scroll: scroll)));
+    await tester.pumpWidget(host(ThumbicoCanvas(image: image)));
 
     expect(tester.getSize(find.byType(RawImage)), const Size(100, 50));
   });
@@ -47,7 +42,7 @@ void main() {
     final image = await solidImage(100, 100);
     addTearDown(image.dispose);
 
-    await tester.pumpWidget(host(ThumbicoCanvas(image: image, scroll: scroll)));
+    await tester.pumpWidget(host(ThumbicoCanvas(image: image)));
 
     final canvas = tester.getRect(find.byType(ThumbicoCanvas));
     final drawn = tester.getRect(find.byType(RawImage));
@@ -59,7 +54,7 @@ void main() {
   ) async {
     final image = await solidImage(20, 12);
     addTearDown(image.dispose);
-    await tester.pumpWidget(host(ThumbicoCanvas(image: image, scroll: scroll)));
+    await tester.pumpWidget(host(ThumbicoCanvas(image: image)));
 
     // The painter behind the image, the only one inside the canvas that has a child
     final painter = tester
@@ -91,9 +86,7 @@ void main() {
     final image = await solidImage(200, 100);
     addTearDown(image.dispose);
 
-    await tester.pumpWidget(
-      host(ThumbicoCanvas(image: image, scroll: scroll, scaleToDisplay: true)),
-    );
+    await tester.pumpWidget(host(ThumbicoCanvas(image: image, scaleToDisplay: true)));
 
     expect(tester.getSize(find.byType(RawImage)), const Size(200, 100));
   });

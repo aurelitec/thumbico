@@ -34,7 +34,6 @@ import '../widgets/size_field.dart';
 import '../widgets/status_bar.dart';
 import '../widgets/thumbico_canvas.dart';
 import '../widgets/toolbar.dart';
-import '../widgets/two_axis_scroll_view.dart';
 
 /// The main window of the application.
 class const MainWindow({super.key}) extends StatefulWidget {
@@ -89,9 +88,6 @@ class _MainWindowState extends State<MainWindow> {
   final _pathFocus = FocusNode();
   final _size = TextEditingController(text: settings.sizeText.value);
 
-  /// Where the image is scrolled to, held here so that the window's keys can scroll it.
-  final _scroll = TwoAxisScrollController();
-
   LoadedThumbico? _thumbico;
   var _message = strings.enterPath;
 
@@ -129,18 +125,6 @@ class _MainWindowState extends State<MainWindow> {
     shortcuts.showcase: _toggleShowcase,
     // Escape is taken only while there is a mode to leave
     if (_showcase) shortcuts.exitShowcase: _exitShowcase,
-  };
-
-  /// What each scroll key does; they are the image's only while nothing else has focus.
-  Map<ShortcutActivator, VoidCallback> get _scrollBindings => {
-    shortcuts.scrollLeft: () => _scroll.scroll(.left),
-    shortcuts.scrollRight: () => _scroll.scroll(.right),
-    shortcuts.scrollUp: () => _scroll.scroll(.up),
-    shortcuts.scrollDown: () => _scroll.scroll(.down),
-    shortcuts.scrollPageUp: () => _scroll.scroll(.up, type: .page),
-    shortcuts.scrollPageDown: () => _scroll.scroll(.down, type: .page),
-    shortcuts.scrollPageLeft: () => _scroll.scroll(.left, type: .page),
-    shortcuts.scrollPageRight: () => _scroll.scroll(.right, type: .page),
   };
 
   /// Puts the caret in the path field with the whole path selected, ready to be replaced.
@@ -323,7 +307,6 @@ class _MainWindowState extends State<MainWindow> {
     _path.dispose();
     _pathFocus.dispose();
     _size.dispose();
-    _scroll.dispose();
     _reads.dispose();
     _thumbico?.image.dispose();
     super.dispose();
@@ -333,13 +316,11 @@ class _MainWindowState extends State<MainWindow> {
   Widget build(BuildContext context) {
     final canvas = ThumbicoCanvas(
       image: _thumbico?.image,
-      scroll: _scroll,
       scaleToDisplay: settings.scaleToDisplay.value,
     );
 
     return ShortcutScope(
       bindings: _shortcutBindings,
-      unfocusedBindings: _scrollBindings,
       child: Material(
         child: Column(
           children: [

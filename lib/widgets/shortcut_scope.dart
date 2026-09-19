@@ -1,7 +1,6 @@
 // Copyright (c) 2011-2026 Aurelitec <https://www.aurelitec.com>
 // Licensed under the MIT License. See LICENSE file in the project root for more information.
 
-import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Binds the window's keyboard shortcuts around [child] and keeps them working after a click
@@ -18,10 +17,6 @@ class const ShortcutScope({
   /// What each shortcut does.
   required final Map<ShortcutActivator, VoidCallback> bindings,
 
-  /// What each key does while nothing inside has focus, for keys that a field, a menu, or a
-  /// flyout needs for itself whenever it has focus.
-  final Map<ShortcutActivator, VoidCallback> unfocusedBindings = const {},
-
   required final Widget child,
 }) extends StatelessWidget {
   @override
@@ -29,21 +24,7 @@ class const ShortcutScope({
     return CallbackShortcuts(
       bindings: bindings,
       // The scope takes focus at start, so the keys work before anything is clicked
-      child: FocusScope(autofocus: true, onKeyEvent: _onKeyEvent, child: child),
+      child: FocusScope(autofocus: true, child: child),
     );
-  }
-
-  /// Runs an unfocused binding, but only while the scope itself is what holds the focus.
-  KeyEventResult _onKeyEvent(FocusNode scope, KeyEvent event) {
-    if (!scope.hasPrimaryFocus) {
-      return .ignored;
-    }
-    for (final MapEntry(key: activator, value: callback) in unfocusedBindings.entries) {
-      if (activator.accepts(event, HardwareKeyboard.instance)) {
-        callback();
-        return .handled;
-      }
-    }
-    return .ignored;
   }
 }

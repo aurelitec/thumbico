@@ -35,17 +35,3 @@ const showcase = SingleActivator(LogicalKeyboardKey.f11);
 
 /// Exits Showcase mode; bound only while the mode is on, so Escape stays free otherwise.
 const exitShowcase = SingleActivator(LogicalKeyboardKey.escape);
-
-/// Scroll the image by a small step. Bound only while nothing has focus, since a field, a menu,
-/// and a flyout each need the arrows for themselves.
-const scrollLeft = SingleActivator(LogicalKeyboardKey.arrowLeft);
-const scrollRight = SingleActivator(LogicalKeyboardKey.arrowRight);
-const scrollUp = SingleActivator(LogicalKeyboardKey.arrowUp);
-const scrollDown = SingleActivator(LogicalKeyboardKey.arrowDown);
-
-/// Scroll the image by most of a view: the Page keys up and down, and Home and End sideways,
-/// as IrfanView has them. Bound only while nothing has focus, as the arrows are.
-const scrollPageUp = SingleActivator(LogicalKeyboardKey.pageUp);
-const scrollPageDown = SingleActivator(LogicalKeyboardKey.pageDown);
-const scrollPageLeft = SingleActivator(LogicalKeyboardKey.home);
-const scrollPageRight = SingleActivator(LogicalKeyboardKey.end);
