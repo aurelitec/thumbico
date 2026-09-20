@@ -6,10 +6,11 @@
 Builds the release and packs it as the installer.
 
 .DESCRIPTION
-Stages the shared files through Build-Release.ps1, then compiles thumbico.iss into
-build/installer/Thumbico-<version>-windows-x64-setup.exe. Nothing is added to the staged folder:
-the settings file and the README the Portable package needs are exactly what an installed copy
-must not have.
+Stages the shared files through Build-Release.ps1, adds the end-user README written for an
+installed copy, then compiles thumbico.iss into
+build/installer/Thumbico-<version>-windows-x64-setup.exe. The settings file the Portable package
+adds is deliberately absent, since it is what would send an installed copy's settings back beside
+its own executable.
 
 .PARAMETER Flutter
 The flutter command to build with. Defaults to the main-channel SDK, whose prerelease Dart
@@ -40,6 +41,9 @@ $files = Join-Path $output 'files'
 
 $staged = & (Join-Path $PSScriptRoot '..' 'common' 'Build-Release.ps1') `
   -Destination $files -Flutter $Flutter
+
+# What the user reads, written for an installed copy rather than a portable one
+Copy-Item (Join-Path $PSScriptRoot 'README.txt') $files
 
 # The script holds no version and no absolute path; both arrive here
 $options = @(
