@@ -24,6 +24,7 @@ import '../common/size_limit.dart';
 import '../common/strings.dart' as strings;
 import '../common/theme.dart';
 import '../common/urls.dart' as urls;
+import '../common/window_title.dart';
 import '../services/copy_image.dart';
 import '../services/file_dialogs.dart';
 import '../services/file_drop.dart';
@@ -232,6 +233,8 @@ class _MainWindowState extends State<MainWindow> {
         _thumbico = thumbico;
         _message = .none;
       });
+      // The title names the item on screen, so a failed read leaves the last one's name there
+      MainWindow._controller.setTitle(windowTitle(_path.text));
     } on ThumbicoException catch (e) {
       setState(() => _message = .error(_describe(e)));
     } on ArgumentError {

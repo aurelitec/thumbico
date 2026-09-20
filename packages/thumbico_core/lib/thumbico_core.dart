@@ -4,7 +4,7 @@
 /// Reads the thumbnail or icon of any shell item through the Windows shell.
 library;
 
-export 'src/read_thumbico.dart' show readThumbico, readThumbicoAsync;
+export 'src/read_thumbico.dart' show normalizeShellPath, readThumbico, readThumbicoAsync;
 export 'src/thumbico_exception.dart' show ThumbicoException, ThumbicoFailure;
 export 'src/thumbico_image.dart' show ThumbicoImage;
 export 'src/thumbico_info.dart' show ThumbicoInfo;
