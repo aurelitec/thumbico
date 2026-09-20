@@ -12,7 +12,7 @@ import '../common/strings.dart' as strings;
 ///
 /// Nothing opens on a click in the field or on typing, as in a Windows combo box. The flyout
 /// wraps only the chevron, so the field keeps its own keys. It holds the step buttons, the
-/// display-scale choice, and the standard sizes.
+/// standard sizes, and, where the display scales at all, the display-scale choice.
 class const SizeField({
   super.key,
 
@@ -60,6 +60,9 @@ class const SizeField({
 
   @override
   Widget build(BuildContext context) {
+    // Where the display does not scale, both choices draw the same pixels, so the toggle is gone
+    final displayScales = MediaQuery.devicePixelRatioOf(context) != 1;
+
     return SizedBox(
       width: _width,
       child: TextField(
@@ -100,14 +103,15 @@ class const SizeField({
                           onPressed: onBigger,
                         ),
                         const Spacer(),
-                        IconButton(
-                          isSelected: scaleToDisplay,
-                          icon: const Icon(Symbols.desktop_windows),
-                          // Filled while on, the way the symbols mark a selected state
-                          selectedIcon: const Icon(Symbols.desktop_windows, fill: 1),
-                          tooltip: strings.displayScaleTooltip,
-                          onPressed: () => onScaleToDisplayChanged(!scaleToDisplay),
-                        ),
+                        if (displayScales)
+                          IconButton(
+                            isSelected: scaleToDisplay,
+                            icon: const Icon(Symbols.desktop_windows),
+                            // Filled while on, the way the symbols mark a selected state
+                            selectedIcon: const Icon(Symbols.desktop_windows, fill: 1),
+                            tooltip: strings.displayScaleTooltip,
+                            onPressed: () => onScaleToDisplayChanged(!scaleToDisplay),
+                          ),
                       ],
                     ),
 

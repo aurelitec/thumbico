@@ -214,6 +214,20 @@ void main() {
     expect(drawn.text.style?.fontVariations, contains(const FontVariation('FILL', 1)));
   });
 
+  testWidgets('the display-scale toggle is absent where the display does not scale', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(field());
+    await openFlyout(tester);
+
+    expect(find.byTooltip('Display scale instead of real pixels'), findsNothing);
+    expect(presets, findsNWidgets(SizeField.presets.length), reason: 'the rest of the flyout');
+    expect(find.byType(IconButton), findsNWidgets(2 + 1), reason: 'the steps and the chevron');
+  });
+
   testWidgets('Tab from the field reaches the chevron and Enter opens the flyout', (
     tester,
   ) async {
