@@ -14,7 +14,7 @@ import 'common/strings.dart' as strings;
 import 'windows/main_window.dart';
 
 void main() {
-  // Settings read the file the first time one is touched, so the store must exist before any window.
+  // A setting reads the file when first touched, so the store must exist before any window
   SettingsStore.shared = SettingsStore.forApp(
     company: strings.companyName,
     product: strings.appName,

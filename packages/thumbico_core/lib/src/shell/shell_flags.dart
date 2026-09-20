@@ -19,8 +19,8 @@ SIIGBF shellFlagOf(ThumbicoOption option) => switch (option) {
 
 /// Combines an explicit source with a set of options into one flags value.
 ///
-/// [source] must be thumbnail-only or icon-only; auto is resolved by the
-/// caller into one of those. Resize-to-fit is zero and therefore implicit.
+/// [source] must be thumbnail-only or icon-only; auto is resolved by the caller into one of those.
+/// Resize-to-fit is zero and therefore implicit.
 SIIGBF toShellFlags(ThumbicoSource source, Set<ThumbicoOption> options) {
   var flags = switch (source) {
     ThumbicoSource.thumbnailOnly => SIIGBF_THUMBNAILONLY,

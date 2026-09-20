@@ -8,11 +8,12 @@ import 'package:image/image.dart' as img;
 import 'package:path/path.dart' as p;
 import 'package:thumbico_core/thumbico_core.dart';
 
-/// Test files written into a fresh temporary directory, so the shell's
-/// thumbnail and icon caches never hand back stale content.
+/// Test files written into a fresh temporary directory, so the shell's thumbnail and icon caches
+/// never hand back stale content.
 final class Fixtures {
   new _(this.directory);
 
+  /// The directory the files were written into.
   final Directory directory;
 
   /// A 400x300 image with the layout described on [layoutImage].
@@ -35,10 +36,9 @@ final class Fixtures {
   }
 }
 
-/// Builds an image whose top and bottom, left and right differ, so a flipped
-/// or mirrored result is caught: red top half, blue bottom half, a
-/// half-transparent green band over the left 15 percent, and a fully
-/// transparent band over the right 25 percent.
+/// Builds an image whose top and bottom, left and right differ, so a flipped or mirrored result is
+/// caught: red top half, blue bottom half, a half-transparent green band over the left 15 percent,
+/// and a fully transparent band over the right 25 percent.
 img.Image layoutImage(int width, int height) {
   final image = img.Image(width: width, height: height, numChannels: 4);
   for (var y = 0; y < height; y++) {

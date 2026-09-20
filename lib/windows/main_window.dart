@@ -48,6 +48,7 @@ class const MainWindow({super.key}) extends StatefulWidget {
   /// panes, and tall enough for the options flyout, which is drawn inside the window.
   static const minimumSize = Size(540, 420);
 
+  /// [minimumSize] in the form the window controller takes it.
   static final _constraints = BoxConstraints(
     minWidth: minimumSize.width,
     minHeight: minimumSize.height,
@@ -68,8 +69,8 @@ class const MainWindow({super.key}) extends StatefulWidget {
 
   /// Returns a [WindowEntry] for the main window. Call before `runWidget`.
   static WindowEntry windowEntry() {
-    // Each window gets its own MaterialApp, which is what gives text fields
-    // their localizations and tooltips their overlay.
+    // Each window gets its own MaterialApp, which is what gives text fields their localizations
+    // and tooltips their overlay
     return WindowEntry(
       controller: _controller,
       builder: (context) => MaterialApp(
@@ -93,10 +94,16 @@ class _MainWindowState extends State<MainWindow> {
   /// White in the dark theme as well, since the image leaves the app for a document.
   static const _background = Color(0xFFFFFFFF);
 
+  /// The path field's text, owned here so that Showcase mode can take the toolbar away.
   final _path = TextEditingController();
+
+  /// The path field's focus, so that a shortcut can put the caret there.
   final _pathFocus = FocusNode();
+
+  /// The size field's text, starting from the size the last run ended on.
   final _size = TextEditingController(text: settings.sizeText.value);
 
+  /// The image on the canvas and what the shell said about it; null until the first read.
   LoadedThumbico? _thumbico;
 
   /// What the status bar says; a problem is marked as one, so the bar can show it as one.
@@ -151,8 +158,10 @@ class _MainWindowState extends State<MainWindow> {
     _path.selection = TextSelection(baseOffset: 0, extentOffset: _path.text.length);
   }
 
+  /// Enters Showcase mode, or leaves it.
   void _toggleShowcase() => setState(() => _showcase = !_showcase);
 
+  /// Leaves Showcase mode if it is on, and does nothing otherwise.
   void _exitShowcase() {
     if (_showcase) {
       setState(() => _showcase = false);
@@ -165,13 +174,14 @@ class _MainWindowState extends State<MainWindow> {
   @override
   void initState() {
     super.initState();
-    // One item is shown at a time, so of several dropped together the first is read, as of
-    // several command-line arguments
+    // One item is shown at a time, so of several dropped together only the first is read
     _drops = fileDrops(_handle).listen((paths) => _open(paths.first));
   }
 
+  /// Asks for a file in the Windows dialog and reads what comes back.
   void _openFile() => _open(pickFile(_handle));
 
+  /// Asks for a folder in the Windows dialog and reads what comes back.
   void _openFolder() => _open(pickFolder(_handle));
 
   /// Puts a picked or dropped path in the field and reads it; a cancelled dialog changes nothing.
@@ -234,8 +244,10 @@ class _MainWindowState extends State<MainWindow> {
     }
   }
 
+  /// Asks for the next size up.
   void _bigger() => _step((size) => size.scaled(SizeField.stepFactor));
 
+  /// Asks for the next size down.
   void _smaller() => _step((size) => size.scaled(1 / SizeField.stepFactor));
 
   /// Replaces the size in the field with [next] of it, stopping at the maximum, and reads.
@@ -262,15 +274,18 @@ class _MainWindowState extends State<MainWindow> {
   /// What the status bar says when a size past the maximum is asked for.
   String get _largestSizeMessage => '${strings.largestSizeIs} ${maximumSize.format()}.';
 
-  // The display scale only changes how the image is drawn, so nothing is read again.
+  /// Draws the image at the display's scale, or at real pixels.
+  ///
+  /// Only how the image is drawn changes, so nothing is read again.
   void _setScaleToDisplay(bool value) => setState(() => settings.scaleToDisplay.value = value);
 
-  // A read mode is read again the moment it changes, so its effect is visible at once.
+  /// Asks the shell for another source, and reads at once so the effect is visible.
   void _setSource(ThumbicoSource source) {
     setState(() => settings.source.value = source);
     _read();
   }
 
+  /// Turns a shell option on or off, and reads at once so the effect is visible.
   void _toggleOption(ThumbicoOption option, bool isOn) {
     final options = {...settings.options.value};
     if (isOn) {
@@ -336,9 +351,10 @@ class _MainWindowState extends State<MainWindow> {
   /// Opens the About window over this one, which it blocks until it is closed.
   void _about() => AboutWindow.open(context, MainWindow._controller, onOpenUrl: _openInBrowser);
 
-  /// Closes the window, which is what exits the application, so Exit and the close button share one path.
+  /// Closes the window, which exits the application: Exit and the close button share one path.
   void _exit() => MainWindow._controller.destroy();
 
+  /// What the status bar says for a failed read.
   String _describe(ThumbicoException e) => switch (e.failure) {
     ThumbicoFailure.itemNotFound => '${strings.itemNotFound}: ${e.path}',
     ThumbicoFailure.noThumbnail => '${strings.noThumbnail}: ${e.path}',
@@ -402,6 +418,7 @@ class _MainWindowState extends State<MainWindow> {
   }
 }
 
+/// Exits the application when the window is destroyed, however it was closed.
 class _MainWindowControllerDelegate with WindowControllerDelegate {
   @override
   void onWindowDestroyed() {

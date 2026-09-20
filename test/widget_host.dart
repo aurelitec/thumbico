@@ -11,9 +11,9 @@ import 'package:thumbico/common/theme.dart';
 
 /// Call first in a widget test's `main`, before any `testWidgets`.
 ///
-/// `flutter test` cannot create the native windowing owner that the test
-/// binding would otherwise construct when the windowing feature is on
-/// (flutter/flutter#178706). The widgets under test do not need one.
+/// `flutter test` cannot create the native windowing owner that the test binding would otherwise
+/// construct when the windowing feature is on (flutter/flutter#178706). The widgets under test do
+/// not need one.
 void disableWindowingForTests() {
   isWindowingEnabled = false;
 }

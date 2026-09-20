@@ -41,9 +41,8 @@ class const AboutWindow({
   /// Opens the window over [parent], which it blocks until it is closed.
   ///
   /// Creating a native window pumps the Windows message loop, so it is done from a message-loop
-  /// task of its own, never inside a frame. That makes it safe from any handler, including a
-  /// menu item's, which the framework runs in a post-frame callback; made right there, the
-  /// window's first frame began inside the menu's and tripped the scheduler's idle check.
+  /// task of its own and never inside a frame. That makes it safe from any handler, including a
+  /// menu item's, which the framework runs in a post-frame callback.
   static void open(
     BuildContext context,
     BaseWindowController parent, {
@@ -87,10 +86,10 @@ class const AboutWindow({
       delegate: _AboutWindowDelegate(onClose: close, onDestroyed: leaveRegistry),
     );
 
-    // A view of its own at the root, so it carries its own app, as the main window does. The
-    // app is what makes it a keyboard citizen: Tab and the arrows between controls, and Enter
-    // and Space on the focused one, are its default shortcuts and actions. Hosted under a bare
-    // theme at first, the window heard only the Escape it binds itself.
+    // A view of its own at the root, so it carries its own app, as the main window does. The app is
+    // what makes the window a keyboard citizen: Tab and the arrows between controls, and Enter and
+    // Space on the focused one, are its default shortcuts, actions, and traversal group. Under a
+    // bare theme the window would hear only the Escape it binds itself.
     entry = WindowEntry(
       controller: controller,
       builder: (context) => MaterialApp(
@@ -197,7 +196,10 @@ class const _Link(final String label, {required final VoidCallback onPressed})
 /// Sends the title bar's close button down the same path as the Close button, and keeps the
 /// registry right when the window is destroyed without being asked, as when its parent closes.
 class _AboutWindowDelegate({
+  /// Takes the window down the same path the Close button does.
   required final VoidCallback onClose,
+
+  /// Called once the window is gone, to leave the registry if nothing else has.
   required final VoidCallback onDestroyed,
 }) with DialogWindowControllerDelegate {
   @override

@@ -26,12 +26,12 @@ class const ThumbicoCanvas({
       return const _EmptyCanvas();
     }
 
-    // The greys of an image editor's checkerboard, light or dark with the theme. Both dark ones
-    // are lighter than the dark canvas, so the image's bounds still show.
     final isLight = Theme.of(context).brightness == .light;
 
     return TwoAxisScrollView(
       child: CustomPaint(
+        // The greys of an image editor's checkerboard; both dark ones are lighter than the dark
+        // canvas, so the image's bounds still show
         painter: _Checkerboard(
           first: isLight ? const Color(0xFFFFFFFF) : const Color(0xFF2B2B2B),
           second: isLight ? const Color(0xFFCCCCCC) : const Color(0xFF3A3A3A),
@@ -58,8 +58,6 @@ class const _EmptyCanvas() extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    // Grey stands out twice as far from a dark canvas as from white at the same opacity, so the
-    // dark theme fades it by half to match
     final isLight = theme.brightness == .light;
 
     return Center(
@@ -73,6 +71,8 @@ class const _EmptyCanvas() extends StatelessWidget {
               assets.appIcon,
               width: _iconSize,
               height: _iconSize,
+              // Grey stands out twice as far from a dark canvas as from white at one opacity, so
+              // the dark theme fades it by half to match
               opacity: AlwaysStoppedAnimation(isLight ? 0.4 : 0.2),
               filterQuality: .medium,
               excludeFromSemantics: true,
@@ -100,6 +100,7 @@ class const _Checkerboard({
   /// The colour of the squares in between.
   required final Color second,
 }) extends CustomPainter {
+  /// The side of one square.
   static const _square = 8.0;
 
   @override

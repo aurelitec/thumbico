@@ -18,14 +18,12 @@ const _maximumDimension = 0x7FFFFFFF;
 
 /// Reads the thumbnail or icon of the shell item at [path], at most [size].
 ///
-/// With [ThumbicoSource.auto] the shell is asked for a thumbnail first; if
-/// that fails for any reason other than a missing item, its icon is returned
-/// instead and [ThumbicoInfo.isIcon] is true.
+/// With [ThumbicoSource.auto] the shell is asked for a thumbnail first; if that fails for any
+/// reason other than a missing item, its icon is returned and [ThumbicoInfo.isIcon] is true.
 ///
-/// Blocks the calling thread for as long as the shell takes, which can be
-/// seconds for a video; GUI callers use [readThumbicoAsync]. Throws
-/// [ArgumentError] for an empty path or a dimension outside 1 to 2^31 - 1,
-/// and [ThumbicoException] when the shell fails.
+/// Blocks the calling thread for as long as the shell takes, which can be seconds for a video; GUI
+/// callers use [readThumbicoAsync]. Throws [ArgumentError] for an empty path or a dimension outside
+/// 1 to 2^31 - 1, and [ThumbicoException] when the shell fails.
 ThumbicoImage readThumbico(
   String path,
   ThumbicoSize size, {
@@ -54,8 +52,8 @@ ThumbicoImage readThumbico(
 
 /// Runs [readThumbico] in a short-lived isolate and returns its result.
 ///
-/// The isolate enters its own COM apartment, so this is safe to call from a
-/// UI isolate. Argument errors are reported before any isolate is spawned.
+/// The isolate enters its own COM apartment, so this is safe to call from a UI isolate. Argument
+/// errors are reported before any isolate is spawned.
 Future<ThumbicoImage> readThumbicoAsync(
   String path,
   ThumbicoSize size, {
@@ -93,6 +91,7 @@ void validateArguments(String path, ThumbicoSize size) {
   _checkDimension(size.height, 'size.height');
 }
 
+/// Throws [ArgumentError] unless [value] is a side the shell's 32-bit SIZE can carry.
 void _checkDimension(int value, String name) {
   if (value < 1 || value > _maximumDimension) {
     throw ArgumentError.value(value, name, 'must be between 1 and $_maximumDimension');
@@ -100,8 +99,9 @@ void _checkDimension(int value, String name) {
 }
 
 /// Makes a filesystem path fully qualified, which the shell parser requires.
-/// Shell namespace strings are passed through unchanged. Quotes are dropped,
-/// since no path or shell string can hold one and Explorer copies paths in them.
+///
+/// Shell namespace strings are passed through unchanged. Quotes are dropped, since no path or shell
+/// string can hold one and Explorer copies paths wrapped in them.
 String normalizeShellPath(String path) {
   final trimmed = path.trim().replaceAll('"', '');
   if (trimmed.toLowerCase().startsWith('shell:') || trimmed.startsWith('::')) {

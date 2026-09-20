@@ -3,8 +3,8 @@
 
 /// The choices the user made, carried between runs.
 ///
-/// Settings marked saveOnSet are written the moment they change. Window bounds change many times
-/// a second while the user drags, so the window writes them through [save] when it closes.
+/// A setting declared with saveOnSet is written the moment it changes, so nothing is lost if the
+/// app is closed or crashes. Any other setting reaches the file only through [save].
 library;
 
 import 'package:simple_app_settings/simple_app_settings.dart';
@@ -20,6 +20,7 @@ final scaleToDisplay = AppSetting<bool>(
   saveOnSet: true,
 );
 
+/// Which kind of image the shell is asked for.
 final source = EnumAppSetting<ThumbicoSource>(
   key: 'source',
   defaultValue: ThumbicoSource.auto,
@@ -27,6 +28,7 @@ final source = EnumAppSetting<ThumbicoSource>(
   saveOnSet: true,
 );
 
+/// The shell options that are on, stored by name so that reordering the enum changes nothing.
 final options = ConvertedAppSetting<Set<ThumbicoOption>, List<Object?>>(
   key: 'options',
   defaultValue: const {},
@@ -35,12 +37,23 @@ final options = ConvertedAppSetting<Set<ThumbicoOption>, List<Object?>>(
   saveOnSet: true,
 );
 
-/// Null until the window has been closed once; the system then places the window.
+// The window's placement. Nothing reads or writes these yet: the window opens at a fixed size and
+// Windows places it.
+
+/// The window's left edge on screen.
 final windowLeft = AppSetting<int?>(key: 'windowLeft', defaultValue: null);
+
+/// The window's top edge on screen.
 final windowTop = AppSetting<int?>(key: 'windowTop', defaultValue: null);
+
+/// The width of the window's content.
 final windowWidth = AppSetting<int>(key: 'windowWidth', defaultValue: 800);
+
+/// The height of the window's content.
 final windowHeight = AppSetting<int>(key: 'windowHeight', defaultValue: 600);
+
+/// Whether the window was maximized.
 final windowMaximized = AppSetting<bool>(key: 'windowMaximized', defaultValue: false);
 
-/// Writes what was not saved on set.
+/// Writes every setting the file holds, including those not saved on set.
 void save() => SettingsStore.shared.save();

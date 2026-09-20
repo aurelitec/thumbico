@@ -15,16 +15,20 @@ import 'shell_flags.dart';
 
 /// The pixels of one shell image, in the package's pixel convention.
 final class const ShellBitmap({
+  /// The width the shell produced, in pixels.
   required final int width,
+
+  /// The height the shell produced, in pixels.
   required final int height,
+
+  /// Straight alpha, BGRA, top-down, four bytes per pixel with no row padding.
   required final Uint8List pixels,
 });
 
 /// Asks the shell for the image of [path] and copies its pixels out.
 ///
-/// [path] must already be fully qualified and [source] must not be auto.
-/// Every native resource is released before this returns, on success and on
-/// failure alike.
+/// [path] must already be fully qualified and [source] must not be auto. Every native resource is
+/// released before this returns, on success and on failure alike.
 ShellBitmap readShellBitmap(
   String path,
   int width,
@@ -76,9 +80,9 @@ ShellBitmap readShellBitmap(
 
 /// Reads the bitmap top-down at 32 bits per pixel.
 ///
-/// The shell returns icons bottom-up and thumbnails top-down while reporting
-/// a positive height for both, so the header cannot tell them apart. Asking
-/// GDI for a negative height dictates top-down rows for either kind.
+/// The shell returns icons bottom-up and thumbnails top-down while reporting a positive height for
+/// both, so the header cannot tell them apart. Asking GDI for a negative height dictates top-down
+/// rows for either kind.
 ShellBitmap _copyPixels(HBITMAP bitmap, String path, Arena arena) {
   final info = arena<BITMAP>();
   if (GetObject(HGDIOBJ(bitmap), sizeOf<BITMAP>(), info) == 0) {
@@ -115,5 +119,6 @@ ShellBitmap _copyPixels(HBITMAP bitmap, String path, Arena arena) {
   );
 }
 
+/// The failure of a GDI call, which reports through [GetLastError] rather than an HRESULT.
 ThumbicoException _lastError(String path, String operation) =>
     ThumbicoException(hresult: GetLastError().toHRESULT(), path: path, operation: operation);

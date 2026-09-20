@@ -3,31 +3,45 @@
 
 /// The keyboard shortcuts, one activator per command.
 ///
-/// The window binds them. The menu and the tooltips show them as text of their own, which a
-/// test keeps equal to these. The editing keys, Ctrl with C, V, X, A, and Z, are left to the
-/// text fields, which is why Copy takes Shift.
+/// The window binds them. The menu and the tooltips show them as text of their own, which a test
+/// keeps equal to these. The editing keys, Ctrl with C, V, X, A, and Z, belong to the text fields,
+/// which is why Copy takes Shift.
 library;
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+/// Opens the file dialog.
 const openFile = SingleActivator(LogicalKeyboardKey.keyO, control: true);
+
+/// Opens the folder dialog.
 const openFolder = SingleActivator(LogicalKeyboardKey.keyO, control: true, shift: true);
+
+/// Reads the item in the path field again.
 const refresh = SingleActivator(LogicalKeyboardKey.f5);
 
 /// Puts the caret in the path field with its text selected, as the address bar keys do.
 const focusPath = SingleActivator(LogicalKeyboardKey.keyL, control: true);
 
+/// Saves the image to a file.
 const saveAs = SingleActivator(LogicalKeyboardKey.keyS, control: true);
+
+/// Copies the image to the clipboard.
 const copy = SingleActivator(LogicalKeyboardKey.keyC, control: true, shift: true);
+
+/// Opens the help page in the browser.
 const help = SingleActivator(LogicalKeyboardKey.f1);
 
-/// Doubles the size. The main keyboard's plus is the equals key unshifted, as browsers bind it.
+/// Steps the size up. The main keyboard's plus is the equals key unshifted, as browsers bind it.
 const bigger = SingleActivator(LogicalKeyboardKey.equal, control: true);
+
+/// The same step from the numeric keypad, whose plus needs no shift.
 const biggerNumpad = SingleActivator(LogicalKeyboardKey.numpadAdd, control: true);
 
-/// Halves the size.
+/// Steps the size down.
 const smaller = SingleActivator(LogicalKeyboardKey.minus, control: true);
+
+/// The same step from the numeric keypad.
 const smallerNumpad = SingleActivator(LogicalKeyboardKey.numpadSubtract, control: true);
 
 /// Enters and leaves Showcase mode; the key every full-screen view on Windows uses.

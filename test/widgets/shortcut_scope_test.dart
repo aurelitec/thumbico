@@ -49,8 +49,8 @@ void main() {
     var fired = 0;
     await tester.pumpWidget(scope(onRefresh: () => fired++));
 
-    // A click on the image makes the field give up focus, which is this call; the test
-    // harness's pointer events do not reach the field's tap region, so it is made directly.
+    // A click on the image makes the field give up focus, which is this call; the test harness's
+    // pointer events do not reach the field's tap region, so it is made directly
     tester.binding.focusManager.primaryFocus!.unfocus();
     await tester.pump();
     final field = tester.widget<EditableText>(find.byType(EditableText));

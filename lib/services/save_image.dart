@@ -44,8 +44,8 @@ final class const WriteFailed(
 
 /// The name the save dialog opens with: the item's own name, the app's, and [size].
 ///
-/// The item's name is dropped when the path has none, such as a drive root, or when it
-/// holds characters a file name cannot, such as a shell string.
+/// The item's name is dropped when the path has none, such as a drive root, or when it holds
+/// characters a file name cannot, such as a shell string.
 String suggestedFileName(String itemPath, ThumbicoSize size) {
   final name = p.basenameWithoutExtension(itemPath.trim());
   final sizeText = '${size.width}x${size.height}';
@@ -57,9 +57,8 @@ String suggestedFileName(String itemPath, ThumbicoSize size) {
 
 /// Writes [image] to [path] in the format the extension names.
 ///
-/// PNG and ICO keep transparency; every other format is flattened onto [background]
-/// first. Encoding runs off the UI isolate. Nothing is written when the result is not
-/// [Saved].
+/// PNG and ICO keep transparency; every other format is flattened onto [background] first. Encoding
+/// runs off the UI isolate. Nothing is written when the result is not [Saved].
 Future<SaveResult> saveImage(ui.Image image, String path, ui.Color background) async {
   final extension = p.extension(path).toLowerCase();
   if (img.findEncoderForNamedImage(path) == null) {

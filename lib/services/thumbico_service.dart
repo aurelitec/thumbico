@@ -19,9 +19,8 @@ typedef LoadedThumbico = ({ThumbicoInfo info, ui.Image image});
 
 /// Reads the thumbnail or icon of the item at [path], at most [size], and decodes it.
 ///
-/// [source] and [options] go to the core unchanged. Runs off the UI isolate and
-/// throws what [readThumbicoAsync] throws. The shell's pixel buffer is dropped
-/// once the Flutter image has been made.
+/// [source] and [options] go to the core unchanged. Runs off the UI isolate and throws what
+/// [readThumbicoAsync] throws. The shell's pixel buffer is dropped once the Flutter image is made.
 Future<LoadedThumbico> loadThumbico(
   String path,
   ThumbicoSize size, {
@@ -34,8 +33,8 @@ Future<LoadedThumbico> loadThumbico(
 
 /// Converts a shell image to a Flutter image.
 ///
-/// Flutter's raw pixel formats expect premultiplied alpha while the shell
-/// hands out straight alpha, so the pixels are premultiplied into a copy first.
+/// Flutter's raw pixel formats expect premultiplied alpha while the shell hands out straight alpha,
+/// so the pixels are premultiplied into a copy first.
 @visibleForTesting
 Future<ui.Image> toUiImage(ThumbicoImage image) {
   final bytes = Uint8List.fromList(image.pixels);

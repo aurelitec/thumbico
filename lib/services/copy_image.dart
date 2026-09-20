@@ -18,14 +18,15 @@ import '../imaging/image_conversion.dart';
 // A BMP file is a 14-byte file header followed by exactly what CF_DIBV5 holds.
 const _bmpFileHeaderLength = 14;
 
+/// The one clipboard format written, every other bitmap form being synthesized from it.
 const _dibV5 = ClipboardFormat(CF_DIBV5, 'CF_DIBV5');
 
 /// Puts [image] on the clipboard as an opaque bitmap, flattened onto [background].
 ///
-/// One CF_DIBV5 entry, from which Windows makes the legacy bitmap forms, so every
-/// application can paste it. Transparency is not carried, by decision; Save As PNG
-/// keeps it. Completes with whether the clipboard took the image. The pixel work
-/// runs off the UI isolate, so a large image does not freeze the window.
+/// One CF_DIBV5 entry, from which Windows makes the legacy bitmap forms, so every application can
+/// paste it. Transparency is not carried; Save As PNG or ICO keeps it. Completes with whether the
+/// clipboard took the image. The pixel work runs off the UI isolate, so a large image does not
+/// freeze the window.
 Future<bool> copyImage(ui.Image image, ui.Color background) async {
   final source = await toImage(image);
   final argb = background.toARGB32();

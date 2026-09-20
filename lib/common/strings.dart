@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2026 Aurelitec <https://www.aurelitec.com>
 // Licensed under the MIT License. See LICENSE file in the project root for more information.
 
-/// Contains user-facing strings used throughout the application.
+/// The user-facing text of the application, in one place.
 library;
 
 import 'package:thumbico_core/thumbico_core.dart';
@@ -91,15 +91,16 @@ const copyShortcut = 'Ctrl+Shift+C';
 const showcaseShortcut = 'F11';
 const helpShortcut = 'F1';
 
+const helpLabel = 'Help';
+const aboutLabel = 'About Thumbico';
+const exitLabel = 'Exit';
+
 // ---------------------------------------------------------------------------
 // Showcase mode
 // ---------------------------------------------------------------------------
 
 const exitShowcaseLabel = 'Exit Showcase';
 const exitShowcaseTooltip = 'Exit Showcase mode (F11, Esc)';
-const helpLabel = 'Help';
-const aboutLabel = 'About Thumbico';
-const exitLabel = 'Exit';
 
 // ---------------------------------------------------------------------------
 // Save As dialog

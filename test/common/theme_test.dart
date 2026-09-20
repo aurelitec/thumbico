@@ -313,13 +313,13 @@ void main() {
     final focused = overlay.resolve({WidgetState.focused})!;
     final pressed = overlay.resolve({WidgetState.pressed})!;
 
-    // A row takes focus when the pointer enters it, and measured on screen it then shows the
-    // hover tint twice, one layer over the other
+    // A row takes focus when the pointer enters it, so it draws the hover tint twice, one layer
+    // over the other
     Color twice(Color tint) =>
         Color.alphaBlend(tint, Color.alphaBlend(tint, colors.surfaceContainerLow));
     int levelsDarker(Color color) => ((colors.surfaceContainerLow.r - color.r) * 255).round();
 
-    // As strong as Material's own hover on a toolbar button, which measures 19 levels
+    // As strong as Material's own hover on a toolbar button, which lands at 19 levels
     expect(levelsDarker(twice(hovered)), inInclusiveRange(15, 22));
 
     // A row reached by keyboard alone shows one layer, and must be as clear as a hovered one
@@ -353,7 +353,7 @@ void main() {
       final onBar = Color.alphaBlend(tint, scheme.surfaceContainer);
       int levels(Color a, Color b) => ((a.r - b.r).abs() * 255).round();
 
-      // A menu row shows its hover tint twice, as measured on screen
+      // A menu row draws its hover tint twice, since the pointer also gives it focus
       final rowTint = theme.menuButtonTheme.style!.overlayColor!.resolve({WidgetState.hovered})!;
       final onMenu = Color.alphaBlend(
         rowTint,

@@ -16,16 +16,16 @@ import '../widget_host.dart';
 void main() {
   disableWindowingForTests();
 
-  // The content must fit a window of a stated size, and the test font draws every character as
-  // a full square, about twice the real width. Windows' own font is loaded under the name a
-  // test's theme asks for, since a test counts as Android.
+  // The content must fit a window of a stated size, and the test font draws every character as a
+  // full square, about twice the real width. Windows' own font is loaded under the name a test's
+  // theme asks for, since a test counts as Android.
   setUpAll(() async {
     final font = File(r'C:\Windows\Fonts\segoeui.ttf').readAsBytes();
     await (FontLoader('Roboto')..addFont(font.then((bytes) => ByteData.sublistView(bytes)))).load();
   });
 
-  /// The content as the window hosts it: in an app of its own, in exactly the room the window
-  /// gives it.
+  /// The content as the window hosts it: in an app of its own, in exactly the room the window gives
+  /// it.
   Widget hosted({VoidCallback? onClose, void Function(String url)? onOpenUrl}) => MaterialApp(
     theme: appTheme(),
     home: Center(

@@ -5,9 +5,10 @@ import 'dart:math' show max;
 
 /// A size in pixels, and the text form every frontend parses the same way.
 ///
-/// As a request there is no upper limit here. A maximum is a product decision each frontend
-/// applies before calling the core.
+/// As a request there is no upper limit here. A maximum is a product decision each frontend applies
+/// before calling the core.
 final class const ThumbicoSize(final int width, final int height) {
+  /// A size with the same [side] both ways.
   const new square(int side) : this(side, side);
 
   // The separator may be x, X, or the multiplication sign.
@@ -16,8 +17,8 @@ final class const ThumbicoSize(final int width, final int height) {
 
   /// Parses a single number as a square, or two numbers separated by an x.
   ///
-  /// Whitespace around and between the parts is ignored. Only bare digits are
-  /// accepted, and each dimension must be at least 1; otherwise returns null.
+  /// Whitespace around and between the parts is ignored. Only bare digits are accepted, and each
+  /// dimension must be at least 1; otherwise returns null.
   static ThumbicoSize? tryParse(String text) {
     final parts = text.trim().split(_separator);
     if (parts.length > 2) {
@@ -38,6 +39,7 @@ final class const ThumbicoSize(final int width, final int height) {
         : ThumbicoSize(dimensions[0], dimensions[1]);
   }
 
+  /// One side of a typed size, or null when it is not a whole number of at least 1.
   static int? _parseDimension(String part) {
     final trimmed = part.trim();
     if (!_digits.hasMatch(trimmed)) {
@@ -47,6 +49,7 @@ final class const ThumbicoSize(final int width, final int height) {
     return value == null || value < 1 ? null : value;
   }
 
+  /// Whether both sides are the same length.
   bool get isSquare => width == height;
 
   /// Writes the size in the form [tryParse] reads back, such as `256 x 160`.

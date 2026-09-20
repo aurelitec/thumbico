@@ -26,10 +26,10 @@ ThemeData appTheme([Brightness brightness = .light]) {
     // Icons at the smallest size the symbols are designed for, in the shape drawn for that size
     iconTheme: const IconThemeData(size: _iconSize, opticalSize: _iconSize),
 
-    // Small corners on what Material draws as a circle or a pill, and icons in the text colour.
-    // An icon button sizes its own icon, so the size is repeated here. Its tints are stated
-    // too: left to Material they came out black in either theme, and on a dark bar a black
-    // hover cannot be seen.
+    // Small corners on what Material draws as a circle or a pill, and icons in the text colour. An
+    // icon button sizes its own icon, so the size is repeated here. Its tints are stated from the
+    // text colour, since Material's own resolve to black in both themes and a black tint cannot be
+    // seen on a dark bar.
     iconButtonTheme: IconButtonThemeData(
       style: IconButton.styleFrom(shape: _controlShape, iconSize: _iconSize).copyWith(
         foregroundColor: WidgetStateProperty.fromMap(_iconButtonColors(colors)),
@@ -42,13 +42,12 @@ ThemeData appTheme([Brightness brightness = .light]) {
     ),
     textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(shape: _controlShape)),
 
-    // Fields as Windows draws them: the fill shows the field on the bar, white on the light
-    // grey one and a lighter grey on the dark one, and the outline stays faint until the field
-    // has focus
+    // Fields as Windows draws them: the fill shows the field on the bar, white on the light grey
+    // one and a lighter grey on the dark one, and the outline stays faint until the field has focus
     inputDecorationTheme: InputDecorationThemeData(
       filled: true,
       fillColor: isDark ? colors.surfaceContainerHigh : colors.surface,
-      // Fainter than Material's, which greys the fill down to the bar's own colour
+      // Must stay lighter than the bar; Material's own tint greys the fill down to the bar's colour
       hoverColor: colors.onSurface.withValues(alpha: 0.03),
       border: const OutlineInputBorder(),
       enabledBorder: OutlineInputBorder(
@@ -71,9 +70,8 @@ ThemeData appTheme([Brightness brightness = .light]) {
       ).copyWith(overlayColor: WidgetStateProperty.fromMap(_menuRowTints(colors))),
     ),
 
-    // In the dark theme a tooltip is the menus' dark card with their faint edge; Material
-    // inverts it to a white box there, a glare spot in a dark window. The light theme keeps
-    // Material's own.
+    // In the dark theme a tooltip is the menus' dark card, since Material inverts it to a white
+    // box there, a glare spot in a dark window. The light theme keeps Material's own.
     tooltipTheme: isDark
         ? TooltipThemeData(
             decoration: BoxDecoration(
@@ -113,8 +111,8 @@ TextStyle _menuLabelStyle(Brightness brightness) {
 
 /// What a menu row is tinted with, fainter than Material's.
 ///
-/// A row takes focus when the pointer enters it and then shows its hover tint twice, so hover
-/// is half of what a toolbar button shows, and focus, shown alone by keyboard, is all of it.
+/// A row takes focus when the pointer enters it and then draws its hover tint twice, so hover is
+/// half of what a toolbar button shows, and focus, which the keyboard shows alone, is all of it.
 Map<WidgetStatesConstraint, Color> _menuRowTints(ColorScheme colors) => {
   WidgetState.pressed: colors.onSurface.withValues(alpha: 0.06),
   WidgetState.hovered: colors.onSurface.withValues(alpha: 0.04),
@@ -150,11 +148,11 @@ const _overlayShape = RoundedRectangleBorder(borderRadius: .all(.circular(8)));
 
 /// The colours of the light or the dark theme, each role given as its light and its dark value.
 ///
-/// Windows 11's greys, with a green from the app icon as the only colour. Written out rather
-/// than seeded: a seed tints every surface, and the chrome must stay neutral beside whatever
-/// image is shown. Roles left out fall back to the ones given here.
+/// Windows 11's greys, with a green from the app icon as the only colour. Written out rather than
+/// seeded: a seed tints every surface, and the chrome must stay neutral beside whatever image is
+/// shown. Every value is a colour literal, light first, so that the editor previews it. Roles left
+/// out fall back to the ones given here.
 ColorScheme _colors(Brightness brightness) {
-  // Every value is a colour literal, light first, so that the editor previews it
   final isLight = brightness == .light;
 
   // The icon's ear green, the lightest of its tones that carries white text; on dark its face
@@ -173,8 +171,8 @@ ColorScheme _colors(Brightness brightness) {
     onSecondary: onAccent,
     secondaryContainer: accent,
     onSecondaryContainer: onAccent,
-    // Must differ from the accent: a switch that is on draws its knob in this colour under the
-    // pointer
+    // A pale green rather than the accent, so that a control tinting itself from this role still
+    // stands apart from one filled with the accent
     primaryContainer: isLight ? const Color(0xFFDCF3D9) : const Color(0xFF1B5E20),
     onPrimaryContainer: isLight ? const Color(0xFF1B5E20) : const Color(0xFFDCF3D9),
 

@@ -18,9 +18,9 @@ import '../widget_host.dart';
 void main() {
   disableWindowingForTests();
 
-  // Widths are the subject here, and the test font draws every character as a full square,
-  // about twice the real width. Windows' own font is loaded under the name a test's theme
-  // asks for, since a test counts as Android.
+  // Widths are the subject here, and the test font draws every character as a full square, about
+  // twice the real width. Windows' own font is loaded under the name a test's theme asks for,
+  // since a test counts as Android.
   setUpAll(() async {
     final font = File(r'C:\Windows\Fonts\segoeui.ttf').readAsBytes();
     await (FontLoader('Roboto')..addFont(font.then((bytes) => ByteData.sublistView(bytes)))).load();

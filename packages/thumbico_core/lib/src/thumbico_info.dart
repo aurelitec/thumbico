@@ -10,6 +10,7 @@ final class const ThumbicoInfo({
   /// The size the shell produced, which is often not the size requested.
   required final ThumbicoSize size,
 
+  /// The size the shell was asked for, which it treats as an upper bound.
   required final ThumbicoSize requestedSize,
 
   /// True when the shell returned an icon rather than a thumbnail.

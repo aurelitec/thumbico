@@ -27,6 +27,7 @@ class const OptionsFlyout({
   /// Called with the option and its new state when the user checks or unchecks it.
   required final void Function(ThumbicoOption option, bool isOn) onOptionToggled,
 }) extends StatelessWidget {
+  /// The width of the card, wide enough for the longest option label on one line.
   static const _width = 300.0;
 
   /// Whether every mode is at its default, so the button needs no mark.
@@ -35,8 +36,8 @@ class const OptionsFlyout({
   @override
   Widget build(BuildContext context) {
     return MenuAnchor(
-      // More room at the top: the rows carry room of their own around their checkboxes and the
-      // solid source control does not, so equal padding looked crowded above it
+      // More room at the top, since the rows carry room of their own around their checkboxes and
+      // the solid source control does not
       style: const MenuStyle(padding: WidgetStatePropertyAll(.fromLTRB(8, 16, 8, 8))),
       menuChildren: [
         SizedBox(

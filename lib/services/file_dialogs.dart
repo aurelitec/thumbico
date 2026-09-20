@@ -29,12 +29,11 @@ String? pickFolder(Pointer<Void> owner) {
   return picker.getDirectory()?.path;
 }
 
-/// Shows the Save As dialog, owned by [owner], and completes with the chosen path or null on cancel.
+/// Shows the Save As dialog, owned by [owner]; completes with the chosen path or null on cancel.
 ///
 /// Opens with [suggestedName] in the name field. A name typed without an extension gets the
-/// selected type's, and the dialog itself asks before an existing file is replaced. Unlike the
-/// open dialogs, this one is called from a menu item, so it shows the dialog from a message-loop
-/// task of its own rather than inside the frame the menu item's callback runs in.
+/// selected type's, and the dialog itself asks before an existing file is replaced. Called from a
+/// menu item, so the dialog is shown from a message-loop task of its own and never inside a frame.
 Future<String?> pickSavePath(Pointer<Void> owner, String suggestedName) {
   return Future(() {
     final picker = SaveFilePicker()

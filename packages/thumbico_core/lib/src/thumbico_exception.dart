@@ -24,11 +24,14 @@ final class ThumbicoException({
   /// The name of the call that failed.
   required final String operation,
 }) implements Exception {
+  /// The category [hresult] falls into, which is what a consumer switches over.
   final ThumbicoFailure failure = classify(hresult);
 
+  /// The HRESULT as eight hexadecimal digits, the form Windows documents it in.
   String get hresultHex =>
       '0x${hresult.toUnsigned(32).toRadixString(16).toUpperCase().padLeft(8, '0')}';
 
+  /// The failure in one line, for a log rather than for the user.
   String get message => '$operation failed for "$path" with $hresultHex';
 
   /// Sorts an HRESULT into the categories a consumer can act on.

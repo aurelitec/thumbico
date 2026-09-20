@@ -7,10 +7,9 @@ import '../thumbico_exception.dart';
 
 /// Runs [body] with a COM apartment on the current thread.
 ///
-/// A thread that already has one, such as the Flutter main isolate on the
-/// runner thread, is left alone. Otherwise a single-threaded apartment is
-/// entered for the duration of [body] and left afterwards. [path] is only
-/// used to report a failure to initialize COM.
+/// A thread that already has one, such as the Flutter main isolate on the runner thread, is left
+/// alone. Otherwise a single-threaded apartment is entered for the duration of [body] and left
+/// afterwards. [path] is only used to report a failure to initialize COM.
 T withComApartment<T>(String path, T Function() body) {
   if (isComInitialized) {
     return body();

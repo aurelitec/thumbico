@@ -11,22 +11,22 @@ import '../common/strings.dart' as strings;
 /// One bundle travels from the window through the toolbar to the menu, so a new item adds a
 /// field here rather than a parameter on every widget in between.
 class const OverflowCallbacks({
-  /// Called when the user picks Save As; null while there is nothing to save, which disables the item.
+  /// Saves the image; null while there is nothing to save, which disables the item.
   final VoidCallback? onSaveAs,
 
-  /// Called when the user picks Copy; null while there is nothing to copy, which disables the item.
+  /// Copies the image; null while there is nothing to copy, which disables the item.
   final VoidCallback? onCopy,
 
-  /// Called when the user picks Showcase mode.
+  /// Enters Showcase mode.
   required final VoidCallback onShowcase,
 
-  /// Called when the user picks Help.
+  /// Opens the help page in the browser.
   required final VoidCallback onHelp,
 
-  /// Called when the user picks About.
+  /// Opens the About window.
   required final VoidCallback onAbout,
 
-  /// Called when the user picks Exit.
+  /// Closes the window, which exits the application.
   required final VoidCallback onExit,
 });
 

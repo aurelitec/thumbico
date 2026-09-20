@@ -140,8 +140,8 @@ void main() {
     });
 
     test('makes a relative path absolute before asking the shell', () {
-      // The temp directory may sit on another drive, so a missing relative
-      // path is used: the reported path proves what the shell was asked for.
+      // The temp directory may sit on another drive, so a missing relative path is used: the
+      // reported path proves what the shell was asked for
       expect(
         () => readThumbico('missing.png', size256, source: ThumbicoSource.iconOnly),
         throwsA(

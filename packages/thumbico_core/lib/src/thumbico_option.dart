@@ -3,8 +3,8 @@
 
 /// Options that shape how the shell renders. Each maps to one SIIGBF flag.
 ///
-/// With no options the shell shrinks the image to fit the requested size
-/// while preserving its aspect ratio.
+/// With no options the shell shrinks the image to fit the requested size while preserving its
+/// aspect ratio.
 enum ThumbicoOption {
   /// Accept an image larger than requested, leaving any scaling to the caller.
   allowLargerSize,
