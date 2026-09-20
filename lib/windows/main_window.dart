@@ -88,8 +88,10 @@ class const MainWindow({super.key}) extends StatefulWidget {
 }
 
 class _MainWindowState extends State<MainWindow> {
-  /// What transparent pixels are copied onto while the canvas shows its checkerboard.
-  static const _whiteArgb = 0xFFFFFFFF;
+  /// What transparent pixels are flattened onto when a copy or a save cannot keep them.
+  ///
+  /// White in the dark theme as well, since the image leaves the app for a document.
+  static const _background = Color(0xFFFFFFFF);
 
   final _path = TextEditingController();
   final _pathFocus = FocusNode();
@@ -289,9 +291,6 @@ class _MainWindowState extends State<MainWindow> {
     setState(() => settings.options.value = options);
     _read();
   }
-
-  /// The colour transparent pixels are flattened onto when a copy or a save cannot keep them.
-  Color get _background => Color(settings.backgroundArgb.value ?? _whiteArgb);
 
   /// Asks where to save the image, writes it there, and says how it went in the status bar.
   Future<void> _saveAs() async {

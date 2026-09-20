@@ -35,9 +35,6 @@ final options = ConvertedAppSetting<Set<ThumbicoOption>, List<Object?>>(
   saveOnSet: true,
 );
 
-/// The solid canvas colour as ARGB, or null for the checkerboard.
-final backgroundArgb = AppSetting<int?>(key: 'backgroundArgb', defaultValue: null, saveOnSet: true);
-
 /// Null until the window has been closed once; the system then places the window.
 final windowLeft = AppSetting<int?>(key: 'windowLeft', defaultValue: null);
 final windowTop = AppSetting<int?>(key: 'windowTop', defaultValue: null);
