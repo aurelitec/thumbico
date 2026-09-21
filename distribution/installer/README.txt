@@ -1,9 +1,21 @@
 Thumbico
 ========
 
-Thumbico shows the thumbnail or icon that Windows itself produces for any
-file, folder, or drive, at any size you ask for, pixel for pixel. You can
-save the image to a file or copy it to the clipboard.
+See any file the way Windows sees it.
+
+Windows makes a thumbnail or an icon for every file, folder, and drive on
+your PC, but shows it only at a few fixed sizes. Thumbico asks for it at
+the size you choose and shows exactly what comes back, pixel for pixel.
+
+- Grab a program's icon at its largest size for an article, a slide, or a
+  web page.
+- See what a document, photo, or video thumbnail really looks like at 512
+  or 1024 pixels.
+- Check how your own icon or thumbnail handler behaves at every size.
+
+Drop anything on the window or open it, pick a size, and save the result
+as PNG, ICO, JPEG, BMP, or GIF, or copy it to the clipboard. Showcase mode
+hides everything but the image, ready for a screenshot.
 
 
 Running Thumbico

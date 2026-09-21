@@ -1,5 +1,5 @@
 name: thumbico
-description: "View the large thumbnail or icon of any file, folder, or drive on Windows."
+description: "See any file the way Windows sees it: its thumbnail or icon at the size you choose, pixel for pixel, ready to save or copy."
 publish_to: 'none'
 
 # Becomes the executable's version resource and names the release packages; the About window's
