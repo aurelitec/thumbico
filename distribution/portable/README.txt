@@ -44,4 +44,4 @@ License
 
 Thumbico is free and open source, under the MIT License. See LICENSE.txt.
 
-Copyright (c) 2011-2026 Aurelitec
+Copyright © 2011-2026 Aurelitec

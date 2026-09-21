@@ -90,10 +90,10 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "Aurelitec" "\0"
-            VALUE "FileDescription", "View the large thumbnail or icon of any file, document, or program on your PC." "\0"
+            VALUE "FileDescription", "Thumbico" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "Thumbico" "\0"
-            VALUE "LegalCopyright", "Copyright (c) 2011-2026 Aurelitec. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright © 2011-2026 Aurelitec" "\0"
             VALUE "OriginalFilename", "thumbico.exe" "\0"
             VALUE "ProductName", "Thumbico" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
