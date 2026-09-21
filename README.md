@@ -46,18 +46,6 @@ Thumbico is not code-signed, so Windows SmartScreen may warn about it the first 
 
 Help for every feature is on the [website](https://www.aurelitec.com/thumbico/help/).
 
-## Quotes
-
-> "A likeable and easy-to-use icon viewer and extractor."
->
-> - [Downloadcrew](https://www.downloadcrew.com/article/35260-thumbico)
-
-> "If you work with icons and screenshots on a daily basis like I do, you'll want to pay attention to this new application from Aurelitec."
->
-> - [Rocky Bytes](https://www.rockybytes.com/thumbico), 5 stars
-
-[More reviews](https://www.aurelitec.com/thumbico/reviews/)
-
 ## Built with Flutter
 
 Thumbico 2.0 is a Flutter desktop app, written in Dart and themed to feel at home on Windows.
