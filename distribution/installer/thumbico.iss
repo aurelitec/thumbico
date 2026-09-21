@@ -42,6 +42,17 @@ LicenseFile={#StagingDir}\LICENSE.txt
 
 WizardStyle=modern dynamic windows11
 
+; The app icon in grey, as the app's empty canvas shows it, drawn for 250 percent scaling and
+; shrunk by Setup below that
+WizardImageFile=assets\wizard-light.png
+WizardImageFileDynamicDark=assets\wizard-dark.png
+WizardSmallImageFile=assets\wizard-small-light.png
+WizardSmallImageFileDynamicDark=assets\wizard-small-dark.png
+; The app's canvas colours behind the panel image; the small image keeps the page behind it
+WizardImageBackColor=white
+WizardImageBackColorDynamicDark=#161616
+WizardSmallImageBackColor=none
+
 Compression=lzma2/max
 SolidCompression=yes
 OutputBaseFilename=Thumbico-{#AppVersion}-windows-x64-setup
