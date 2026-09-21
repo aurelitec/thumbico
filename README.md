@@ -1,9 +1,9 @@
 # <img src="assets/app_icon.png" alt="" width="40" align="top"> Thumbico
 
-[![Version](https://img.shields.io/github/v/release/aurelitec/thumbico?color=forestgreen&label=version)](https://github.com/aurelitec/thumbico/releases)
+[![Version](https://img.shields.io/github/v/release/aurelitec/thumbico?color=forestgreen&label=version&cacheSeconds=3600)](https://github.com/aurelitec/thumbico/releases)
 [![Platform: Windows 10 and 11](https://img.shields.io/badge/platform-Windows_10_%7C_11-0078D4)](#download)
 [![Built with Flutter](https://img.shields.io/badge/built_with-Flutter-02569B?logo=flutter)](https://flutter.dev/)
-[![MIT License](https://img.shields.io/github/license/aurelitec/thumbico?color=9c0000)](LICENSE)
+[![MIT License](https://img.shields.io/badge/license-MIT-9c0000)](LICENSE)
 [![Downloads](https://img.shields.io/github/downloads/aurelitec/thumbico/total?cacheSeconds=86400)](https://github.com/aurelitec/thumbico/releases)
 
 **See any file the way Windows sees it.**
@@ -32,7 +32,10 @@ Windows makes a thumbnail or an icon for every file, folder, and drive on your P
 
 ## Download
 
-Get the latest version from [GitHub Releases](https://github.com/aurelitec/thumbico/releases/latest):
+[![Download Setup](https://img.shields.io/badge/Download_Setup-2E8F2B?style=for-the-badge)](https://github.com/aurelitec/thumbico/releases/download/v2.0.0/Thumbico-2.0.0-windows-x64-setup.exe)
+[![Download Portable](https://img.shields.io/badge/Download_Portable-2E8F2B?style=for-the-badge)](https://github.com/aurelitec/thumbico/releases/download/v2.0.0/Thumbico-2.0.0-windows-x64-portable.zip)
+
+Both files and the release notes are on [GitHub Releases](https://github.com/aurelitec/thumbico/releases/latest):
 
 - **Setup** (`...-setup.exe`) - installs for you alone without administrator rights, or for all users.
 - **Portable** (`...-portable.zip`) - extract it anywhere, such as a USB drive; its settings stay beside it.
@@ -100,5 +103,5 @@ Thumbico is open source under the [MIT License](LICENSE).
 
 ---
 
-Made in Oradea, Romania, since 2011  
+Made with 💚 in Oradea, Romania  
 https://www.aurelitec.com
