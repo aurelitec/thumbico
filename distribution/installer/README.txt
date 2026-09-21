@@ -57,8 +57,8 @@ Windows 10 or Windows 11, 64-bit.
 More information
 ----------------
 
-Website: https://www.aurelitec.com/thumbico/windows/
-Help:    https://www.aurelitec.com/thumbico/windows/help/
+Website: https://www.aurelitec.com/thumbico/
+Help:    https://www.aurelitec.com/thumbico/help/
 Source:  https://github.com/aurelitec/thumbico
 
 

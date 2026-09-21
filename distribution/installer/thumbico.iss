@@ -18,8 +18,8 @@ AppVersion={#AppVersion}
 AppPublisher=Aurelitec
 AppCopyright=Copyright © 2011-2026 Aurelitec
 AppPublisherURL=https://www.aurelitec.com/
-AppSupportURL=https://www.aurelitec.com/thumbico/windows/help/
-AppUpdatesURL=https://www.aurelitec.com/thumbico/windows/
+AppSupportURL=https://www.aurelitec.com/thumbico/help/
+AppUpdatesURL=https://www.aurelitec.com/thumbico/
 
 ; Without this, Apps & features shows "Thumbico 2.0.0" beside a version column already reading 2.0.0
 UninstallDisplayName=Thumbico
