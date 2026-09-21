@@ -106,7 +106,9 @@ class const MainWindow({super.key}) extends StatefulWidget {
     settings.save();
   }
 
-  /// Returns a [WindowEntry] for the main window. Call before `runWidget`.
+  /// Returns a [WindowEntry] for the main window.
+  ///
+  /// Call once, after the binding is initialized: the first call creates the native window.
   static WindowEntry windowEntry() {
     // Each window gets its own MaterialApp, which is what gives text fields their localizations
     // and tooltips their overlay
