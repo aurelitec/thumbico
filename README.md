@@ -16,7 +16,7 @@ Windows makes a thumbnail or an icon for every file, folder, and drive on your P
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="repo-assets/screenshots/thumbico-dark.png">
-  <img src="repo-assets/screenshots/thumbico-light.png" alt="Thumbico showing a large thumbnail on its checkerboard, with the toolbar above and the status bar below">
+  <img src="repo-assets/screenshots/thumbico-light.png" width="800" alt="Thumbico showing its own icon at 512 x 512 pixels on the checkerboard, with the toolbar above and the status bar below">
 </picture>
 
 ## Features
