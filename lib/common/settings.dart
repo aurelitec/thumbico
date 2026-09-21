@@ -37,20 +37,21 @@ final options = ConvertedAppSetting<Set<ThumbicoOption>, List<Object?>>(
   saveOnSet: true,
 );
 
-// The window's placement. Nothing reads or writes these yet: the window opens at a fixed size and
-// Windows places it.
+// The window's placement, written through [save] when the window closes, since a resize would
+// otherwise write the file many times a second. Physical pixels in the coordinates Windows keeps
+// placements in, and all null until a window has closed once.
 
-/// The window's left edge on screen.
+/// The left edge of the window while it is not maximized.
 final windowLeft = AppSetting<int?>(key: 'windowLeft', defaultValue: null);
 
-/// The window's top edge on screen.
+/// The top edge of the window while it is not maximized.
 final windowTop = AppSetting<int?>(key: 'windowTop', defaultValue: null);
 
-/// The width of the window's content.
-final windowWidth = AppSetting<int>(key: 'windowWidth', defaultValue: 800);
+/// The width of the window while it is not maximized, frame included.
+final windowWidth = AppSetting<int?>(key: 'windowWidth', defaultValue: null);
 
-/// The height of the window's content.
-final windowHeight = AppSetting<int>(key: 'windowHeight', defaultValue: 600);
+/// The height of the window while it is not maximized, frame included.
+final windowHeight = AppSetting<int?>(key: 'windowHeight', defaultValue: null);
 
 /// Whether the window was maximized.
 final windowMaximized = AppSetting<bool>(key: 'windowMaximized', defaultValue: false);

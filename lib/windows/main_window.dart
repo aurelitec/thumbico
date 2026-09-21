@@ -31,6 +31,7 @@ import '../services/file_drop.dart';
 import '../services/open_url.dart';
 import '../services/save_image.dart';
 import '../services/thumbico_service.dart';
+import '../services/window_placement.dart';
 import '../widgets/overflow_menu.dart';
 import '../widgets/shortcut_scope.dart';
 import '../widgets/showcase_view.dart';
@@ -60,12 +61,50 @@ class const MainWindow({super.key}) extends StatefulWidget {
   // at creation for the view only: the window's own copy, which answers Windows when it asks for
   // the smallest size, is stored by the setter alone. Without the second call the minimum size
   // is ignored. Remove it when the engine stores the creation constraints on the window.
-  static final _controller = WindowController(
-    size: const Size(800, 600),
-    constraints: _constraints,
-    title: strings.mainWindowTitle,
-    delegate: _MainWindowControllerDelegate(),
-  )..setConstraints(_constraints);
+  static final _controller = _restored(
+    WindowController(
+      size: const Size(800, 600),
+      constraints: _constraints,
+      title: strings.mainWindowTitle,
+      delegate: _MainWindowControllerDelegate(),
+    )..setConstraints(_constraints),
+  );
+
+  /// Puts [controller]'s window, still hidden, where the last run left it; a first run has
+  /// nothing saved, and the window keeps the size above where Windows places it.
+  static WindowController _restored(WindowController controller) {
+    final saved = WindowPlacement.tryFrom(
+      left: settings.windowLeft.value,
+      top: settings.windowTop.value,
+      width: settings.windowWidth.value,
+      height: settings.windowHeight.value,
+      maximized: settings.windowMaximized.value,
+    );
+    if (saved != null && controller is WindowControllerWin32) {
+      applyWindowPlacement(controller.windowHandle, saved);
+      if (saved.maximized) {
+        unawaited(maximizeWhenShown(controller.windowHandle, () => controller.setMaximized(true)));
+      }
+    }
+    return controller;
+  }
+
+  /// Writes where the window is to the settings. Call while the window still exists.
+  static void _savePlacement() {
+    final placement = switch (_controller) {
+      final WindowControllerWin32 controller => readWindowPlacement(controller.windowHandle),
+      _ => null,
+    };
+    if (placement == null) {
+      return;
+    }
+    settings.windowLeft.value = placement.left;
+    settings.windowTop.value = placement.top;
+    settings.windowWidth.value = placement.width;
+    settings.windowHeight.value = placement.height;
+    settings.windowMaximized.value = placement.maximized;
+    settings.save();
+  }
 
   /// Returns a [WindowEntry] for the main window. Call before `runWidget`.
   static WindowEntry windowEntry() {
@@ -351,8 +390,13 @@ class _MainWindowState extends State<MainWindow> {
   /// Opens the About window over this one, which it blocks until it is closed.
   void _about() => AboutWindow.open(context, MainWindow._controller, onOpenUrl: _openInBrowser);
 
-  /// Closes the window, which exits the application: Exit and the close button share one path.
-  void _exit() => MainWindow._controller.destroy();
+  /// Closes the window, which exits the application, as the close button does.
+  ///
+  /// Destroying the controller sends no close request, so the placement is saved from here too.
+  void _exit() {
+    MainWindow._savePlacement();
+    MainWindow._controller.destroy();
+  }
 
   /// What the status bar says for a failed read.
   String _describe(ThumbicoException e) => switch (e.failure) {
@@ -418,8 +462,16 @@ class _MainWindowState extends State<MainWindow> {
   }
 }
 
-/// Exits the application when the window is destroyed, however it was closed.
+/// Saves the window's placement when it is asked to close, and exits the application when it
+/// is destroyed, however it was closed.
 class _MainWindowControllerDelegate with WindowControllerDelegate {
+  @override
+  void onWindowCloseRequested(WindowController controller) {
+    // The last moment the window's handle is good; once destroyed it cannot be asked
+    MainWindow._savePlacement();
+    super.onWindowCloseRequested(controller);
+  }
+
   @override
   void onWindowDestroyed() {
     super.onWindowDestroyed();
