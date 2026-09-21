@@ -42,10 +42,11 @@ class _ShowcaseViewState extends State<ShowcaseView> {
           // The image, filling the view
           widget.child,
 
-          // The way back for the mouse, in the corner least likely to cover a centred image
+          // The way back for the mouse, in the corner least likely to cover a centred image, and
+          // far enough from the edge to clear the vertical scroll bar
           Positioned(
-            top: 8,
-            right: 8,
+            top: 16,
+            right: 16,
             child: IgnorePointer(
               ignoring: !_hovering,
               child: AnimatedOpacity(
