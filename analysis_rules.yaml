@@ -4,14 +4,50 @@
 
 linter:
   rules:
+    # Keeps signatures short; parameter_assignments already stops a parameter being reassigned
+    - avoid_final_parameters
+
     # Encourages brevity by using ; rather than {} in class-like declarations
     - empty_container_bodies
 
-    # Encourages clarity by moving field initialization from a primary constructor to the field declaration
+    # Encourages clarity by initializing fields at their declaration, not in a primary constructor
     - initialize_in_field_declaration
+
+    # Lets inference state the types of locals, as the Dart style guide recommends
+    - omit_local_variable_types
+
+    # Keeps a parameter holding what the caller passed, all through the function
+    - parameter_assignments
+
+    # Makes widgets and values compile-time constants, so Flutter reuses them rather than rebuilds
+    - prefer_const_constructors
+
+    # Makes a final with a constant value const, for the same reason
+    - prefer_const_declarations
+
+    # Makes list and map literals given to immutable classes const, such as a widget's children
+    - prefer_const_literals_to_create_immutables
+
+    # Marks a private field final when nothing reassigns it; also in the recommended set
+    - prefer_final_fields
+
+    # Marks a for-each loop variable final, like any other local
+    - prefer_final_in_for_each
+
+    # Marks a local final when nothing reassigns it, so a reassignment stands out
+    - prefer_final_locals
+
+    # One quote style everywhere, the one Dart's own code uses
+    - prefer_single_quotes
+
+    # Drops a const that a const context already implies; also in the recommended set
+    - unnecessary_const
 
     # Encourages brevity by removing const from enum constructors
     - unnecessary_const_in_enum_constructor
+
+    # Keeps a final's type non-nullable when its value never is null; also in the recommended set
+    - unnecessary_nullable_for_final_variable_declarations
 
     # Encourages brevity by removing unneeded primary constructor bodies
     - unnecessary_primary_constructor_body
@@ -21,19 +57,6 @@ linter:
 
     # Encourages brevity by using declaring parameters where possible
     - use_declaring_parameters
-
-    - avoid_final_parameters
-    - omit_local_variable_types
-    - parameter_assignments
-    - prefer_const_constructors
-    - prefer_const_declarations
-    - prefer_const_literals_to_create_immutables
-    - prefer_final_fields
-    - prefer_final_in_for_each
-    - prefer_final_locals
-    - prefer_single_quotes
-    - unnecessary_const
-    - unnecessary_nullable_for_final_variable_declarations
 
 formatter:
   page_width: 100
