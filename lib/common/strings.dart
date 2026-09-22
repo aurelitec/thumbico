@@ -82,6 +82,9 @@ const Map<ThumbicoOption, String> optionLabels = {
 const moreTooltip = 'More';
 const saveAsLabel = 'Save As...';
 const copyLabel = 'Copy';
+
+/// The checkerboard, named for what it shows rather than what it looks like.
+const checkerboardLabel = 'Transparency grid';
 const showcaseLabel = 'Showcase mode';
 
 // The keys as the menu shows them; a test keeps each equal to the framework's own label for

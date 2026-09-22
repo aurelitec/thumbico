@@ -13,6 +13,8 @@ void main() {
   Widget menu({
     VoidCallback? onSaveAs,
     VoidCallback? onCopy,
+    bool checkerboard = true,
+    ValueChanged<bool>? onCheckerboardChanged,
     VoidCallback? onShowcase,
     VoidCallback? onHelp,
     VoidCallback? onAbout,
@@ -23,6 +25,8 @@ void main() {
         menuData: OverflowMenuData(
           onSaveAs: onSaveAs,
           onCopy: onCopy,
+          checkerboard: checkerboard,
+          onCheckerboardChanged: onCheckerboardChanged ?? (_) {},
           onShowcase: onShowcase ?? () {},
           onHelp: onHelp ?? () {},
           onAbout: onAbout ?? () {},
@@ -38,7 +42,7 @@ void main() {
   }
 
   testWidgets(
-    'the More button opens the menu with Save As, Copy, Showcase mode, Help, About, and Exit in that order',
+    'the More button opens the menu with Save As, Copy, Transparency grid, Showcase mode, Help, About, and Exit in that order',
     (tester) async {
       await tester.pumpWidget(menu());
       expect(find.text('Help'), findsNothing);
@@ -47,12 +51,14 @@ void main() {
 
       final saveAs = tester.getCenter(find.text('Save As...'));
       final copy = tester.getCenter(find.text('Copy'));
+      final grid = tester.getCenter(find.text('Transparency grid'));
       final showcase = tester.getCenter(find.text('Showcase mode'));
       final help = tester.getCenter(find.text('Help'));
       final about = tester.getCenter(find.text('About Thumbico'));
       final exit = tester.getCenter(find.text('Exit'));
       expect(saveAs.dy, lessThan(copy.dy));
-      expect(copy.dy, lessThan(showcase.dy));
+      expect(copy.dy, lessThan(grid.dy));
+      expect(grid.dy, lessThan(showcase.dy));
       expect(showcase.dy, lessThan(help.dy));
       expect(help.dy, lessThan(about.dy));
       expect(about.dy, lessThan(exit.dy));
@@ -69,7 +75,7 @@ void main() {
     final lines = [for (var i = 0; i < 2; i++) tester.getCenter(find.byType(Divider).at(i)).dy];
     double row(String label) => tester.getCenter(find.text(label)).dy;
 
-    expect(lines[0], inExclusiveRange(row('Copy'), row('Showcase mode')));
+    expect(lines[0], inExclusiveRange(row('Copy'), row('Transparency grid')));
     expect(lines[1], inExclusiveRange(row('Showcase mode'), row('Help')));
   });
 
@@ -83,6 +89,8 @@ void main() {
           alignment: .topRight,
           child: OverflowMenu(
             menuData: OverflowMenuData(
+              checkerboard: true,
+              onCheckerboardChanged: (_) {},
               onShowcase: () {},
               onHelp: () {},
               onAbout: () {},
@@ -145,6 +153,36 @@ void main() {
       find.ancestor(of: find.text('Copy'), matching: find.byType(MenuItemButton)),
     );
     expect(item.enabled, isFalse);
+  });
+
+  testWidgets('Transparency grid shows whether the grid is on', (tester) async {
+    bool checked() => tester
+        .widget<CheckboxMenuButton>(
+          find.widgetWithText(CheckboxMenuButton, 'Transparency grid'),
+        )
+        .value!;
+
+    await tester.pumpWidget(menu(checkerboard: true));
+    await open(tester);
+    expect(checked(), isTrue);
+
+    await tester.pumpWidget(menu(checkerboard: false));
+    await tester.pumpAndSettle();
+    expect(checked(), isFalse);
+  });
+
+  testWidgets('toggling Transparency grid reports the new state and closes the menu', (
+    tester,
+  ) async {
+    final changes = <bool>[];
+    await tester.pumpWidget(menu(checkerboard: true, onCheckerboardChanged: changes.add));
+    await open(tester);
+
+    await tester.tap(find.text('Transparency grid'));
+    await tester.pumpAndSettle();
+
+    expect(changes, [false]);
+    expect(find.text('Transparency grid'), findsNothing);
   });
 
   testWidgets('picking Showcase mode reports it', (tester) async {
@@ -220,11 +258,12 @@ void main() {
     expect(gap, greaterThanOrEqualTo(24));
   });
 
-  testWidgets('every item carries an icon', (tester) async {
+  testWidgets('every command carries an icon, and the checked item its box', (tester) async {
     await tester.pumpWidget(menu());
     await open(tester);
 
-    expect(find.byType(MenuItemButton), findsNWidgets(6));
+    // Six commands with their icons and the More button's, and one checked row with a box
     expect(find.byType(Icon), findsNWidgets(7));
+    expect(find.byType(Checkbox), findsOneWidget);
   });
 }

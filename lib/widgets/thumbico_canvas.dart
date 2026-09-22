@@ -18,6 +18,9 @@ class const ThumbicoCanvas({
 
   /// Whether to draw the image at the display's scale instead of one image pixel per screen pixel.
   final bool scaleToDisplay = false,
+
+  /// Whether the checkerboard is drawn behind the image; off, the canvas colour shows through.
+  final bool checkerboard = true,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -32,10 +35,12 @@ class const ThumbicoCanvas({
       child: CustomPaint(
         // The greys of an image editor's checkerboard; both dark ones are lighter than the dark
         // canvas, so the image's bounds still show
-        painter: _Checkerboard(
-          first: isLight ? const Color(0xFFFFFFFF) : const Color(0xFF2B2B2B),
-          second: isLight ? const Color(0xFFCCCCCC) : const Color(0xFF3A3A3A),
-        ),
+        painter: checkerboard
+            ? _Checkerboard(
+                first: isLight ? const Color(0xFFFFFFFF) : const Color(0xFF2B2B2B),
+                second: isLight ? const Color(0xFFCCCCCC) : const Color(0xFF3A3A3A),
+              )
+            : null,
         // The display's scale is Flutter's resolution-aware asset mechanism: an image with that
         // scale draws one image pixel per device pixel. A scale of one draws it as the display
         // draws everything else.

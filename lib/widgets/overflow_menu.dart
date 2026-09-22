@@ -6,7 +6,7 @@ import 'package:material_ui/material_ui.dart';
 
 import '../common/strings.dart' as strings;
 
-/// What the window does for each item of the overflow menu.
+/// What the window does for each item of the overflow menu, and what a checked item shows.
 ///
 /// One bundle travels from the window through the toolbar to the menu, so a new item adds a
 /// field here rather than a parameter on every widget in between.
@@ -16,6 +16,12 @@ class const OverflowMenuData({
 
   /// Copies the image; null while there is nothing to copy, which disables the item.
   final VoidCallback? onCopy,
+
+  /// Whether the checkerboard is drawn behind the image, which the item shows as its check.
+  required final bool checkerboard,
+
+  /// Called with the new state when the user checks or unchecks the checkerboard.
+  required final ValueChanged<bool> onCheckerboardChanged,
 
   /// Enters Showcase mode.
   required final VoidCallback onShowcase,
@@ -38,7 +44,7 @@ class const OverflowMenuData({
 class const OverflowMenu({
   super.key,
 
-  /// What each item does.
+  /// What each item does, and what the checked item shows.
   required final OverflowMenuData menuData,
 }) extends StatelessWidget {
   /// The line between two groups of items, with less air around it than a divider has on a page.
@@ -65,6 +71,13 @@ class const OverflowMenu({
         ),
 
         _separator,
+
+        // Draw the checkerboard behind the image, or the canvas alone
+        CheckboxMenuButton(
+          value: menuData.checkerboard,
+          onChanged: (isOn) => menuData.onCheckerboardChanged(isOn ?? false),
+          child: const Text(strings.checkerboardLabel),
+        ),
 
         // Hide the bars and show the image alone
         MenuItemButton(

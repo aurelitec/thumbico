@@ -155,10 +155,13 @@ class _MainWindowState extends State<MainWindow> {
   /// Whether the bars are hidden and the image shown alone. Never remembered between runs.
   var _showcase = false;
 
-  /// What the overflow menu's items do; Save As and Copy are only offered while there is an image.
+  /// What the overflow menu's items do and show; Save As and Copy are only offered while there is
+  /// an image.
   OverflowMenuData get _overflowMenuData => OverflowMenuData(
     onSaveAs: _thumbico == null ? null : _saveAs,
     onCopy: _thumbico == null ? null : _copy,
+    checkerboard: settings.checkerboard.value,
+    onCheckerboardChanged: _setCheckerboard,
     onShowcase: _toggleShowcase,
     onHelp: _help,
     onAbout: _about,
@@ -320,6 +323,11 @@ class _MainWindowState extends State<MainWindow> {
   /// Only how the image is drawn changes, so nothing is read again.
   void _setScaleToDisplay(bool value) => setState(() => settings.scaleToDisplay.value = value);
 
+  /// Draws the checkerboard behind the image, or leaves the canvas bare.
+  ///
+  /// Only what is behind the image changes, so nothing is read again.
+  void _setCheckerboard(bool value) => setState(() => settings.checkerboard.value = value);
+
   /// Asks the shell for another source, and reads at once so the effect is visible.
   void _setSource(ThumbicoSource source) {
     setState(() => settings.source.value = source);
@@ -423,6 +431,7 @@ class _MainWindowState extends State<MainWindow> {
     final canvas = ThumbicoCanvas(
       image: _thumbico?.image,
       scaleToDisplay: settings.scaleToDisplay.value,
+      checkerboard: settings.checkerboard.value,
     );
 
     return ShortcutScope(

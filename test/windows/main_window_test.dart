@@ -47,6 +47,8 @@ void main() {
             onSourceChanged: (_) {},
             onOptionToggled: (_, _) {},
             overflowMenuData: OverflowMenuData(
+              checkerboard: true,
+              onCheckerboardChanged: (_) {},
               onShowcase: () {},
               onHelp: () {},
               onAbout: () {},

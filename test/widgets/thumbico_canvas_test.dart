@@ -181,6 +181,23 @@ void main() {
     });
   }
 
+  testWidgets('leaves the checkerboard out when asked, so the canvas shows behind the image', (
+    tester,
+  ) async {
+    final image = await solidImage(32, 32);
+    addTearDown(image.dispose);
+
+    await tester.pumpWidget(host(ThumbicoCanvas(image: image, checkerboard: false)));
+
+    final behindImage = tester
+        .widgetList<CustomPaint>(
+          find.descendant(of: find.byType(ThumbicoCanvas), matching: find.byType(CustomPaint)),
+        )
+        .where((paint) => paint.child is RawImage);
+    expect(behindImage.every((paint) => paint.painter == null), isTrue);
+    expect(find.byType(RawImage), findsOneWidget);
+  });
+
   testWidgets('draws the image at the display scale when asked', (tester) async {
     tester.view.devicePixelRatio = 2.0;
     addTearDown(tester.view.reset);

@@ -20,6 +20,9 @@ final scaleToDisplay = AppSetting<bool>(
   saveOnSet: true,
 );
 
+/// Whether the checkerboard is drawn behind the image, so transparency is visible.
+final checkerboard = AppSetting<bool>(key: 'checkerboard', defaultValue: true, saveOnSet: true);
+
 /// Which kind of image the shell is asked for.
 final source = EnumAppSetting<ThumbicoSource>(
   key: 'source',

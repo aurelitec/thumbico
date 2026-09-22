@@ -58,7 +58,7 @@ class const Toolbar({
   /// Called with the option and its new state when the user checks or unchecks it.
   required final void Function(ThumbicoOption option, bool isOn) onOptionToggled,
 
-  /// What each item of the overflow menu does.
+  /// What each item of the overflow menu does, and what its checked item shows.
   required final OverflowMenuData overflowMenuData,
 }) extends StatelessWidget {
   @override

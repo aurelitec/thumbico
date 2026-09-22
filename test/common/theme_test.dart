@@ -149,6 +149,8 @@ void main() {
       themed(
         OverflowMenu(
           menuData: OverflowMenuData(
+            checkerboard: true,
+            onCheckerboardChanged: (_) {},
             onShowcase: () {},
             onHelp: () {},
             onAbout: () {},
@@ -172,6 +174,8 @@ void main() {
       themed(
         OverflowMenu(
           menuData: OverflowMenuData(
+            checkerboard: true,
+            onCheckerboardChanged: (_) {},
             onShowcase: () {},
             onHelp: () {},
             onAbout: () {},
@@ -199,6 +203,8 @@ void main() {
         // No Save As callback, which is how the window disables the item
         OverflowMenu(
           menuData: OverflowMenuData(
+            checkerboard: true,
+            onCheckerboardChanged: (_) {},
             onShowcase: () {},
             onHelp: () {},
             onAbout: () {},
@@ -230,6 +236,8 @@ void main() {
       themed(
         OverflowMenu(
           menuData: OverflowMenuData(
+            checkerboard: true,
+            onCheckerboardChanged: (_) {},
             onShowcase: () {},
             onHelp: () {},
             onAbout: () {},
@@ -272,6 +280,8 @@ void main() {
       themed(
         OverflowMenu(
           menuData: OverflowMenuData(
+            checkerboard: true,
+            onCheckerboardChanged: (_) {},
             onShowcase: () {},
             onHelp: () {},
             onAbout: () {},
