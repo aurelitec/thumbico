@@ -42,7 +42,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # The app icon as the About window shows it; a copy of the 256-pixel drawing in the icon's
-  # build output, which is kept outside this repo.
+  # The app icon as the About window and the empty canvas draw it; a copy of a file the icon's
+  # build script makes, kept outside this repo.
   assets:
     - assets/app_icon.png

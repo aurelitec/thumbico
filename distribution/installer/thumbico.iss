@@ -28,6 +28,9 @@ UninstallDisplayIcon={app}\thumbico.exe
 ; The icon the app already ships, referenced in place so the two cannot drift
 SetupIconFile=..\..\windows\runner\resources\app_icon.ico
 VersionInfoDescription=Thumbico Setup
+; The file version under Properties > Details, 0.0.0.0 unless set; the missing fourth number
+; is padded with a zero
+VersionInfoVersion={#AppVersion}
 
 ; Also sets ArchitecturesAllowed and ArchitecturesInstallIn64BitMode to x64compatible
 SetupArchitecture=x64
