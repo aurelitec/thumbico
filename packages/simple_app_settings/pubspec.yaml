@@ -5,15 +5,15 @@ repository: https://github.com/aurelitec/thumbico
 publish_to: none
 
 environment:
-  sdk: ^3.13.0
+  sdk: ^3.13.4
 
 platforms:
   windows:
 
 dependencies:
-  meta: ^1.16.0
-  path: ^1.9.0
+  meta: ^1.19.0
+  path: ^1.9.1
 
 dev_dependencies:
   lints: ^6.1.0
-  test: ^1.25.0
+  test: ^1.32.0

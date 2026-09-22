@@ -7,18 +7,18 @@ publish_to: 'none'
 version: 2.0.0
 
 environment:
-  sdk: ^3.14.0-217.0.dev
+  sdk: ^3.14.0-252.0.dev
 
 dependencies:
   flutter:
     sdk: flutter
 
-  material_ui: ^1.2.0
+  material_ui: ^1.4.0
 
   thumbico_core:
     path: packages/thumbico_core
 
-  filepicker_windows: ^3.0.1
+  filepicker_windows: ^3.0.2
 
   ffi: ^2.2.0
   win32: ^6.4.0
@@ -26,7 +26,7 @@ dependencies:
 
   image: ^4.10.1
   path: ^1.9.1
-  stream_transform: ^2.1.0
+  stream_transform: ^2.1.2
 
   simple_app_settings:
     path: packages/simple_app_settings
