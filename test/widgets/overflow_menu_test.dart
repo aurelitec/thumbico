@@ -20,7 +20,7 @@ void main() {
   }) {
     return host(
       OverflowMenu(
-        callbacks: OverflowCallbacks(
+        menuData: OverflowMenuData(
           onSaveAs: onSaveAs,
           onCopy: onCopy,
           onShowcase: onShowcase ?? () {},
@@ -82,7 +82,7 @@ void main() {
         Align(
           alignment: .topRight,
           child: OverflowMenu(
-            callbacks: OverflowCallbacks(
+            menuData: OverflowMenuData(
               onShowcase: () {},
               onHelp: () {},
               onAbout: () {},

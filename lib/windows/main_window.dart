@@ -156,7 +156,7 @@ class _MainWindowState extends State<MainWindow> {
   var _showcase = false;
 
   /// What the overflow menu's items do; Save As and Copy are only offered while there is an image.
-  OverflowCallbacks get _overflowCallbacks => OverflowCallbacks(
+  OverflowMenuData get _overflowMenuData => OverflowMenuData(
     onSaveAs: _thumbico == null ? null : _saveAs,
     onCopy: _thumbico == null ? null : _copy,
     onShowcase: _toggleShowcase,
@@ -447,7 +447,7 @@ class _MainWindowState extends State<MainWindow> {
                 options: settings.options.value,
                 onSourceChanged: _setSource,
                 onOptionToggled: _toggleOption,
-                overflowCallbacks: _overflowCallbacks,
+                overflowMenuData: _overflowMenuData,
               ),
 
             // The image, alone with a way back while the bars are hidden

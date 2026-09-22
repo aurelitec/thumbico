@@ -59,7 +59,7 @@ class const Toolbar({
   required final void Function(ThumbicoOption option, bool isOn) onOptionToggled,
 
   /// What each item of the overflow menu does.
-  required final OverflowCallbacks overflowCallbacks,
+  required final OverflowMenuData overflowMenuData,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -125,7 +125,7 @@ class const Toolbar({
               onSourceChanged: onSourceChanged,
               onOptionToggled: onOptionToggled,
             ),
-            OverflowMenu(callbacks: overflowCallbacks),
+            OverflowMenu(menuData: overflowMenuData),
           ],
         ),
       ),

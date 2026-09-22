@@ -10,7 +10,7 @@ import '../common/strings.dart' as strings;
 ///
 /// One bundle travels from the window through the toolbar to the menu, so a new item adds a
 /// field here rather than a parameter on every widget in between.
-class const OverflowCallbacks({
+class const OverflowMenuData({
   /// Saves the image; null while there is nothing to save, which disables the item.
   final VoidCallback? onSaveAs,
 
@@ -39,7 +39,7 @@ class const OverflowMenu({
   super.key,
 
   /// What each item does.
-  required final OverflowCallbacks callbacks,
+  required final OverflowMenuData menuData,
 }) extends StatelessWidget {
   /// The line between two groups of items, with less air around it than a divider has on a page.
   static const _separator = Divider(height: 8);
@@ -52,7 +52,7 @@ class const OverflowMenu({
         MenuItemButton(
           leadingIcon: const Icon(Symbols.save),
           trailingIcon: const _ShortcutHint(strings.saveAsShortcut),
-          onPressed: callbacks.onSaveAs,
+          onPressed: menuData.onSaveAs,
           child: const Text(strings.saveAsLabel),
         ),
 
@@ -60,7 +60,7 @@ class const OverflowMenu({
         MenuItemButton(
           leadingIcon: const Icon(Symbols.content_copy),
           trailingIcon: const _ShortcutHint(strings.copyShortcut),
-          onPressed: callbacks.onCopy,
+          onPressed: menuData.onCopy,
           child: const Text(strings.copyLabel),
         ),
 
@@ -70,7 +70,7 @@ class const OverflowMenu({
         MenuItemButton(
           leadingIcon: const Icon(Symbols.fullscreen),
           trailingIcon: const _ShortcutHint(strings.showcaseShortcut),
-          onPressed: callbacks.onShowcase,
+          onPressed: menuData.onShowcase,
           child: const Text(strings.showcaseLabel),
         ),
 
@@ -80,21 +80,21 @@ class const OverflowMenu({
         MenuItemButton(
           leadingIcon: const Icon(Symbols.help),
           trailingIcon: const _ShortcutHint(strings.helpShortcut),
-          onPressed: callbacks.onHelp,
+          onPressed: menuData.onHelp,
           child: const Text(strings.helpLabel),
         ),
 
         // About the application
         MenuItemButton(
           leadingIcon: const Icon(Symbols.info),
-          onPressed: callbacks.onAbout,
+          onPressed: menuData.onAbout,
           child: const Text(strings.aboutLabel),
         ),
 
         // Exit the application
         MenuItemButton(
           leadingIcon: const Icon(Symbols.close),
-          onPressed: callbacks.onExit,
+          onPressed: menuData.onExit,
           child: const Text(strings.exitLabel),
         ),
       ],

@@ -148,7 +148,7 @@ void main() {
     await tester.pumpWidget(
       themed(
         OverflowMenu(
-          callbacks: OverflowCallbacks(
+          menuData: OverflowMenuData(
             onShowcase: () {},
             onHelp: () {},
             onAbout: () {},
@@ -171,7 +171,7 @@ void main() {
     await tester.pumpWidget(
       themed(
         OverflowMenu(
-          callbacks: OverflowCallbacks(
+          menuData: OverflowMenuData(
             onShowcase: () {},
             onHelp: () {},
             onAbout: () {},
@@ -198,7 +198,7 @@ void main() {
       themed(
         // No Save As callback, which is how the window disables the item
         OverflowMenu(
-          callbacks: OverflowCallbacks(
+          menuData: OverflowMenuData(
             onShowcase: () {},
             onHelp: () {},
             onAbout: () {},
@@ -229,7 +229,7 @@ void main() {
     await tester.pumpWidget(
       themed(
         OverflowMenu(
-          callbacks: OverflowCallbacks(
+          menuData: OverflowMenuData(
             onShowcase: () {},
             onHelp: () {},
             onAbout: () {},
@@ -271,7 +271,7 @@ void main() {
     await tester.pumpWidget(
       themed(
         OverflowMenu(
-          callbacks: OverflowCallbacks(
+          menuData: OverflowMenuData(
             onShowcase: () {},
             onHelp: () {},
             onAbout: () {},
