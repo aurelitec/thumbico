@@ -11,11 +11,20 @@ platforms:
   windows:
 
 dependencies:
+  # Native memory for the shell calls and the bitmap's pixels
   ffi: ^2.2.0
+
+  # Makes the item path absolute and normalized before the shell reads it
   path: ^1.9.1
+
+  # The Windows shell's COM interfaces and the GDI calls that read the bitmap
   win32: ^6.4.0
 
 dev_dependencies:
+  # Writes the PNG and ICO sample files the tests read through the shell; the engine never encodes
   image: ^4.10.1
+
+  # The lint set for pure Dart packages, which analysis_options.yaml includes
   lints: ^6.1.0
+
   test: ^1.32.0

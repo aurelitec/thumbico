@@ -11,9 +11,14 @@ platforms:
   windows:
 
 dependencies:
+  # The @protected and @internal annotations on the package's API
   meta: ^1.19.0
+
+  # Builds the settings file's path, beside the executable or under Local AppData
   path: ^1.9.1
 
 dev_dependencies:
+  # The lint set for pure Dart packages, which analysis_options.yaml includes
   lints: ^6.1.0
+
   test: ^1.32.0

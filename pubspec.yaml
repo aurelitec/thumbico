@@ -13,30 +13,50 @@ dependencies:
   flutter:
     sdk: flutter
 
-  material_ui: ^1.4.0
+  # The project's own packages, under packages/
 
-  thumbico_core:
-    path: packages/thumbico_core
-
-  filepicker_windows: ^3.0.2
-
-  ffi: ^2.2.0
-  win32: ^6.4.0
-  win32_clipboard: ^2.0.3
-
-  image: ^4.10.1
-  path: ^1.9.1
-  stream_transform: ^2.1.2
-
+  # The settings file, beside the executable for a portable copy or under Local AppData
   simple_app_settings:
     path: packages/simple_app_settings
 
+  # The engine that asks the Windows shell for a thumbnail or icon
+  thumbico_core:
+    path: packages/thumbico_core
+
+  # Packages from pub.dev
+
+  # Native memory for the Win32 calls the app makes itself
+  ffi: ^2.2.0
+
+  # The Open and Save As dialogs
+  filepicker_windows: ^3.0.2
+
+  # Encodes a saved or copied image, and flattens transparency for formats without it
+  image: ^4.10.1
+
+  # The app's icons, from the Material Symbols set
   material_symbols_icons: ^4.2960.0
+
+  # Material widgets and theming, published apart from the Flutter framework
+  material_ui: ^1.4.0
+
+  # File names: the window title, and the saved file's default name and format
+  path: ^1.9.1
+
+  # Holds the newest read request while a read runs, so reads never pile up
+  stream_transform: ^2.1.2
+
+  # Dropped files, the clipboard, the browser, and the window's position between runs
+  win32: ^6.4.0
+
+  # Puts the image on the clipboard
+  win32_clipboard: ^2.0.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  # The lint set for Flutter apps, which analysis_options.yaml includes
   flutter_lints: ^6.0.0
 
 flutter:
