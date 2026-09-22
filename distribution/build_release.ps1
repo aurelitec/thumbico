@@ -25,13 +25,17 @@ $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
 $root = Resolve-Path (Join-Path $PSScriptRoot '..')
+$step = Join-Path $PSScriptRoot 'common' 'write_step.ps1'
 
 Push-Location $root
 try {
+  & $step 'Cleaning the previous build'
   & $Flutter clean
   if ($LASTEXITCODE -ne 0) {
     throw "flutter clean failed with exit code $LASTEXITCODE"
   }
+
+  & $step 'Building the release'
   & $Flutter build windows --release
   if ($LASTEXITCODE -ne 0) {
     throw "flutter build failed with exit code $LASTEXITCODE"

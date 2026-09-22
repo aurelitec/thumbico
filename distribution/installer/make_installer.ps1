@@ -31,6 +31,8 @@ $root = Resolve-Path (Join-Path $PSScriptRoot '..' '..')
 $output = Join-Path $root 'build' 'installer'
 $files = Join-Path $output 'files'
 
+& (Join-Path $PSScriptRoot '..' 'common' 'write_step.ps1') 'Making the installer'
+
 $staged = & (Join-Path $PSScriptRoot '..' 'common' 'stage_release.ps1') -Destination $files
 
 # What the user reads, written for an installed copy rather than a portable one, and with CRLF

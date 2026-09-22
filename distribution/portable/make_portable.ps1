@@ -21,6 +21,8 @@ $root = Resolve-Path (Join-Path $PSScriptRoot '..' '..')
 $output = Join-Path $root 'build' 'portable'
 $files = Join-Path $output 'files'
 
+& (Join-Path $PSScriptRoot '..' 'common' 'write_step.ps1') 'Making the portable package'
+
 $staged = & (Join-Path $PSScriptRoot '..' 'common' 'stage_release.ps1') -Destination $files
 
 # What the user reads, with CRLF line endings as LICENSE.txt is
