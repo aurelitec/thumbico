@@ -71,9 +71,10 @@ The two packages have tests of their own: run `dart test` in `packages/thumbico_
 To make the release packages, use PowerShell 7:
 
 ```powershell
-./distribution/portable/make_portable.ps1     # portable zip, in build/portable/
-./distribution/installer/make_installer.ps1   # setup file, in build/installer/; needs Inno Setup 7.1
+./distribution/make_release.ps1   # clean build, then both packages
 ```
+
+The steps also run on their own: `build_release.ps1` builds, and `portable/make_portable.ps1` and `installer/make_installer.ps1` pack the existing build into `build/portable/` and `build/installer/`. The installer needs Inno Setup 7.1.
 
 ## History
 

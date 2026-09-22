@@ -3,50 +3,48 @@
 
 <#
 .SYNOPSIS
-Builds the release and stages the files every release package shares.
+Stages the files every release package shares from the existing release build.
 
 .DESCRIPTION
-Builds the Windows release, then fills Destination with the release folder, the three Visual C++
-runtime DLLs the executable imports, and LICENSE.txt. Returns the version read from pubspec.yaml
-and the staged path, so a caller names its output without parsing the pubspec again. Each package
-adds its own extras afterwards.
+Fills Destination with the release folder that build_release.ps1 left, the three Visual C++
+runtime DLLs the executable imports, and LICENSE.txt. Returns the version read from the built
+executable and the staged path, so a caller names its output after what was actually built. Each
+package adds its own extras afterwards.
 
 .PARAMETER Destination
 The folder to stage into. It is emptied first, so nothing from an earlier run is packed.
-
-.PARAMETER Flutter
-The flutter command to build with. Defaults to the main-channel SDK, whose prerelease Dart
-pubspec.yaml requires.
 #>
 
 #Requires -Version 7
 
 param(
-  [Parameter(Mandatory)] [string] $Destination,
-  [string] $Flutter = 'C:\Programs\Develop\Flutter\main\bin\flutter.bat'
+  [Parameter(Mandatory)] [string] $Destination
 )
 
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
 $root = Resolve-Path (Join-Path $PSScriptRoot '..' '..')
+$release = Join-Path $root 'build' 'windows' 'x64' 'runner' 'Release'
+$exe = Join-Path $release 'thumbico.exe'
 
-# Read before building, so a malformed pubspec fails in seconds rather than after a full build
+if (-not (Test-Path $exe)) {
+  throw "No release build in $release. Run distribution/build_release.ps1 first."
+}
+
+# The numeric file version holds major, minor, and patch whether or not the pubspec version has a
+# build suffix
+$info = (Get-Item $exe).VersionInfo
+$version = "$($info.FileMajorPart).$($info.FileMinorPart).$($info.FileBuildPart)"
+
+# A version bumped after the build would otherwise name the package after a version it does not hold
 $pubspec = Get-Content (Join-Path $root 'pubspec.yaml') -Raw
 if ($pubspec -notmatch '(?m)^version:\s*(\d+\.\d+\.\d+)') {
   throw 'No version found in pubspec.yaml'
 }
-$version = $Matches[1]
-
-# Piped to Out-Host so the build's own output stays out of this script's return value
-Push-Location $root
-try {
-  & $Flutter build windows --release | Out-Host
-  if ($LASTEXITCODE -ne 0) {
-    throw "flutter build failed with exit code $LASTEXITCODE"
-  }
-} finally {
-  Pop-Location
+if ($Matches[1] -ne $version) {
+  throw "The release build is version $version but pubspec.yaml says $($Matches[1]). " +
+    'Run distribution/build_release.ps1 again.'
 }
 
 # Start from an empty folder, so nothing from an earlier run is packed
@@ -56,7 +54,6 @@ if (Test-Path $Destination) {
 New-Item $Destination -ItemType Directory | Out-Null
 
 # The app: the executable, the engine, and the data folder
-$release = Join-Path $root 'build' 'windows' 'x64' 'runner' 'Release'
 Copy-Item (Join-Path $release '*') $Destination -Recurse
 
 # The Visual C++ runtime beside the executable, for PCs that do not have it installed
