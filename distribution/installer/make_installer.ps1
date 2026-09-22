@@ -42,8 +42,9 @@ $files = Join-Path $output 'files'
 $staged = & (Join-Path $PSScriptRoot '..' 'common' 'Build-Release.ps1') `
   -Destination $files -Flutter $Flutter
 
-# What the user reads, written for an installed copy rather than a portable one
-Copy-Item (Join-Path $PSScriptRoot 'README.txt') $files
+# What the user reads, written for an installed copy rather than a portable one, and with CRLF
+# line endings as LICENSE.txt is
+Get-Content (Join-Path $PSScriptRoot 'README.txt') | Set-Content (Join-Path $files 'README.txt')
 
 # The script holds no version and no absolute path; both arrive here
 $options = @(

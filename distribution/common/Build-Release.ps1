@@ -70,8 +70,9 @@ foreach ($dll in 'msvcp140.dll', 'vcruntime140.dll', 'vcruntime140_1.dll') {
   Copy-Item (Join-Path $crt $dll) $Destination
 }
 
-# What the user reads
-Copy-Item (Join-Path $root 'LICENSE') (Join-Path $Destination 'LICENSE.txt')
+# What the user reads, rewritten with CRLF line endings: the repo keeps LF, which the Notepad of
+# older Windows 10 builds shows as one line
+Get-Content (Join-Path $root 'LICENSE') | Set-Content (Join-Path $Destination 'LICENSE.txt')
 
 [PSCustomObject] @{
   Version = $version

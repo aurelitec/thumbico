@@ -31,8 +31,8 @@ $files = Join-Path $output 'files'
 $staged = & (Join-Path $PSScriptRoot '..' 'common' 'Build-Release.ps1') `
   -Destination $files -Flutter $Flutter
 
-# What the user reads
-Copy-Item (Join-Path $PSScriptRoot 'README.txt') $files
+# What the user reads, with CRLF line endings as LICENSE.txt is
+Get-Content (Join-Path $PSScriptRoot 'README.txt') | Set-Content (Join-Path $files 'README.txt')
 
 # The settings file beside the executable is what makes this copy portable
 Set-Content (Join-Path $files 'Thumbico.settings.json') '{}' -NoNewline
