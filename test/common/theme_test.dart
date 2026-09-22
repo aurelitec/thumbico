@@ -200,7 +200,7 @@ void main() {
   testWidgets('a disabled menu row fades its icon with its label', (tester) async {
     await tester.pumpWidget(
       themed(
-        // No Save As callback, which is how the window disables the item
+        // No Save as callback, which is how the window disables the item
         OverflowMenu(
           menuData: OverflowMenuData(
             checkerboard: true,
@@ -223,7 +223,7 @@ void main() {
         .color!;
 
     final icon = drawnColor(find.byIcon(Symbols.save));
-    final label = drawnColor(find.text('Save As...'));
+    final label = drawnColor(find.text('Save as...'));
     expect(icon.withValues(alpha: 1), label.withValues(alpha: 1));
     expect(icon.a, closeTo(label.a, 0.01));
     expect(icon.a, lessThan(0.5));

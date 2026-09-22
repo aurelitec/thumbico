@@ -80,7 +80,7 @@ const Map<ThumbicoOption, String> optionLabels = {
 // ---------------------------------------------------------------------------
 
 const moreTooltip = 'More';
-const saveAsLabel = 'Save As...';
+const saveAsLabel = 'Save as...';
 const copyLabel = 'Copy';
 
 /// The checkerboard, named for what it shows rather than what it looks like.
@@ -106,7 +106,7 @@ const exitShowcaseLabel = 'Exit Showcase';
 const exitShowcaseTooltip = 'Exit Showcase mode (F11, Esc)';
 
 // ---------------------------------------------------------------------------
-// Save As dialog
+// Save as dialog
 // ---------------------------------------------------------------------------
 
 /// The file types offered, in the order shown; the first is the default.

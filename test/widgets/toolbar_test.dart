@@ -72,6 +72,54 @@ void main() {
     expect(size.text, '512');
   });
 
+  testWidgets('the refresh button is disabled while the path field is empty', (tester) async {
+    path.text = '';
+
+    await tester.pumpWidget(
+      host(
+        Toolbar(
+          path: path,
+          pathFocus: pathFocus,
+          size: size,
+          onBigger: () {},
+          onSmaller: () {},
+          scaleToDisplay: false,
+          onScaleToDisplayChanged: (_) {},
+          onOpenFile: () {},
+          onOpenFolder: () {},
+          onRefresh: () {},
+          source: ThumbicoSource.auto,
+          options: const {},
+          onSourceChanged: (_) {},
+          onOptionToggled: (_, _) {},
+          overflowMenuData: OverflowMenuData(
+            checkerboard: true,
+            onCheckerboardChanged: (_) {},
+            onShowcase: () {},
+            onHelp: () {},
+            onAbout: () {},
+            onExit: () {},
+          ),
+        ),
+      ),
+    );
+
+    IconButton refreshButton() => tester.widget<IconButton>(
+      find.ancestor(of: find.byIcon(Symbols.refresh), matching: find.byType(IconButton)),
+    );
+
+    expect(refreshButton().onPressed, isNull);
+
+    // Text of any kind enables it, and spaces alone do not
+    await tester.enterText(find.byType(TextField).first, 'notepad.exe');
+    await tester.pump();
+    expect(refreshButton().onPressed, isNotNull);
+
+    await tester.enterText(find.byType(TextField).first, '   ');
+    await tester.pump();
+    expect(refreshButton().onPressed, isNull);
+  });
+
   testWidgets('the open buttons ask for a file and for a folder', (tester) async {
     var files = 0;
     var folders = 0;

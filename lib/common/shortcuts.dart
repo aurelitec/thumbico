@@ -20,6 +20,9 @@ const openFolder = SingleActivator(LogicalKeyboardKey.keyO, control: true, shift
 /// Reads the item in the path field again.
 const refresh = SingleActivator(LogicalKeyboardKey.f5);
 
+/// The same read from the key Explorer and the browsers also take; the menu shows F5 alone.
+const refreshCtrlR = SingleActivator(LogicalKeyboardKey.keyR, control: true);
+
 /// Puts the caret in the path field with its text selected, as the address bar keys do.
 const focusPath = SingleActivator(LogicalKeyboardKey.keyL, control: true);
 

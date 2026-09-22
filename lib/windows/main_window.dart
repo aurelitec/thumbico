@@ -155,7 +155,7 @@ class _MainWindowState extends State<MainWindow> {
   /// Whether the bars are hidden and the image shown alone. Never remembered between runs.
   var _showcase = false;
 
-  /// What the overflow menu's items do and show; Save As and Copy are only offered while there is
+  /// What the overflow menu's items do and show; Save as and Copy are only offered while there is
   /// an image.
   OverflowMenuData get _overflowMenuData => OverflowMenuData(
     onSaveAs: _thumbico == null ? null : _saveAs,
@@ -179,6 +179,7 @@ class _MainWindowState extends State<MainWindow> {
     shortcuts.openFile: _openFile,
     shortcuts.openFolder: _openFolder,
     shortcuts.refresh: _read,
+    shortcuts.refreshCtrlR: _read,
     shortcuts.focusPath: _focusPath,
     shortcuts.saveAs: _saveAs,
     shortcuts.copy: _copy,

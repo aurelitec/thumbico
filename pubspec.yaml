@@ -28,7 +28,7 @@ dependencies:
   # Native memory for the Win32 calls the app makes itself
   ffi: ^2.2.0
 
-  # The Open and Save As dialogs
+  # The Open and Save as dialogs
   filepicker_windows: ^3.0.2
 
   # Encodes a saved or copied image, and flattens transparency for formats without it

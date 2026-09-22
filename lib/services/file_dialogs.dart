@@ -29,7 +29,7 @@ String? pickFolder(Pointer<Void> owner) {
   return picker.getDirectory()?.path;
 }
 
-/// Shows the Save As dialog, owned by [owner]; completes with the chosen path or null on cancel.
+/// Shows the Save as dialog, owned by [owner]; completes with the chosen path or null on cancel.
 ///
 /// Opens with [suggestedName] in the name field. A name typed without an extension gets the
 /// selected type's, and the dialog itself asks before an existing file is replaced. Called from a

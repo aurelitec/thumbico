@@ -42,14 +42,14 @@ void main() {
   }
 
   testWidgets(
-    'the More button opens the menu with Save As, Copy, Transparency grid, Showcase mode, Help, About, and Exit in that order',
+    'the More button opens the menu with Save as, Copy, Transparency grid, Showcase mode, Help, About, and Exit in that order',
     (tester) async {
       await tester.pumpWidget(menu());
       expect(find.text('Help'), findsNothing);
 
       await open(tester);
 
-      final saveAs = tester.getCenter(find.text('Save As...'));
+      final saveAs = tester.getCenter(find.text('Save as...'));
       final copy = tester.getCenter(find.text('Copy'));
       final grid = tester.getCenter(find.text('Transparency grid'));
       final showcase = tester.getCenter(find.text('Showcase mode'));
@@ -113,23 +113,23 @@ void main() {
     );
   });
 
-  testWidgets('picking Save As reports it', (tester) async {
+  testWidgets('picking Save as reports it', (tester) async {
     var saves = 0;
     await tester.pumpWidget(menu(onSaveAs: () => saves++));
     await open(tester);
 
-    await tester.tap(find.text('Save As...'));
+    await tester.tap(find.text('Save as...'));
     await tester.pumpAndSettle();
 
     expect(saves, 1);
   });
 
-  testWidgets('Save As is disabled when there is nothing to save', (tester) async {
+  testWidgets('Save as is disabled when there is nothing to save', (tester) async {
     await tester.pumpWidget(menu());
     await open(tester);
 
     final item = tester.widget<MenuItemButton>(
-      find.ancestor(of: find.text('Save As...'), matching: find.byType(MenuItemButton)),
+      find.ancestor(of: find.text('Save as...'), matching: find.byType(MenuItemButton)),
     );
     expect(item.enabled, isFalse);
   });

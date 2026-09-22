@@ -24,7 +24,7 @@ const _dibV5 = ClipboardFormat(CF_DIBV5, 'CF_DIBV5');
 /// Puts [image] on the clipboard as an opaque bitmap, flattened onto [background].
 ///
 /// One CF_DIBV5 entry, from which Windows makes the legacy bitmap forms, so every application can
-/// paste it. Transparency is not carried; Save As PNG or ICO keeps it. Completes with whether the
+/// paste it. Transparency is not carried; Save as PNG or ICO keeps it. Completes with whether the
 /// clipboard took the image. The pixel work runs off the UI isolate, so a large image does not
 /// freeze the window.
 Future<bool> copyImage(ui.Image image, ui.Color background) async {

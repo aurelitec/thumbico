@@ -110,11 +110,15 @@ class const Toolbar({
             ),
             const SizedBox(width: 4),
 
-            // Ask again for the same item at the same size
-            IconButton(
-              icon: const Icon(Symbols.refresh),
-              tooltip: strings.refreshTooltip,
-              onPressed: onRefresh,
+            // Ask again for the same item at the same size; with no item named there is nothing
+            // to ask, so the button waits for the field
+            ListenableBuilder(
+              listenable: path,
+              builder: (context, child) => IconButton(
+                icon: const Icon(Symbols.refresh),
+                tooltip: strings.refreshTooltip,
+                onPressed: path.text.trim().isEmpty ? null : onRefresh,
+              ),
             ),
             const SizedBox(width: 4),
 

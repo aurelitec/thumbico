@@ -19,6 +19,10 @@ void main() {
       [LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.shiftLeft, LogicalKeyboardKey.keyO],
     ),
     'refresh': (shortcuts.refresh, [LogicalKeyboardKey.f5]),
+    'refreshCtrlR': (
+      shortcuts.refreshCtrlR,
+      [LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.keyR],
+    ),
     'focusPath': (shortcuts.focusPath, [LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.keyL]),
     'saveAs': (shortcuts.saveAs, [LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.keyS]),
     'copy': (
