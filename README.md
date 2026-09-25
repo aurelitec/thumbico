@@ -48,19 +48,17 @@ Thumbico is not code-signed, so Windows SmartScreen may warn about it the first 
 
 > "Thumbico is a combination of an icon extraction and viewing tool, with a thumbnail viewer and creator." ([BetaNews](https://betanews.com/article/extract-icons-and-create-image-thumbnails-with-thumbico/))
 
-> "Thumbico is ideally suited as a tool for creating slideshows, preparing presentations, and any use case that requires display sizes outside standard Windows presets." ([Dr. Windows](https://www.drwindows.de/news/software-vorstellungen/thumbico))
+> "Thumbico is ideally suited as a tool for creating slideshows, preparing presentations, and any use case that requires display sizes outside standard Windows presets." ([Dr. Windows](https://www.drwindows.de/news/software-vorstellungen/thumbico), translated from German)
 
 > "The simplicity of the application is its greatest strength, in my opinion. To load an image, just drag and drop it onto the main interface of the application." ([AddictiveTips](https://www.addictivetips.com/windows-tips/thumbico-lets-you-view-extract-icons-of-files-videos-applications/))
 
-> "There are plenty of ways to extract the icons of the files on your computer, but Thumbico makes the entire process really easy. It is capable to pull out the icon of any sort of file you feed it." ([Softpedia](https://www.softpedia.com/reviews/windows/Thumbico-Review-181397.shtml))
+> "There are plenty of ways to extract the icons of the files on your computer, but Thumbico makes the entire process really easy. It is capable of pulling out the icon of any sort of file you feed it." ([Softpedia](https://www.softpedia.com/reviews/windows/Thumbico-Review-181397.shtml))
 
-> "A useful program for users who want to customize icons on the operating system and developers who want to test how icons look in different sites and save icons in various resolutions." ([gHacks](https://www.ghacks.net/2012/01/30/view-and-extract-file-icons-with-thumbico/))
+> "A useful program for users who want to customize icons on the operating system and developers who want to test how icons look on different sites and save icons in various resolutions." ([gHacks](https://www.ghacks.net/2012/01/30/view-and-extract-file-icons-with-thumbico/))
 
-> "I really like this thumbnail extractor software. It is user friendly and extracting thumbnails of desktop shortcuts, EXE files, or some other application is very simple." ([TechwareGuide](https://web.archive.org/web/20220703135111/https://www.techwareguide.com/extract-thumbnail-desktop-shortcuts-exe-as-jpg-png-images-thumbico/)) 
+> "I really like this thumbnail extractor software. It is user-friendly, and extracting thumbnails of desktop shortcuts, EXE files, or some other application is very simple." ([TechwareGuide](https://web.archive.org/web/20220703135111/https://www.techwareguide.com/extract-thumbnail-desktop-shortcuts-exe-as-jpg-png-images-thumbico/))
 
-> "What makes Thumbico quite useful is it's able to extract an icon sized image or thumbnail from just about any file." ([Raymond.CC](https://raymond.cc/becyicongrabber-extracts-icon-from-exe-and-save-output-as-png/))
-
-
+> "Final verdict: Thumbico is nice and simple software. All the features are, collectively, very helpful and make thumbnails and icons look much more attractive and clear." ([I Love Free Software](https://www.ilovefreesoftware.com/17/windows/image-photo/thumbnail-viewer-display-thumbnails-icons-resize.html))
 
 [More reviews](https://www.aurelitec.com/thumbico/reviews/)
 
